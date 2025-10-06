@@ -9,34 +9,45 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Light black primary color scheme
         primary: {
-          DEFAULT: '#1976D2',
-          dark: '#1565C0',
-          light: '#42A5F5',
+          50: '#f5f5f5',   // Very light gray
+          100: '#e0e0e0',  // Light gray
+          200: '#bdbdbd',  // Medium light gray
+          300: '#9e9e9e',  // Medium gray
+          400: '#757575',  // Medium dark gray
+          500: '#616161',  // Dark gray
+          600: '#424242',  // Darker gray
+          700: '#303030',  // Very dark gray
+          800: '#212121',  // Light black
+          900: '#1a1a1a',  // Darker black
         },
-        deepwork: {
-          DEFAULT: '#1E3A8A',
-          light: '#3B82F6',
+        // Accent colors that are easy on the eyes
+        accent: {
+          blue: '#4a90e2',     // Soft blue
+          green: '#7cb342',    // Soft green
+          orange: '#ff8c42',   // Soft orange
+          purple: '#9c88ff',   // Soft purple
         },
-        meeting: '#6B7280',
-        break: '#10B981',
-        gym: '#F97316',
+        // Background colors optimized for reading
+        background: {
+          primary: '#ffffff',   // Pure white
+          secondary: '#f8f9fa', // Very light gray
+          tertiary: '#e9ecef',  // Light gray
+        },
+        // Text colors with optimal contrast
+        text: {
+          primary: '#212529',   // Almost black
+          secondary: '#495057', // Dark gray
+          tertiary: '#6c757d',   // Medium gray
+          muted: '#adb5bd',     // Light gray
+        }
       },
-      animation: {
-        'breathe-in': 'breathe-in 5s ease-in-out',
-        'breathe-out': 'breathe-out 5s ease-in-out',
-      },
-      keyframes: {
-        'breathe-in': {
-          '0%': { transform: 'scale(0.8)', opacity: '0.6' },
-          '100%': { transform: 'scale(1.2)', opacity: '1' },
-        },
-        'breathe-out': {
-          '0%': { transform: 'scale(1.2)', opacity: '1' },
-          '100%': { transform: 'scale(0.8)', opacity: '0.6' },
-        },
+      fontFamily: {
+        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'monospace'],
       },
     },
   },
   plugins: [],
-}
+};
