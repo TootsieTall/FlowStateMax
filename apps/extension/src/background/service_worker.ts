@@ -1,184 +1,219 @@
-import { storage } from '../shared/storage'
-import { api } from '../shared/api'
+/**
+ * Service Worker (Background Script)
+ * Handles blocking logic and communication with web app
+ * Enhanced for global grayscale control
+ */
 
-// Service worker lifecycle
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log('FlowState extension installed')
-  
-  // Initialize storage
-  await storage.init()
-})
+import { ExtensionMessage, SessionState } from '@flowstate/core';
+import { getBlockedDomains, getSessionStatus, logIntervention } from '../shared/api';
 
-// Listen for messages from content scripts
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  handleMessage(message, sender).then(sendResponse)
-  return true // Keep channel open for async response
-})
+// State
+let blockedDomains: string[] = [];
+let sessionState: SessionState = {
+  isActive: false,
+  isShutdownLocked: false,
+  monochromeEnabled: false,
+};
+let globalGrayscaleEnabled = false;
+let grayscaleIntensity = 100;
 
-// Handle alarms
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'session_check') {
-    checkActiveSession()
-  }
-})
+// Initialize on install
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('FlowState extension installed');
+  syncWithWebApp();
+});
 
-async function handleMessage(message: any, sender: chrome.runtime.MessageSender) {
-  switch (message.type) {
-    case 'CHECK_BLOCK':
-      return await checkIfBlocked(message.url)
-    
-    case 'GET_SESSION_STATUS':
-      return await getSessionStatus()
-    
-    case 'TOGGLE_MONOCHROME':
-      return await toggleMonochrome(message.enabled)
-    
-    case 'START_SESSION':
-      return await startSession(message.blockId)
-    
-    case 'END_SESSION':
-      return await endSession(message.sessionId)
-    
-    default:
-      return { error: 'Unknown message type' }
+// Sync with web app every 5 minutes
+setInterval(syncWithWebApp, 5 * 60 * 1000);
+
+/**
+ * Sync blocked domains and session state from web app
+ */
+async function syncWithWebApp() {
+  try {
+    const [domains, session] = await Promise.all([
+      getBlockedDomains(),
+      getSessionStatus(),
+    ]);
+
+    blockedDomains = domains;
+    sessionState = session;
+
+    // Update badge
+    updateBadge();
+
+    console.log('Synced with web app', { blockedDomains, sessionState });
+  } catch (error) {
+    console.error('Failed to sync with web app:', error);
   }
 }
 
-async function checkIfBlocked(url: string): Promise<{ blocked: boolean; appName?: string }> {
-  try {
-    // Get session status
-    const session = await storage.get('activeSession')
-    if (!session) {
-      return { blocked: false }
-    }
+/**
+ * Update extension badge based on state
+ */
+function updateBadge() {
+  if (sessionState.isActive) {
+    chrome.action.setBadgeText({ text: '🎯' });
+    chrome.action.setBadgeBackgroundColor({ color: '#1e3a8a' });
+  } else if (sessionState.isShutdownLocked) {
+    chrome.action.setBadgeText({ text: '🌙' });
+    chrome.action.setBadgeBackgroundColor({ color: '#4c1d95' });
+  } else {
+    chrome.action.setBadgeText({ text: '' });
+  }
+}
 
-    // Get blocked apps
-    const blockedApps = await storage.get('blockedApps') || []
-    
-    // Check if URL matches blocked domain
-    for (const app of blockedApps) {
-      if (app.enabled && url.includes(app.domain)) {
-        return { blocked: true, appName: app.name }
+/**
+ * Check if domain is blocked
+ */
+function isDomainBlocked(url: string): boolean {
+  try {
+    const domain = new URL(url).hostname.replace('www.', '');
+    return blockedDomains.some((blocked) => 
+      domain === blocked.replace('www.', '') || 
+      domain.endsWith('.' + blocked.replace('www.', ''))
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Handle navigation to check for blocked sites
+ */
+chrome.webNavigation.onBeforeNavigate.addListener((details) => {
+  if (details.frameId !== 0) return; // Only main frame
+
+  const isBlocked = isDomainBlocked(details.url);
+
+  if (isBlocked && (sessionState.isActive || sessionState.isShutdownLocked)) {
+    // Inject breath overlay
+    chrome.tabs.sendMessage(details.tabId, {
+      type: 'SHOW_BREATH_OVERLAY',
+      payload: {
+        url: details.url,
+        reason: sessionState.isActive ? 'flow_session' : 'shutdown_lock',
+      },
+    });
+
+    // Log intervention
+    logIntervention(details.url);
+  }
+});
+
+/**
+ * Handle new tabs to apply grayscale if globally enabled
+ */
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && globalGrayscaleEnabled && tab.url) {
+    // Wait a bit for content script to load
+    setTimeout(async () => {
+      try {
+        await chrome.tabs.sendMessage(tabId, {
+          type: 'ENABLE_GRAYSCALE',
+          payload: { intensity: grayscaleIntensity }
+        });
+      } catch (error) {
+        // Content script might not be ready yet, ignore
+        console.log(`Could not apply grayscale to new tab ${tabId}:`, error);
       }
-    }
-
-    return { blocked: false }
-  } catch (error) {
-    console.error('Error checking block:', error)
-    return { blocked: false }
+    }, 100);
   }
-}
+});
 
-async function getSessionStatus() {
+/**
+ * Apply grayscale to all tabs
+ */
+async function applyGrayscaleToAllTabs(enabled: boolean, intensity: number = 100) {
   try {
-    const session = await storage.get('activeSession')
-    const monochromeEnabled = await storage.get('monochromeEnabled')
+    const tabs = await chrome.tabs.query({});
     
-    return {
-      sessionActive: !!session,
-      monochromeEnabled: !!monochromeEnabled,
-      session,
-    }
-  } catch (error) {
-    console.error('Error getting session status:', error)
-    return { sessionActive: false, monochromeEnabled: false }
-  }
-}
-
-async function toggleMonochrome(enabled: boolean) {
-  try {
-    await storage.set('monochromeEnabled', enabled)
-    
-    // Update all tabs
-    const tabs = await chrome.tabs.query({})
     for (const tab of tabs) {
-      if (tab.id) {
-        chrome.tabs.sendMessage(tab.id, {
-          type: 'TOGGLE_GRAYSCALE',
-          enabled,
-        })
+      if (tab.id && tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('chrome-extension://')) {
+        try {
+          if (enabled) {
+            await chrome.tabs.sendMessage(tab.id, {
+              type: 'ENABLE_GRAYSCALE',
+              payload: { intensity }
+            });
+          } else {
+            await chrome.tabs.sendMessage(tab.id, {
+              type: 'DISABLE_GRAYSCALE'
+            });
+          }
+        } catch (error) {
+          // Tab might not have content script loaded yet, ignore
+          console.log(`Could not apply grayscale to tab ${tab.id}:`, error);
+        }
       }
     }
-    
-    return { success: true }
   } catch (error) {
-    console.error('Error toggling monochrome:', error)
-    return { success: false, error: error.message }
+    console.error('Failed to apply grayscale to all tabs:', error);
   }
 }
 
-async function startSession(blockId: string) {
-  try {
-    const auth = await storage.get('auth')
-    if (!auth?.token) {
-      return { error: 'Not authenticated' }
-    }
+/**
+ * Handle messages from content scripts and popup
+ */
+chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendResponse) => {
+  switch (message.type) {
+    case 'GET_SESSION_STATUS':
+      sendResponse({ success: true, data: sessionState });
+      break;
 
-    // Call API to start session
-    const session = await api.startSession(blockId)
-    
-    // Store active session
-    await storage.set('activeSession', session)
-    
-    // Enable monochrome
-    await toggleMonochrome(true)
-    
-    // Set alarm to check session periodically
-    chrome.alarms.create('session_check', { periodInMinutes: 1 })
-    
-    return { success: true, session }
-  } catch (error) {
-    console.error('Error starting session:', error)
-    return { error: error.message }
+    case 'GET_BLOCKED_DOMAINS':
+      sendResponse({ success: true, data: blockedDomains });
+      break;
+
+    case 'ENABLE_GLOBAL_GRAYSCALE':
+      globalGrayscaleEnabled = true;
+      grayscaleIntensity = message.payload?.intensity || 100;
+      applyGrayscaleToAllTabs(true, grayscaleIntensity);
+      sendResponse({ success: true });
+      break;
+
+    case 'DISABLE_GLOBAL_GRAYSCALE':
+      globalGrayscaleEnabled = false;
+      applyGrayscaleToAllTabs(false);
+      sendResponse({ success: true });
+      break;
+
+    case 'SET_GLOBAL_GRAYSCALE_INTENSITY':
+      grayscaleIntensity = message.payload?.intensity || 100;
+      if (globalGrayscaleEnabled) {
+        applyGrayscaleToAllTabs(true, grayscaleIntensity);
+      }
+      sendResponse({ success: true });
+      break;
+
+    case 'TOGGLE_GLOBAL_GRAYSCALE':
+      globalGrayscaleEnabled = !globalGrayscaleEnabled;
+      applyGrayscaleToAllTabs(globalGrayscaleEnabled, grayscaleIntensity);
+      sendResponse({ 
+        success: true, 
+        data: { 
+          enabled: globalGrayscaleEnabled,
+          intensity: grayscaleIntensity
+        }
+      });
+      break;
+
+    case 'GET_GLOBAL_GRAYSCALE_STATUS':
+      sendResponse({ 
+        success: true, 
+        data: { 
+          enabled: globalGrayscaleEnabled,
+          intensity: grayscaleIntensity
+        }
+      });
+      break;
+
+    default:
+      sendResponse({ success: false, error: 'Unknown message type' });
   }
-}
 
-async function endSession(sessionId: string) {
-  try {
-    const auth = await storage.get('auth')
-    if (!auth?.token) {
-      return { error: 'Not authenticated' }
-    }
+  return true; // Keep message channel open
+});
 
-    // Call API to end session
-    await api.endSession(sessionId)
-    
-    // Clear active session
-    await storage.remove('activeSession')
-    
-    // Disable monochrome
-    await toggleMonochrome(false)
-    
-    // Clear alarm
-    chrome.alarms.clear('session_check')
-    
-    return { success: true }
-  } catch (error) {
-    console.error('Error ending session:', error)
-    return { error: error.message }
-  }
-}
-
-async function checkActiveSession() {
-  try {
-    const session = await storage.get('activeSession')
-    if (!session) return
-
-    // Check if session should have ended
-    const endTime = new Date(session.endTime)
-    if (endTime < new Date()) {
-      // Session expired
-      await endSession(session.id)
-      
-      // Show notification
-      chrome.notifications.create({
-        type: 'basic',
-        iconUrl: 'icons/icon128.png',
-        title: 'Flow Session Complete',
-        message: 'Your focus session has ended. Great work!',
-      })
-    }
-  } catch (error) {
-    console.error('Error checking session:', error)
-  }
-}
+// Initial sync
+syncWithWebApp();
