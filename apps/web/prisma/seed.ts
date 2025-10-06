@@ -3,130 +3,144 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('Seeding database...')
+  console.log('🌱 Seeding database...')
 
-  const user = await prisma.user.upsert({
+  // Create a demo user
+  const demoUser = await prisma.user.upsert({
     where: { email: 'demo@flowstate.app' },
     update: {},
     create: {
       email: 'demo@flowstate.app',
       name: 'Demo User',
-      plan: 'pro',
-    },
-  })
-
-  console.log('Created user:', user.id)
-
-  await prisma.profile.create({
-    data: {
-      userId: user.id,
-      podcastGenres: JSON.stringify(['Technology', 'Business', 'Science', 'Health', 'Philosophy']),
-    },
-  })
-
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  await prisma.goal.create({
-    data: {
-      userId: user.id,
-      date: today,
-      top1: 'Complete project proposal',
-      top2: 'Review design mockups',
-      top3: 'Schedule team meeting',
-    },
-  })
-
-  const locations = [
-    { name: 'Home Office', address: '123 Main St' },
-    { name: 'Local Library', address: '456 Oak Ave' },
-    { name: 'Coffee Shop', address: '789 Elm St' },
-    { name: 'University', address: '321 Campus Dr' },
-    { name: 'Co-working Space', address: '654 Work Blvd' },
-  ]
-
-  for (const loc of locations) {
-    await prisma.location.create({
-      data: {
-        userId: user.id,
-        ...loc,
+      onboardingComplete: true,
+      goals: ['Career', 'Side Project', 'Learning'],
+      podcastGenres: ['Technology', 'Business', 'Science', 'Personal Development', 'Health'],
+      flowLocations: {
+        create: [
+          {
+            name: 'Home Office',
+            latitude: 40.7128,
+            longitude: -74.0060,
+            radius: 100,
+          },
+          {
+            name: 'Local Library',
+            latitude: 40.7589,
+            longitude: -73.9851,
+            radius: 150,
+          },
+        ],
       },
+      blockedApps: {
+        create: [
+          { name: 'Instagram', identifier: 'com.instagram.android' },
+          { name: 'TikTok', identifier: 'com.zhiliaoapp.musically' },
+          { name: 'Twitter', identifier: 'com.twitter.android' },
+        ],
+      },
+      ritual: {
+        create: [
+          { text: 'Make coffee ☕', order: 1 },
+          { text: 'Clear desk 🗂️', order: 2 },
+          { text: 'Start music 🎵', order: 3 },
+          { text: 'Enable DND 📵', order: 4 },
+          { text: 'Close email 📧', order: 5 },
+          { text: 'Take 3 deep breaths 🧘', order: 6 },
+        ],
+      },
+    },
+  })
+
+  // Create sample time blocks for this week
+  const now = new Date()
+  const startOfWeek = new Date(now)
+  startOfWeek.setDate(now.getDate() - now.getDay() + 1) // Monday
+  startOfWeek.setHours(0, 0, 0, 0)
+
+  const blocks = []
+  for (let day = 0; day < 5; day++) {
+    const blockDate = new Date(startOfWeek)
+    blockDate.setDate(startOfWeek.getDate() + day)
+
+    // Morning deep work block
+    blocks.push({
+      userId: demoUser.id,
+      title: 'Deep Work Session',
+      startTime: new Date(blockDate.setHours(9, 0)),
+      endTime: new Date(blockDate.setHours(11, 0)),
+      type: 'DEEP_WORK',
+      color: '#1E3A8A',
+    })
+
+    // Afternoon meeting
+    blocks.push({
+      userId: demoUser.id,
+      title: 'Team Standup',
+      startTime: new Date(blockDate.setHours(14, 0)),
+      endTime: new Date(blockDate.setHours(15, 0)),
+      type: 'MEETING',
+      color: '#6B7280',
+    })
+
+    // Afternoon deep work
+    blocks.push({
+      userId: demoUser.id,
+      title: 'Project Work',
+      startTime: new Date(blockDate.setHours(15, 30)),
+      endTime: new Date(blockDate.setHours(17, 30)),
+      type: 'DEEP_WORK',
+      color: '#1E3A8A',
     })
   }
 
-  const blocks = [
-    { type: 'Deep', startTime: '09:00', endTime: '11:00', title: 'Project Work', impact: 'High' },
-    { type: 'Meeting', startTime: '11:00', endTime: '11:30', title: 'Team Sync', impact: 'Low' },
-    { type: 'Break', startTime: '11:30', endTime: '12:00', title: 'Lunch Break', impact: 'Low' },
-    { type: 'Deep', startTime: '12:00', endTime: '14:00', title: 'Design Review', impact: 'High' },
-    { type: 'Gym', startTime: '17:00', endTime: '18:00', title: 'Workout', impact: 'Low' },
-  ]
+  await prisma.timeBlock.createMany({ data: blocks })
 
-  for (const block of blocks) {
-    await prisma.block.create({
-      data: {
-        userId: user.id,
-        date: today,
-        ...block,
+  // Create sample tasks
+  await prisma.task.createMany({
+    data: [
+      {
+        userId: demoUser.id,
+        title: 'Complete project proposal',
+        description: 'Draft and review the Q1 project proposal',
+        impact: 'HIGH',
+        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
       },
-    })
-  }
-
-  await prisma.ritualChecklist.create({
-    data: {
-      userId: user.id,
-      items: JSON.stringify([
-        { text: 'Make coffee', checked: false },
-        { text: 'Clear desk', checked: false },
-        { text: 'Start music', checked: false },
-        { text: 'Enable Do Not Disturb', checked: false },
-        { text: 'Close email', checked: false },
-        { text: 'Take 3 deep breaths', checked: false },
-      ]),
-      completedCount: 5,
-    },
-  })
-
-  const blockedDomains = [
-    'instagram.com',
-    'tiktok.com',
-    'twitter.com',
-    'facebook.com',
-    'reddit.com',
-    'youtube.com',
-  ]
-
-  for (const domain of blockedDomains) {
-    await prisma.blockedApp.create({
-      data: {
-        userId: user.id,
-        domain,
+      {
+        userId: demoUser.id,
+        title: 'Review pull requests',
+        description: 'Review pending PRs on GitHub',
+        impact: 'LOW',
       },
-    })
-  }
+      {
+        userId: demoUser.id,
+        title: 'Study machine learning course',
+        description: 'Complete modules 3-4',
+        impact: 'HIGH',
+        deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
+      },
+    ],
+  })
 
-  await prisma.settings.create({
+  // Create today's daily goal
+  await prisma.dailyGoal.create({
     data: {
-      userId: user.id,
+      userId: demoUser.id,
+      date: new Date(),
+      goals: [
+        'Complete project proposal draft',
+        'Review 5 pull requests',
+        'ML course module 3',
+      ],
     },
   })
 
-  await prisma.metrics.create({
-    data: {
-      userId: user.id,
-      focusHours: 24.5,
-      highImpactPercent: 68,
-      timeSavedHours: 12.3,
-      streakDays: 7,
-    },
-  })
-
-  console.log('Seed completed!')
+  console.log('✅ Database seeded successfully!')
+  console.log(`Demo user: ${demoUser.email}`)
 }
 
 main()
   .catch((e) => {
-    console.error(e)
+    console.error('❌ Error seeding database:', e)
     process.exit(1)
   })
   .finally(async () => {

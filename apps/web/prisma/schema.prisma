@@ -1,173 +1,192 @@
+// This is your Prisma schema file
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  plan      String   @default("free")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  profile         Profile?
-  goals           Goal[]
-  locations       Location[]
-  blocks          Block[]
-  sessions        Session[]
-  ritualChecklist RitualChecklist?
-  blockedApps     BlockedApp[]
-  recovery        Recovery[]
-  podcasts        Podcast?
-  metrics         Metrics?
-  settings        Settings?
+  id                String             @id @default(cuid())
+  email             String             @unique
+  name              String?
+  image             String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  
+  // Onboarding
+  onboardingComplete Boolean           @default(false)
+  goals             String[]          // Array of focus areas
+  
+  // Settings
+  flowLocations     FlowLocation[]
+  blockedApps       BlockedApp[]
+  ritual            RitualItem[]
+  podcastGenres     String[]          // Selected podcast genres
+  
+  // Data
+  timeBlocks        TimeBlock[]
+  tasks             Task[]
+  flowSessions      FlowSession[]
+  shutdownLogs      ShutdownLog[]
+  dailyGoals        DailyGoal[]
+  
+  // Accounts
+  accounts          Account[]
+  sessions          Session[]
 }
 
-model Profile {
-  id            String  @id @default(cuid())
-  userId        String  @unique
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
   
-  musicProvider String?
-  spotifyToken  String?
-  podcastGenres String  @default("[]")
-}
-
-model Goal {
-  id     String   @id @default(cuid())
-  userId String
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  date   DateTime
-  top1   String
-  top2   String?
-  top3   String?
-  
-  @@index([userId, date])
-}
-
-model Location {
-  id         String  @id @default(cuid())
-  userId     String
-  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  name       String
-  address    String?
-  latitude   Float?
-  longitude  Float?
-  radius     Int     @default(100)
-  isFlowZone Boolean @default(true)
-  
-  @@index([userId])
-}
-
-model Block {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  date      DateTime
-  type      String
-  startTime String
-  endTime   String
-  title     String
-  notes     String?
-  impact    String   @default("Low")
-  
-  plannedByAI Boolean @default(false)
-  
-  sessions Session[]
-  
-  @@index([userId, date])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  blockId   String?
-  block     Block?    @relation(fields: [blockId], references: [id], onDelete: SetNull)
-  
-  startedAt DateTime
-  endedAt   DateTime?
-  status    String    @default("active")
-  
-  realityCheck String?
-  
-  streakCount  Int @default(0)
-  wallStrength Int @default(0)
-  
-  @@index([userId])
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model RitualChecklist {
-  id             String  @id @default(cuid())
-  userId         String  @unique
-  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model FlowLocation {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  latitude  Float
+  longitude Float
+  radius    Int      @default(100) // meters
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
   
-  items          String
-  completedCount Int     @default(0)
-  isHidden       Boolean @default(false)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model BlockedApp {
-  id       String @id @default(cuid())
-  userId   String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  identifier    String   // Bundle ID or package name
+  enabled       Boolean  @default(true)
+  createdAt     DateTime @default(now())
   
-  domain   String
-  category String @default("social")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  @@unique([userId, domain])
-  @@index([userId])
+  @@unique([userId, identifier])
 }
 
-model Recovery {
+model RitualItem {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      String
+  order     Int
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
   
-  weekStart DateTime
-  activities String
-  
-  @@index([userId, weekStart])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Podcast {
-  id          String @id @default(cuid())
-  userId      String @unique
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+model TimeBlock {
+  id          String     @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  type        BlockType  @default(DEEP_WORK)
+  color       String?
+  completed   Boolean    @default(false)
+  taskId      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   
-  genres      String
-  weeklyPicks String
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task? @relation(fields: [taskId], references: [id], onDelete: SetNull)
 }
 
-model Metrics {
-  id       String  @id @default(cuid())
-  userId   String  @unique
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  hiddenByDefault   Boolean @default(true)
-  
-  focusHours        Float   @default(0)
-  highImpactPercent Float   @default(0)
-  timeSavedHours    Float   @default(0)
-  streakDays        Int     @default(0)
+enum BlockType {
+  DEEP_WORK
+  MEETING
+  BREAK
+  GYM
+  SHALLOW
 }
 
-model Settings {
-  id            String  @id @default(cuid())
-  userId        String  @unique
-  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Task {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  impact      Impact    @default(LOW)
+  deadline    DateTime?
+  completed   Boolean   @default(false)
+  scheduledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   
-  monochromeOnFlow Boolean @default(true)
-  notificationsEnabled Boolean @default(true)
-  shutdownTime  String  @default("17:00")
-  wakeTime      String  @default("07:00")
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timeBlocks TimeBlock[]
+}
+
+enum Impact {
+  HIGH
+  LOW
+}
+
+model FlowSession {
+  id           String   @id @default(cuid())
+  userId       String
+  startTime    DateTime
+  endTime      DateTime?
+  duration     Int?     // minutes
+  locationId   String?
+  feedback     String?  // "on_time", "needed_more", "finished_early"
+  monochromeOn Boolean  @default(false)
+  appsBlocked  Boolean  @default(false)
+  musicPlayed  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ShutdownLog {
+  id          String   @id @default(cuid())
+  userId      String
+  date        DateTime @default(now())
+  brainDump   String?  @db.Text
+  tomorrowTop String[] // Top 3 tasks for tomorrow
+  alarmsSet   String[] // Times of alarms set
+  completed   Boolean  @default(true)
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DailyGoal {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  goals     String[] // 1-3 major goals
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, date])
 }
