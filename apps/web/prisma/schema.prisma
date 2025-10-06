@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  plan      String   @default("free")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile         Profile?
+  goals           Goal[]
+  locations       Location[]
+  blocks          Block[]
+  sessions        Session[]
+  ritualChecklist RitualChecklist?
+  blockedApps     BlockedApp[]
+  recovery        Recovery[]
+  podcasts        Podcast?
+  metrics         Metrics?
+  settings        Settings?
+}
+
+model Profile {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  musicProvider String?
+  spotifyToken  String?
+  podcastGenres String  @default("[]")
+}
+
+model Goal {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date   DateTime
+  top1   String
+  top2   String?
+  top3   String?
+  
+  @@index([userId, date])
+}
+
+model Location {
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name       String
+  address    String?
+  latitude   Float?
+  longitude  Float?
+  radius     Int     @default(100)
+  isFlowZone Boolean @default(true)
+  
+  @@index([userId])
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date      DateTime
+  type      String
+  startTime String
+  endTime   String
+  title     String
+  notes     String?
+  impact    String   @default("Low")
+  
+  plannedByAI Boolean @default(false)
+  
+  sessions Session[]
+  
+  @@index([userId, date])
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  blockId   String?
+  block     Block?    @relation(fields: [blockId], references: [id], onDelete: SetNull)
+  
+  startedAt DateTime
+  endedAt   DateTime?
+  status    String    @default("active")
+  
+  realityCheck String?
+  
+  streakCount  Int @default(0)
+  wallStrength Int @default(0)
+  
+  @@index([userId])
+}
+
+model RitualChecklist {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  items          String
+  completedCount Int     @default(0)
+  isHidden       Boolean @default(false)
+}
+
+model BlockedApp {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  domain   String
+  category String @default("social")
+  
+  @@unique([userId, domain])
+  @@index([userId])
+}
+
+model Recovery {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  weekStart DateTime
+  activities String
+  
+  @@index([userId, weekStart])
+}
+
+model Podcast {
+  id          String @id @default(cuid())
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  genres      String
+  weeklyPicks String
+}
+
+model Metrics {
+  id       String  @id @default(cuid())
+  userId   String  @unique
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  hiddenByDefault   Boolean @default(true)
+  
+  focusHours        Float   @default(0)
+  highImpactPercent Float   @default(0)
+  timeSavedHours    Float   @default(0)
+  streakDays        Int     @default(0)
+}
+
+model Settings {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  monochromeOnFlow Boolean @default(true)
+  notificationsEnabled Boolean @default(true)
+  shutdownTime  String  @default("17:00")
+  wakeTime      String  @default("07:00")
+}
