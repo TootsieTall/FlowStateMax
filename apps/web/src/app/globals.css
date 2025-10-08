@@ -4,9 +4,17 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;    /* white text on dark background */
-  --background-rgb: 33, 33, 33;       /* light black background */
+  --background-rgb: 33, 33, 33;       /* light black background (#212121) */
   --foreground-secondary: 189, 189, 189; /* light gray text */
   --background-secondary: 48, 48, 48;   /* darker gray background */
+}
+
+/* Support for light mode preference */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-rgb: 255, 255, 255;
+    --foreground-rgb: 23, 23, 23;
+  }
 }
 
 body {
@@ -23,6 +31,12 @@ html {
   transition: filter 1s ease-in-out;
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -31,6 +45,12 @@ html {
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
 }
 
 ::-webkit-scrollbar-thumb {
