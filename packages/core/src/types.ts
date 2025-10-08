@@ -53,6 +53,26 @@ export interface FlowSession {
   musicPlayed: boolean
 }
 
+// Session Status Types (for runtime state management)
+export type SessionStatus = 'active' | 'paused' | 'completed' | 'cancelled'
+
+export interface Session {
+  id: string
+  userId: string
+  blockId?: string
+  startedAt: Date
+  endedAt?: Date
+  status: SessionStatus
+  streakCount: number
+  wallStrength: number
+  ritualCompleted: boolean
+  monochromeUsed: boolean
+  realityCheck?: string
+}
+
+// Block type alias for backward compatibility
+export type Block = TimeBlock
+
 // Location Types
 export interface FlowLocation {
   id: string
