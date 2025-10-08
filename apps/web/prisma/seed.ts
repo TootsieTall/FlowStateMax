@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, BlockType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -68,7 +68,7 @@ async function main() {
       title: 'Deep Work Session',
       startTime: new Date(blockDate.setHours(9, 0)),
       endTime: new Date(blockDate.setHours(11, 0)),
-      type: 'DEEP_WORK',
+      type: 'DEEP_WORK' as BlockType,
       color: '#1E3A8A',
     })
 
@@ -78,7 +78,7 @@ async function main() {
       title: 'Team Standup',
       startTime: new Date(blockDate.setHours(14, 0)),
       endTime: new Date(blockDate.setHours(15, 0)),
-      type: 'MEETING',
+      type: 'MEETING' as BlockType,
       color: '#6B7280',
     })
 
@@ -88,7 +88,7 @@ async function main() {
       title: 'Project Work',
       startTime: new Date(blockDate.setHours(15, 30)),
       endTime: new Date(blockDate.setHours(17, 30)),
-      type: 'DEEP_WORK',
+      type: 'DEEP_WORK' as BlockType,
       color: '#1E3A8A',
     })
   }
