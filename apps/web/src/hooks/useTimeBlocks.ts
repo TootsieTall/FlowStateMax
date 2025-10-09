@@ -164,6 +164,7 @@ export function useMoveTimeBlock() {
   const updateMutation = useUpdateTimeBlock()
 
   return {
+    ...updateMutation,
     mutate: (blockId: string, newStartTime: Date, newEndTime: Date) => {
       updateMutation.mutate({
         id: blockId,
@@ -173,7 +174,6 @@ export function useMoveTimeBlock() {
         },
       })
     },
-    ...updateMutation,
   }
 }
 
@@ -184,6 +184,7 @@ export function useResizeTimeBlock() {
   const updateMutation = useUpdateTimeBlock()
 
   return {
+    ...updateMutation,
     mutate: (blockId: string, newStartTime: Date, newEndTime: Date) => {
       updateMutation.mutate({
         id: blockId,
@@ -193,6 +194,5 @@ export function useResizeTimeBlock() {
         },
       })
     },
-    ...updateMutation,
   }
 }
