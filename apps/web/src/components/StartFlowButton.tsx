@@ -166,7 +166,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
   const baseClasses = cn(
     'relative group transition-all duration-200',
     'disabled:opacity-50 disabled:cursor-not-allowed',
-    validationError && 'ring-2 ring-red-500'
+    validationError ? 'ring-2 ring-red-500' : ''
   )
 
   // Variant-specific styling
