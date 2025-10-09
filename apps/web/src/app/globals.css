@@ -27,10 +27,11 @@
 body {
   color: rgb(var(--foreground-primary));
   background: rgb(var(--background-primary));
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv05', 'cv08', 'cv11'; /* Inter font features for better readability */
 }
 
 /* Force dark theme globally */

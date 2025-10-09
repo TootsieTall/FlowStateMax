@@ -3,7 +3,11 @@ import { Inter } from 'next/font/google'
 import { Providers } from './providers'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap', // Prevents invisible text during loading
+})
 
 export const metadata = {
   title: 'FlowState - Deep Work Companion',
@@ -16,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body className={inter.className}>
         <Providers>{children}</Providers>
         <SpeedInsights />
