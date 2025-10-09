@@ -91,11 +91,14 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   checkExtensionConnection: async () => {
     try {
-      // Check if extension is available
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
-        const response = await chrome.runtime.sendMessage({ type: 'GET_SESSION_STATUS' });
-        set({ extensionConnected: response.success });
-        return response.success;
+      // Check if extension is available (browser only)
+      if (typeof window !== 'undefined' && 'chrome' in window) {
+        const chromeAPI = (window as any).chrome;
+        if (chromeAPI?.runtime?.id) {
+          const response = await chromeAPI.runtime.sendMessage({ type: 'GET_SESSION_STATUS' });
+          set({ extensionConnected: response.success });
+          return response.success;
+        }
       }
       return false;
     } catch (error) {
@@ -106,11 +109,14 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   enableGlobalGrayscale: async (intensity = 100) => {
     try {
-      if (typeof chrome !== 'undefined' && chrome.runtime) {
-        await chrome.runtime.sendMessage({
-          type: 'ENABLE_GLOBAL_GRAYSCALE',
-          payload: { intensity }
-        });
+      if (typeof window !== 'undefined' && 'chrome' in window) {
+        const chromeAPI = (window as any).chrome;
+        if (chromeAPI?.runtime) {
+          await chromeAPI.runtime.sendMessage({
+            type: 'ENABLE_GLOBAL_GRAYSCALE',
+            payload: { intensity }
+          });
+        }
       }
     } catch (error) {
       console.error('Failed to enable global grayscale:', error);
@@ -119,10 +125,13 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   disableGlobalGrayscale: async () => {
     try {
-      if (typeof chrome !== 'undefined' && chrome.runtime) {
-        await chrome.runtime.sendMessage({
-          type: 'DISABLE_GLOBAL_GRAYSCALE'
-        });
+      if (typeof window !== 'undefined' && 'chrome' in window) {
+        const chromeAPI = (window as any).chrome;
+        if (chromeAPI?.runtime) {
+          await chromeAPI.runtime.sendMessage({
+            type: 'DISABLE_GLOBAL_GRAYSCALE'
+          });
+        }
       }
     } catch (error) {
       console.error('Failed to disable global grayscale:', error);
