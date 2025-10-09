@@ -48,7 +48,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
 
   const confirmBreak = async () => {
     try {
-      const response = await fetch('/api/sessions/pause', {
+      const response = await fetch('/api/sessions/flow/pause', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId: session.id }),
@@ -68,7 +68,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
 
   const confirmComplete = async (feedback: 'on_time' | 'needed_more' | 'finished_early') => {
     try {
-      const response = await fetch('/api/sessions/complete', {
+      const response = await fetch('/api/sessions/flow/stop', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId: session.id, feedback }),

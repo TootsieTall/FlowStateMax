@@ -23,8 +23,7 @@ export async function GET(request: Request) {
       select: {
         id: true,
         name: true,
-        domain: true,
-        category: true,
+        identifier: true,
         enabled: true,
       },
     })

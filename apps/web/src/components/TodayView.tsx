@@ -3,11 +3,12 @@
 import { useState, useMemo, lazy, Suspense, memo, useEffect } from 'react'
 import { BlockCard, Button, FlowTimer } from '@flowstate/ui'
 import { format, isWithinInterval } from 'date-fns'
-import { Play, Plus, CheckCircle } from 'lucide-react'
+import { Play, Plus, CheckCircle, Sparkles } from 'lucide-react'
 import { SessionData } from './SessionChecklist'
 import { SessionComplete } from './SessionComplete'
 import { StartFlowButton } from './StartFlowButton'
 import { useAppStore } from '@/store'
+import ROUTES from '@/lib/routes'
 
 // Lazy load SessionChecklist modal for better initial load performance
 const SessionChecklist = lazy(() => import('./SessionChecklist').then(module => ({ default: module.default })))
@@ -44,6 +45,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
     pauseFlowSession,
     resumeFlowSession,
     checkExtensionConnection,
+    toggleQuickCapture,
   } = useAppStore()
 
   // Check extension connection on mount
@@ -131,16 +133,19 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
               <h1 className="text-2xl font-bold text-teal-500">FlowState</h1>
             </div>
             <div className="flex items-center space-x-8">
-              <a href="/week" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.WEEK} className="text-gray-400 hover:text-teal-400 transition-colors">
                 Week
               </a>
-              <a href="/today" className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
+              <a href={ROUTES.TODAY} className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
                 Today
               </a>
-              <a href="/explore" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.CAPTURE} className="text-gray-400 hover:text-teal-400 transition-colors">
+                Capture
+              </a>
+              <a href={ROUTES.EXPLORE} className="text-gray-400 hover:text-teal-400 transition-colors">
                 Explore
               </a>
-              <a href="/settings" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.SETTINGS} className="text-gray-400 hover:text-teal-400 transition-colors">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -211,10 +216,11 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
 
         {/* Quick Capture Button */}
         <button
-          className="fixed bottom-8 right-8 bg-teal-600 hover:bg-teal-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl"
-          onClick={() => (window.location.href = '/capture')}
+          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl group"
+          onClick={toggleQuickCapture}
+          title="Quick Capture (⌘K)"
         >
-          <Plus className="w-6 h-6" />
+          <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
         </button>
       </main>
 

@@ -39,11 +39,11 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
   const [showRitualModal, setShowRitualModal] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
 
-  // Fetch current session status
+  // Fetch current session status with orchestrator info
   const { data: sessionStatus, isLoading: isLoadingSession } = useQuery<SessionStatus>({
     queryKey: ['session-status'],
     queryFn: async () => {
-      const res = await fetch('/api/sessions/current')
+      const res = await fetch('/api/sessions/flow/status')
       if (!res.ok) throw new Error('Failed to fetch session')
       return res.json()
     },
@@ -62,10 +62,10 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
     enabled: !sessionStatus?.hasActiveSession, // Only validate when no active session
   })
 
-  // Start flow session
+  // Start flow session with orchestrator
   const startFlow = useMutation({
     mutationFn: async (timeBlockId?: string) => {
-      const res = await fetch('/api/sessions/start', {
+      const res = await fetch('/api/sessions/flow/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ timeBlockId }),
@@ -73,7 +73,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
 
       if (!res.ok) {
         const error = await res.json()
-        throw new Error(error.message || 'Failed to start flow')
+        throw new Error(error.error || 'Failed to start flow')
       }
 
       return res.json()
