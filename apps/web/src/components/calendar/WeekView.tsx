@@ -177,14 +177,14 @@ export function WeekView({
           {/* View mode toggle */}
           <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
             <Button
-              variant={viewMode === 'day' ? 'default' : 'ghost'}
+              variant={viewMode === 'day' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('day')}
             >
               Day
             </Button>
             <Button
-              variant={viewMode === 'week' ? 'default' : 'ghost'}
+              variant={viewMode === 'week' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('week')}
             >
@@ -219,7 +219,7 @@ export function WeekView({
           {weekDays.map((day, index) => (
             <Button
               key={index}
-              variant={selectedDay === index ? 'default' : 'ghost'}
+              variant={selectedDay === index ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setSelectedDay(index)}
               className="flex-shrink-0"
