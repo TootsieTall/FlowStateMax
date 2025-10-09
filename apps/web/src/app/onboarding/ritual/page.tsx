@@ -90,43 +90,46 @@ export default function RitualPage() {
 
         {/* Ritual Checklist */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-gray-300 mb-3">
             Your pre-work checklist
           </label>
           <div className="space-y-2">
             {ritualItems.map((item) => (
-              <div
+              <button
                 key={item.id}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                onClick={() => toggleItem(item.id)}
+                type="button"
+                className={`w-full p-4 rounded-lg border-2 transition-all text-left cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                   item.checked
                     ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-gray-300 hover:border-coral-500 hover:bg-gray-50'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => toggleItem(item.id)}
-                    className="flex-shrink-0"
-                  >
+                <div className="flex items-center gap-3 pointer-events-none">
+                  <div className="flex-shrink-0">
                     {item.checked ? (
                       <CheckCircle className="w-5 h-5 text-green-600" />
                     ) : (
                       <Circle className="w-5 h-5 text-gray-400" />
                     )}
-                  </button>
+                  </div>
                   <span className={`flex-1 ${item.checked ? 'text-green-700 font-medium' : 'text-gray-700'}`}>
                     {item.text}
                   </span>
                   {!item.isDefault && (
                     <button
-                      onClick={() => removeItem(item.id)}
-                      className="flex-shrink-0 text-gray-400 hover:text-red-600 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        removeItem(item.id)
+                      }}
+                      type="button"
+                      className="flex-shrink-0 text-gray-400 hover:text-red-600 transition-colors pointer-events-auto"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -203,13 +206,13 @@ export default function RitualPage() {
         </div>
 
         {/* Cal Newport Quote */}
-        <div className="mb-8 p-4 border-l-4 border-primary-600 bg-primary-50">
-          <p className="text-sm italic text-gray-700">
+        <blockquote className="mb-8">
+          <p className="text-sm italic">
             "To make the most out of your deep work sessions, build rituals of the same level of 
             strictness and idiosyncrasy as the important thinkers mentioned throughout this book."
           </p>
-          <p className="text-sm text-gray-600 mt-2">— Cal Newport, Deep Work</p>
-        </div>
+          <footer className="text-sm mt-2">— Cal Newport, Deep Work</footer>
+        </blockquote>
 
         {/* Navigation */}
         <div className="flex justify-between">

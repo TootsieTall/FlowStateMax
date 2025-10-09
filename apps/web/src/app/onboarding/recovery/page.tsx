@@ -301,14 +301,14 @@ export default function RecoveryPage() {
         </div>
 
         {/* Cal Newport Quote */}
-        <div className="mb-8 p-4 border-l-4 border-primary-600 bg-primary-50">
-          <p className="text-sm italic text-gray-700">
+        <blockquote className="mb-8">
+          <p className="text-sm italic">
             "At the end of the workday, shut down your consideration of work issues until the next 
             morning—no after-dinner email checks, no mental replays of conversations, and no scheming 
             about how you'll handle an upcoming challenge."
           </p>
-          <p className="text-sm text-gray-600 mt-2">— Cal Newport, Deep Work</p>
-        </div>
+          <footer className="text-sm mt-2">— Cal Newport, Deep Work</footer>
+        </blockquote>
 
         {/* Navigation */}
         <div className="flex justify-between items-center">

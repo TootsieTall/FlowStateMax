@@ -163,14 +163,14 @@ export default function BoredomPage() {
         </div>
 
         {/* Cal Newport Quote */}
-        <div className="mb-8 p-4 border-l-4 border-primary-600 bg-primary-50">
-          <p className="text-sm italic text-gray-700">
+        <blockquote className="mb-8">
+          <p className="text-sm italic">
             "If you eat ice cream every night, then you'll find it difficult to eat less ice cream when 
             you decide to lose weight. If you check your email or social media every time you have a 
             free moment, then you'll find it difficult to concentrate when it's time to work deeply."
           </p>
-          <p className="text-sm text-gray-600 mt-2">— Cal Newport, Deep Work</p>
-        </div>
+          <footer className="text-sm mt-2">— Cal Newport, Deep Work</footer>
+        </blockquote>
 
         {/* What Happens Next */}
         {selectedOption === 'embrace' && (
