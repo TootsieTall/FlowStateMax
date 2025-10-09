@@ -130,7 +130,7 @@ export function canAccessOnboardingStep(
     ROUTES.ONBOARDING.BOREDOM,
     ROUTES.ONBOARDING.RECOVERY,
     ROUTES.ONBOARDING.COMPLETE,
-  ];
+  ] as string[];
 
   const currentIndex = steps.indexOf(currentStep);
   const lastCompletedIndex = Math.max(
@@ -165,7 +165,7 @@ export function getNextOnboardingStep(currentStep: string): string | null {
     ROUTES.ONBOARDING.BOREDOM,
     ROUTES.ONBOARDING.RECOVERY,
     ROUTES.ONBOARDING.COMPLETE,
-  ];
+  ] as string[];
 
   const currentIndex = steps.indexOf(currentStep);
   if (currentIndex === -1 || currentIndex === steps.length - 1) {
@@ -189,7 +189,7 @@ export function getPreviousOnboardingStep(currentStep: string): string | null {
     ROUTES.ONBOARDING.BOREDOM,
     ROUTES.ONBOARDING.RECOVERY,
     ROUTES.ONBOARDING.COMPLETE,
-  ];
+  ] as string[];
 
   const currentIndex = steps.indexOf(currentStep);
   if (currentIndex <= 0) {
