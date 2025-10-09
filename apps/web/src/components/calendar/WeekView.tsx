@@ -17,6 +17,7 @@ import {
 } from './utils'
 import { cn } from '@/lib/utils'
 import { Button } from '@flowstate/ui'
+import { StartFlowButton } from '../StartFlowButton'
 
 interface WeekViewProps {
   blocks: TimeBlock[]
@@ -289,6 +290,9 @@ export function WeekView({
           </DragOverlay>
         </DndContext>
       </div>
+      
+      {/* Floating Start Flow Button */}
+      <StartFlowButton variant="floating" />
     </div>
   )
 }
