@@ -6,12 +6,22 @@ checkBlocking()
 
 // Listen for messages from background
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'TOGGLE_GRAYSCALE') {
-    if (message.enabled) {
-      applyGrayscaleFilter()
-    } else {
+  switch (message.type) {
+    case 'TOGGLE_GRAYSCALE':
+      if (message.enabled) {
+        applyGrayscaleFilter()
+      } else {
+        removeGrayscaleFilter()
+      }
+      break
+
+    case 'ENABLE_GRAYSCALE':
+      applyGrayscaleFilter(message.payload?.intensity)
+      break
+
+    case 'DISABLE_GRAYSCALE':
       removeGrayscaleFilter()
-    }
+      break
   }
   sendResponse({ received: true })
 })
@@ -47,10 +57,11 @@ function showBreathOverlay(appName: string) {
     },
     onContinue: () => {
       // User chose to continue anyway
-      // Log this as a "break" in focus
+      // Log this as a "break" in focus with the URL
       chrome.runtime.sendMessage({
         type: 'LOG_BLOCK_BREAK',
         appName,
+        url: window.location.href,
         timestamp: new Date().toISOString(),
       })
     },

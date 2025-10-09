@@ -84,11 +84,13 @@ model BlockedApp {
   userId        String
   name          String
   identifier    String   // Bundle ID or package name
+  domain        String?  // Website domain for browser blocking
+  category      String?  // App category (social, entertainment, etc.)
   enabled       Boolean  @default(true)
   createdAt     DateTime @default(now())
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, identifier])
 }
 
@@ -151,19 +153,33 @@ enum Impact {
 }
 
 model FlowSession {
-  id           String   @id @default(cuid())
+  id           String              @id @default(cuid())
   userId       String
   startTime    DateTime
   endTime      DateTime?
-  duration     Int?     // minutes
+  duration     Int?                // minutes
   locationId   String?
-  feedback     String?  // "on_time", "needed_more", "finished_early"
-  monochromeOn Boolean  @default(false)
-  appsBlocked  Boolean  @default(false)
-  musicPlayed  Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feedback     String?             // "on_time", "needed_more", "finished_early"
+  monochromeOn Boolean             @default(false)
+  appsBlocked  Boolean             @default(false)
+  musicPlayed  Boolean             @default(false)
+  createdAt    DateTime            @default(now())
+
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blockBreaks  SessionBlockBreak[]
+}
+
+model SessionBlockBreak {
+  id        String      @id @default(cuid())
+  sessionId String
+  appName   String
+  url       String?
+  timestamp DateTime
+  createdAt DateTime    @default(now())
+
+  session   FlowSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
 }
 
 model ShutdownLog {

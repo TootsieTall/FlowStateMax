@@ -56,6 +56,17 @@ class API {
       auth: { token },
     })
   }
+
+  async logBlockBreak(appName: string, url: string, timestamp: string) {
+    return this.fetch('/api/extension/log-break', {
+      method: 'POST',
+      body: JSON.stringify({
+        appName,
+        url,
+        timestamp,
+      }),
+    })
+  }
 }
 
 export const api = new API()

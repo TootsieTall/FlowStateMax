@@ -24,5 +24,7 @@ declare class GrayscaleFilter {
     private applyGrayscaleToElement;
 }
 export declare const grayscaleFilter: GrayscaleFilter;
+export declare function applyGrayscaleFilter(intensity?: number): void;
+export declare function removeGrayscaleFilter(): void;
 export {};
 //# sourceMappingURL=grayscale_filter.d.ts.map

@@ -14,9 +14,12 @@ let grayscaleIntensity = 100;
 // Service worker lifecycle
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('FlowState extension installed')
-  
+
   // Initialize storage
   await storage.init()
+
+  // Start session polling alarm (every 5 seconds)
+  chrome.alarms.create('session_poll', { periodInMinutes: 1/12 }) // 5 seconds
 })
 
 // Listen for messages from content scripts
@@ -29,6 +32,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'session_check') {
     checkActiveSession()
+  } else if (alarm.name === 'session_poll') {
+    pollSessionStatus()
   }
 })
 
@@ -129,14 +134,17 @@ async function handleMessage(message: any, sender: chrome.runtime.MessageSender)
       };
 
     case 'GET_GLOBAL_GRAYSCALE_STATUS':
-      return { 
-        success: true, 
-        data: { 
+      return {
+        success: true,
+        data: {
           enabled: globalGrayscaleEnabled,
           intensity: grayscaleIntensity
         }
       };
-    
+
+    case 'LOG_BLOCK_BREAK':
+      return await logBlockBreak(message.appName, message.url, message.timestamp)
+
     default:
       return { error: 'Unknown message type' }
   }
@@ -270,7 +278,7 @@ async function checkActiveSession() {
     if (endTime < new Date()) {
       // Session expired
       await endSession(session.id)
-      
+
       // Show notification
       chrome.notifications.create({
         type: 'basic',
@@ -281,5 +289,64 @@ async function checkActiveSession() {
     }
   } catch (error) {
     console.error('Error checking session:', error)
+  }
+}
+
+async function logBlockBreak(appName: string, url: string | undefined, timestamp: string) {
+  try {
+    const auth = await storage.get('auth')
+    if (!auth?.token) {
+      return { error: 'Not authenticated' }
+    }
+
+    await api.logBlockBreak(appName, url || '', timestamp)
+    return { success: true }
+  } catch (error) {
+    console.error('Error logging block break:', error)
+    return { error: error.message }
+  }
+}
+
+/**
+ * Poll session status from API every 5 seconds
+ * Updates local state based on server session
+ */
+async function pollSessionStatus() {
+  try {
+    const auth = await storage.get('auth')
+    if (!auth?.token) {
+      // Not authenticated, stop polling
+      return
+    }
+
+    // Fetch current session status from API
+    const status = await api.getSessionStatus()
+
+    if (status.active) {
+      // Update local session state
+      await storage.set('activeSession', status.session)
+
+      // Sync monochrome state
+      if (status.monochromeEnabled !== globalGrayscaleEnabled) {
+        globalGrayscaleEnabled = status.monochromeEnabled
+        await applyGrayscaleToAllTabs(globalGrayscaleEnabled, grayscaleIntensity)
+      }
+
+      // Sync blocked apps
+      if (status.appsBlocked) {
+        const blockedApps = await api.getBlockedApps()
+        await storage.set('blockedApps', blockedApps.apps)
+      }
+    } else {
+      // No active session, clear local state
+      const currentSession = await storage.get('activeSession')
+      if (currentSession) {
+        await storage.remove('activeSession')
+        globalGrayscaleEnabled = false
+        await applyGrayscaleToAllTabs(false)
+      }
+    }
+  } catch (error) {
+    console.error('Error polling session status:', error)
   }
 }

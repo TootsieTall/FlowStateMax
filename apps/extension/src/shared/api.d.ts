@@ -5,6 +5,7 @@ declare class API {
     getBlockedApps(): Promise<any>;
     getSessionStatus(): Promise<any>;
     authenticate(token: string): Promise<void>;
+    logBlockBreak(appName: string, url: string, timestamp: string): Promise<any>;
 }
 export declare const api: API;
 export {};

@@ -123,4 +123,14 @@ class GrayscaleFilter {
   }
 }
 
-export const grayscaleFilter = new GrayscaleFilter();
+const filter = new GrayscaleFilter();
+
+export const grayscaleFilter = filter;
+
+export function applyGrayscaleFilter(intensity: number = 100) {
+  filter.enable(intensity);
+}
+
+export function removeGrayscaleFilter() {
+  filter.disable();
+}
