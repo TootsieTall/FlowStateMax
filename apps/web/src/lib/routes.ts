@@ -166,7 +166,7 @@ export const NAV = {
       ROUTES.ONBOARDING.BOREDOM,
       ROUTES.ONBOARDING.RECOVERY,
       ROUTES.ONBOARDING.COMPLETE,
-    ];
+    ] as string[];
 
     const currentIndex = steps.indexOf(currentPath);
     if (currentIndex === -1 || currentIndex === steps.length - 1) {
@@ -190,7 +190,7 @@ export const NAV = {
       ROUTES.ONBOARDING.BOREDOM,
       ROUTES.ONBOARDING.RECOVERY,
       ROUTES.ONBOARDING.COMPLETE,
-    ];
+    ] as string[];
 
     const currentIndex = steps.indexOf(currentPath);
     if (currentIndex <= 0) {
