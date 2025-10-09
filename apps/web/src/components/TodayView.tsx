@@ -122,25 +122,25 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background-primary">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-background-card border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-primary">FlowState</h1>
+              <h1 className="text-2xl font-bold text-teal-500">FlowState</h1>
             </div>
             <div className="flex items-center space-x-8">
-              <a href="/week" className="text-gray-600 hover:text-gray-900">
+              <a href="/week" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Week
               </a>
-              <a href="/today" className="text-primary font-semibold border-b-2 border-primary pb-1">
+              <a href="/today" className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
                 Today
               </a>
-              <a href="/explore" className="text-gray-600 hover:text-gray-900">
+              <a href="/explore" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Explore
               </a>
-              <a href="/settings" className="text-gray-600 hover:text-gray-900">
+              <a href="/settings" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -211,7 +211,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
 
         {/* Quick Capture Button */}
         <button
-          className="fixed bottom-8 right-8 bg-primary hover:bg-primary-dark text-white rounded-full p-4 shadow-lg transition-transform hover:scale-110"
+          className="fixed bottom-8 right-8 bg-teal-600 hover:bg-teal-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl"
           onClick={() => (window.location.href = '/capture')}
         >
           <Plus className="w-6 h-6" />

@@ -31,6 +31,19 @@ module.exports = {
           purple: '#c084fc',   // Bright soft purple
           yellow: '#fcd34d',   // Bright soft yellow
         },
+        // Teal for primary buttons - pops nicely without being aggressive
+        teal: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',  // Main teal
+          600: '#0d9488',  // Primary button color
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+        },
         // Background colors for light black theme
         background: {
           primary: '#1a1a1a',   // Darkest background

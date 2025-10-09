@@ -56,25 +56,25 @@ export default function WeekViewPage() {
   const nextWeek = () => setCurrentWeek(addDays(currentWeek, 7))
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background-primary">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-background-card border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-primary">FlowState</h1>
+              <h1 className="text-2xl font-bold text-teal-500">FlowState</h1>
             </div>
             <div className="flex items-center space-x-8">
-              <a href="/week" className="text-primary font-semibold border-b-2 border-primary pb-1">
+              <a href="/week" className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
                 Week
               </a>
-              <a href="/today" className="text-gray-600 hover:text-gray-900">
+              <a href="/today" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Today
               </a>
-              <a href="/explore" className="text-gray-600 hover:text-gray-900">
+              <a href="/explore" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Explore
               </a>
-              <a href="/settings" className="text-gray-600 hover:text-gray-900">
+              <a href="/settings" className="text-gray-400 hover:text-teal-400 transition-colors">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -89,16 +89,16 @@ export default function WeekViewPage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={previousWeek}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-primary-700 rounded-lg transition-colors text-gray-300"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-200">
             {format(weekStart, 'MMMM d')} - {format(addDays(weekStart, 6), 'MMMM d, yyyy')}
           </h2>
           <button
             onClick={nextWeek}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-primary-700 rounded-lg transition-colors text-gray-300"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -106,7 +106,7 @@ export default function WeekViewPage() {
 
         {/* Calendar Grid */}
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading...</div>
+          <div className="text-center py-12 text-gray-400">Loading...</div>
         ) : (
           <div className="grid grid-cols-7 gap-4">
             {days.map((day) => {
@@ -116,15 +116,15 @@ export default function WeekViewPage() {
               return (
                 <div
                   key={day.toISOString()}
-                  className={`bg-white rounded-lg border-2 p-4 min-h-[400px] ${
-                    isToday ? 'border-primary' : 'border-gray-200'
+                  className={`bg-background-card rounded-lg border-2 p-4 min-h-[400px] ${
+                    isToday ? 'border-teal-500' : 'border-gray-700'
                   }`}
                 >
                   <div className="mb-4">
-                    <div className="text-sm text-gray-500">{format(day, 'EEE')}</div>
+                    <div className="text-sm text-gray-400 font-medium">{format(day, 'EEE')}</div>
                     <div
                       className={`text-2xl font-bold ${
-                        isToday ? 'text-primary' : 'text-gray-900'
+                        isToday ? 'text-teal-500' : 'text-gray-200'
                       }`}
                     >
                       {format(day, 'd')}
@@ -145,7 +145,7 @@ export default function WeekViewPage() {
                   </div>
 
                   <button
-                    className="w-full mt-4 p-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-colors flex items-center justify-center text-gray-500 hover:text-primary"
+                    className="w-full mt-4 p-2 border-2 border-dashed border-gray-600 rounded-lg hover:border-teal-500 hover:bg-teal-500 hover:bg-opacity-10 transition-colors flex items-center justify-center text-gray-400 hover:text-teal-400"
                     onClick={() => {
                       // Handle adding new block
                     }}
@@ -162,7 +162,7 @@ export default function WeekViewPage() {
 
       {/* Quick Capture Button */}
       <button
-        className="fixed bottom-8 right-8 bg-primary hover:bg-primary-dark text-white rounded-full p-4 shadow-lg transition-transform hover:scale-110"
+        className="fixed bottom-8 right-8 bg-teal-600 hover:bg-teal-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl"
         onClick={() => (window.location.href = '/capture')}
       >
         <Plus className="w-6 h-6" />

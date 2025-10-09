@@ -38,6 +38,38 @@ body {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Input fields - ensure visibility */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea,
+select {
+  background-color: rgb(var(--background-tertiary)) !important;
+  color: rgb(var(--foreground-primary)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  background-color: rgb(var(--background-card)) !important;
+  border-color: rgb(var(--accent-blue)) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgb(var(--foreground-muted)) !important;
+  opacity: 0.6;
+}
+
 /* Smooth transitions for grayscale mode */
 html {
   transition: filter 1s ease-in-out;
