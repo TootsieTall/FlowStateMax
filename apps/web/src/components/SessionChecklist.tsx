@@ -220,13 +220,14 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
             <button
               key={item.id}
               onClick={() => toggleChecklistItem(item.id)}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              type="button"
+              className={`w-full p-4 rounded-lg border-2 transition-all text-left cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                 item.checked
                   ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-gray-300 hover:border-coral-500 hover:bg-gray-50'
               }`}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3 pointer-events-none">
                 <div className={`mt-0.5 ${item.checked ? 'text-green-600' : 'text-gray-400'}`}>
                   {item.checked ? <CheckCircle className="w-5 h-5" /> : <Circle className="w-5 h-5" />}
                 </div>

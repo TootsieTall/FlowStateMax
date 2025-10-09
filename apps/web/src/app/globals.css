@@ -70,6 +70,28 @@ textarea::placeholder {
   opacity: 0.6;
 }
 
+/* Quote blocks - beautiful and readable */
+blockquote {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%) !important;
+  border-left: 4px solid #f59e0b !important;
+  color: #fef3c7 !important;
+  padding: 1.5rem 1.5rem 1.5rem 1.75rem !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1);
+}
+
+blockquote p {
+  color: #fde68a !important;
+  margin-bottom: 0.75rem !important;
+}
+
+blockquote footer {
+  color: #fbbf24 !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+}
+
 /* Smooth transitions for grayscale mode */
 html {
   transition: filter 1s ease-in-out;

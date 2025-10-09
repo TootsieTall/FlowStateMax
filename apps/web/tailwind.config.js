@@ -44,6 +44,32 @@ module.exports = {
           800: '#115e59',
           900: '#134e4a',
         },
+        // Coral for buttons - warm complement to teal
+        coral: {
+          50: '#fff5f3',
+          100: '#ffe8e3',
+          200: '#ffd1c7',
+          300: '#ffb09f',
+          400: '#ff8b6d',
+          500: '#ff6b4a',  // Main coral
+          600: '#f04f2f',  // Button color - pops beautifully
+          700: '#d63d1f',
+          800: '#b0311a',
+          900: '#8f2a1a',
+        },
+        // Amber for quotes and accents
+        amber: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',  // Warm amber for quotes
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
         // Background colors for light black theme
         background: {
           primary: '#1a1a1a',   // Darkest background
