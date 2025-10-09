@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns'
 import { BlockCard, Button } from '@flowstate/ui'
 import { Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { StartFlowButton } from '@/components/StartFlowButton'
 
 interface TimeBlock {
   id: string
@@ -76,6 +77,7 @@ export default function WeekViewPage() {
               <a href="/settings" className="text-gray-600 hover:text-gray-900">
                 Settings
               </a>
+              <StartFlowButton variant="icon" />
             </div>
           </div>
         </div>

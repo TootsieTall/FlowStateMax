@@ -6,6 +6,7 @@ import { format, isWithinInterval } from 'date-fns'
 import { Play, Plus, CheckCircle } from 'lucide-react'
 import { SessionData } from './SessionChecklist'
 import { SessionComplete } from './SessionComplete'
+import { StartFlowButton } from './StartFlowButton'
 import { useAppStore } from '@/store'
 
 // Lazy load SessionChecklist modal for better initial load performance
@@ -142,6 +143,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
               <a href="/settings" className="text-gray-600 hover:text-gray-900">
                 Settings
               </a>
+              <StartFlowButton variant="icon" />
             </div>
           </div>
         </div>
@@ -178,20 +180,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
                 {format(new Date(currentBlock.endTime), 'h:mm a')}
               </p>
 
-              {!isInFlow ? (
-                <Button
-                  onClick={handleStartFlow}
-                  size="lg"
-                  className="bg-primary hover:bg-primary-dark text-white px-8 py-4 text-lg"
-                >
-                  <Play className="w-6 h-6 mr-2" />
-                  Start Flow Session
-                </Button>
-              ) : (
-                <div className="text-sm text-primary-700 font-medium">
-                  Flow session in progress...
-                </div>
-              )}
+              <StartFlowButton variant="primary" />
             </div>
           </div>
         ) : (

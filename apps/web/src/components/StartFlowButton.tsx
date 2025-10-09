@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Circle, Loader2, PlayCircle, Clock, AlertCircle } from 'lucide-react'
-import { Button } from '@flowstate/ui'
 import { RitualChecklist } from './RitualChecklist'
 
 // Utility function for merging class names
@@ -202,14 +201,14 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
         whileHover={{ scale: variant === 'floating' ? 1.1 : 1.02 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Button
+        <button
           onClick={handleClick}
           disabled={isDisabled}
           className={variantClasses[variant]}
           title={getTooltip() || undefined}
         >
           {getButtonContent()}
-        </Button>
+        </button>
 
         {/* Pulsing ring animation for primary variant */}
         {variant === 'primary' && !isLoading && (

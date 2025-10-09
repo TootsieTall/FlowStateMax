@@ -42,3 +42,4 @@ yarn-error.log*
 
 # Turbo
 .turbo/
+*.tsbuildinfo
