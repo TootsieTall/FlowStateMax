@@ -13,12 +13,12 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2'
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900'
   
   const variantStyles = {
-    primary: 'bg-primary text-white hover:bg-primary-dark focus:ring-primary',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+    primary: 'bg-primary-600 text-white hover:bg-primary-500 focus:ring-primary-500',
+    secondary: 'bg-primary-800 text-gray-200 hover:bg-primary-700 focus:ring-primary-600 border border-gray-700',
+    ghost: 'bg-transparent text-gray-300 hover:bg-primary-800 focus:ring-primary-700',
   }
   
   const sizeStyles = {

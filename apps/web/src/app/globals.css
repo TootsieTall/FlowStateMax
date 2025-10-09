@@ -3,27 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;    /* white text on dark background */
-  --background-rgb: 33, 33, 33;       /* light black background (#212121) */
-  --foreground-secondary: 189, 189, 189; /* light gray text */
-  --background-secondary: 48, 48, 48;   /* darker gray background */
-}
-
-/* Support for light mode preference */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-rgb: 255, 255, 255;
-    --foreground-rgb: 23, 23, 23;
-  }
+  /* Light black/charcoal color scheme */
+  --background-primary: 26, 26, 26;      /* #1a1a1a - Darkest background */
+  --background-secondary: 36, 36, 36;    /* #242424 - Secondary dark */
+  --background-tertiary: 48, 48, 48;     /* #303030 - Tertiary dark */
+  --background-card: 42, 42, 42;         /* #2a2a2a - Card background */
+  
+  --foreground-primary: 245, 245, 245;   /* #f5f5f5 - Almost white text */
+  --foreground-secondary: 208, 208, 208; /* #d0d0d0 - Light gray text */
+  --foreground-tertiary: 160, 160, 160;  /* #a0a0a0 - Medium gray text */
+  --foreground-muted: 112, 112, 112;     /* #707070 - Muted gray */
+  
+  --primary: 48, 48, 48;                 /* #303030 - Primary brand color */
+  --primary-hover: 64, 64, 64;           /* #404040 - Hover state */
+  
+  /* Accent colors */
+  --accent-blue: 96, 165, 250;           /* #60a5fa */
+  --accent-green: 134, 239, 172;         /* #86efac */
+  --accent-orange: 253, 186, 116;        /* #fdba74 */
+  --accent-purple: 192, 132, 252;        /* #c084fc */
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  color: rgb(var(--foreground-primary));
+  background: rgb(var(--background-primary));
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force dark theme globally */
+* {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Smooth transitions for grayscale mode */
@@ -35,31 +47,96 @@ html {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-track {
-    background: #2a2a2a;
+  
+  /* Dark theme utilities */
+  .bg-app {
+    background-color: rgb(var(--background-primary));
+  }
+  
+  .bg-app-secondary {
+    background-color: rgb(var(--background-secondary));
+  }
+  
+  .bg-app-tertiary {
+    background-color: rgb(var(--background-tertiary));
+  }
+  
+  .bg-card {
+    background-color: rgb(var(--background-card));
+  }
+  
+  .text-app {
+    color: rgb(var(--foreground-primary));
+  }
+  
+  .text-app-secondary {
+    color: rgb(var(--foreground-secondary));
+  }
+  
+  .text-app-muted {
+    color: rgb(var(--foreground-muted));
+  }
+  
+  /* Override white backgrounds with dark */
+  .bg-white {
+    background-color: rgb(var(--background-card)) !important;
+  }
+  
+  .text-gray-900 {
+    color: rgb(var(--foreground-primary)) !important;
+  }
+  
+  .text-gray-700 {
+    color: rgb(var(--foreground-secondary)) !important;
+  }
+  
+  .text-gray-600 {
+    color: rgb(var(--foreground-secondary)) !important;
+  }
+  
+  .text-gray-500 {
+    color: rgb(var(--foreground-tertiary)) !important;
+  }
+  
+  .bg-gray-50 {
+    background-color: rgb(var(--background-secondary)) !important;
+  }
+  
+  .bg-gray-100 {
+    background-color: rgb(var(--background-tertiary)) !important;
+  }
+  
+  .border-gray-200 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .border-gray-300 {
+    border-color: rgba(255, 255, 255, 0.15) !important;
   }
 }
 
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+  background: #505050;
+  border-radius: 5px;
+  border: 2px solid #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #686868;
+}
+
+::-webkit-scrollbar-corner {
+  background: #1a1a1a;
 }
 
 /* Animations */
@@ -83,3 +160,4 @@ html {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
+

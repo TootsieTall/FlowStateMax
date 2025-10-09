@@ -9,38 +9,41 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Light black primary color scheme
+        // Light black/charcoal primary color scheme
         primary: {
-          50: '#f5f5f5',   // Very light gray
-          100: '#e0e0e0',  // Light gray
-          200: '#bdbdbd',  // Medium light gray
-          300: '#9e9e9e',  // Medium gray
-          400: '#757575',  // Medium dark gray
-          500: '#616161',  // Dark gray
-          600: '#424242',  // Darker gray
+          50: '#e8e8e8',   // Light gray for highlights
+          100: '#d0d0d0',  // Lighter gray
+          200: '#b8b8b8',  // Medium light gray
+          300: '#909090',  // Medium gray
+          400: '#686868',  // Medium dark gray
+          500: '#505050',  // Dark gray (default)
+          600: '#404040',  // Darker gray
           700: '#303030',  // Very dark gray
-          800: '#212121',  // Light black
-          900: '#1a1a1a',  // Darker black
+          800: '#242424',  // Light black
+          900: '#1a1a1a',  // Darkest black
+          DEFAULT: '#303030', // Default primary color
         },
-        // Accent colors that are easy on the eyes
+        // Accent colors with good contrast on dark backgrounds
         accent: {
-          blue: '#4a90e2',     // Soft blue
-          green: '#7cb342',    // Soft green
-          orange: '#ff8c42',   // Soft orange
-          purple: '#9c88ff',   // Soft purple
+          blue: '#60a5fa',     // Bright soft blue
+          green: '#86efac',    // Bright soft green
+          orange: '#fdba74',   // Bright soft orange
+          purple: '#c084fc',   // Bright soft purple
+          yellow: '#fcd34d',   // Bright soft yellow
         },
-        // Background colors optimized for reading
+        // Background colors for light black theme
         background: {
-          primary: '#ffffff',   // Pure white
-          secondary: '#f8f9fa', // Very light gray
-          tertiary: '#e9ecef',  // Light gray
+          primary: '#1a1a1a',   // Darkest background
+          secondary: '#242424', // Secondary dark
+          tertiary: '#303030',  // Tertiary dark
+          card: '#2a2a2a',      // Card background
         },
-        // Text colors with optimal contrast
+        // Text colors with optimal contrast on dark
         text: {
-          primary: '#212529',   // Almost black
-          secondary: '#495057', // Dark gray
-          tertiary: '#6c757d',   // Medium gray
-          muted: '#adb5bd',     // Light gray
+          primary: '#f5f5f5',   // Almost white
+          secondary: '#d0d0d0', // Light gray
+          tertiary: '#a0a0a0',  // Medium gray
+          muted: '#707070',     // Muted gray
         }
       },
       fontFamily: {
