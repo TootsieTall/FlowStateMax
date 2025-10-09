@@ -31,7 +31,7 @@ export interface SessionData {
   }
 }
 
-export default function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
+function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
   const { locations, currentLocation, checkCurrentLocation } = useWorkLocations()
   const [isCheckingLocation, setIsCheckingLocation] = useState(false)
   const [locationVerified, setLocationVerified] = useState(false)
@@ -312,4 +312,7 @@ export default function SessionChecklist({ onComplete, onSkip }: SessionChecklis
     </div>
   )
 }
+
+// Default export for lazy loading
+export default SessionChecklist
 

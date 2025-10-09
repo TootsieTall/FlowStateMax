@@ -1,10 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import { BlockCard, Button, Timer } from '@flowstate/ui'
+import { useState, useMemo, lazy, Suspense, memo, useEffect } from 'react'
+import { BlockCard, Button, FlowTimer } from '@flowstate/ui'
 import { format, isWithinInterval } from 'date-fns'
 import { Play, Plus, CheckCircle } from 'lucide-react'
-import SessionChecklist, { SessionData } from './SessionChecklist'
+import { SessionData } from './SessionChecklist'
+import { SessionComplete } from './SessionComplete'
+import { useAppStore } from '@/store'
+
+// Lazy load SessionChecklist modal for better initial load performance
+const SessionChecklist = lazy(() => import('./SessionChecklist').then(module => ({ default: module.default })))
 
 interface TimeBlock {
   id: string
@@ -22,20 +27,45 @@ interface TodayViewProps {
   dailyGoals: string[]
 }
 
+// Memoized BlockCard for performance
+const MemoizedBlockCard = memo(BlockCard)
+
 export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
-  const [activeSession, setActiveSession] = useState<string | null>(null)
   const [showChecklist, setShowChecklist] = useState(false)
-  const now = new Date()
+  const [showComplete, setShowComplete] = useState(false)
 
-  // Find current block
-  const currentBlock = blocks.find((block) =>
-    isWithinInterval(now, { start: new Date(block.startTime), end: new Date(block.endTime) })
-  )
+  // Global session state
+  const {
+    currentSession,
+    isInFlow,
+    startFlowSession,
+    endFlowSession,
+    pauseFlowSession,
+    resumeFlowSession,
+    checkExtensionConnection,
+  } = useAppStore()
 
-  // Get next 3 blocks
-  const upcomingBlocks = blocks
-    .filter((block) => new Date(block.startTime) > now)
-    .slice(0, 3)
+  // Check extension connection on mount
+  useEffect(() => {
+    checkExtensionConnection()
+  }, [])
+
+  // Memoize expensive calculations
+  const { currentBlock, upcomingBlocks } = useMemo(() => {
+    const now = new Date()
+
+    // Find current block
+    const current = blocks.find((block) =>
+      isWithinInterval(now, { start: new Date(block.startTime), end: new Date(block.endTime) })
+    )
+
+    // Get next 3 blocks
+    const upcoming = blocks
+      .filter((block) => new Date(block.startTime) > now)
+      .slice(0, 3)
+
+    return { currentBlock: current, upcomingBlocks: upcoming }
+  }, [blocks])
 
   const handleStartFlow = () => {
     setShowChecklist(true)
@@ -44,26 +74,50 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
   const handleSessionComplete = async (sessionData: SessionData) => {
     if (!currentBlock) return
 
-    // Start flow session with location and checklist data
-    const response = await fetch('/api/sessions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        blockId: currentBlock.id,
-        startTime: new Date(),
-        location: sessionData.location,
-        locationVerified: sessionData.locationVerified,
-        duration: sessionData.duration,
-        goal: sessionData.goal,
-        checklist: sessionData.checklist,
-      }),
-    })
+    setShowChecklist(false)
 
-    if (response.ok) {
-      const session = await response.json()
-      setActiveSession(session.id)
-      setShowChecklist(false)
+    // Start Flow session with full integration
+    const result = await startFlowSession(currentBlock.id, sessionData.duration)
+
+    if (!result.success) {
+      alert(`Failed to start session: ${result.error}`)
     }
+  }
+
+  const handleEndSession = async () => {
+    if (!currentSession) return
+
+    const result = await endFlowSession()
+
+    if (result.success) {
+      // Calculate duration for feedback
+      const duration = Math.floor(
+        (new Date().getTime() - new Date(currentSession.startTime).getTime()) / (1000 * 60)
+      )
+
+      // Show completion modal
+      setShowComplete(true)
+    } else {
+      alert(`Failed to end session: ${result.error}`)
+    }
+  }
+
+  const handleSessionFeedback = async (
+    feedback: 'on_time' | 'needed_more' | 'finished_early'
+  ) => {
+    // Update session with feedback
+    if (currentSession) {
+      await fetch('/api/sessions/flow', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: currentSession.id,
+          feedback,
+        }),
+      })
+    }
+
+    setShowComplete(false)
   }
 
   return (
@@ -124,15 +178,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
                 {format(new Date(currentBlock.endTime), 'h:mm a')}
               </p>
 
-              {activeSession ? (
-                <div className="space-y-4">
-                  <Timer
-                    startTime={new Date(currentBlock.startTime)}
-                    endTime={new Date(currentBlock.endTime)}
-                  />
-                  <p className="text-sm text-gray-500">Flow session active</p>
-                </div>
-              ) : (
+              {!isInFlow ? (
                 <Button
                   onClick={handleStartFlow}
                   size="lg"
@@ -141,6 +187,10 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
                   <Play className="w-6 h-6 mr-2" />
                   Start Flow Session
                 </Button>
+              ) : (
+                <div className="text-sm text-primary-700 font-medium">
+                  Flow session in progress...
+                </div>
               )}
             </div>
           </div>
@@ -156,7 +206,7 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
           <h3 className="text-lg font-semibold text-gray-900">Coming Up</h3>
           {upcomingBlocks.length > 0 ? (
             upcomingBlocks.map((block) => (
-              <BlockCard
+              <MemoizedBlockCard
                 key={block.id}
                 title={block.title}
                 startTime={new Date(block.startTime)}
@@ -179,16 +229,49 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
         </button>
       </main>
 
-      {/* Session Checklist Modal */}
+      {/* Flow Timer Overlay */}
+      {isInFlow && currentSession && (
+        <FlowTimer
+          startTime={new Date(currentSession.startTime)}
+          endTime={new Date(currentSession.endTime)}
+          onPause={pauseFlowSession}
+          onResume={resumeFlowSession}
+          onEnd={handleEndSession}
+        />
+      )}
+
+      {/* Session Checklist Modal - Lazy loaded with Suspense */}
       {showChecklist && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="max-w-2xl w-full">
-            <SessionChecklist
-              onComplete={handleSessionComplete}
-              onSkip={() => setShowChecklist(false)}
-            />
+            <Suspense fallback={
+              <div className="bg-white rounded-xl p-8 text-center">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+                </div>
+                <p className="mt-4 text-gray-500">Loading session setup...</p>
+              </div>
+            }>
+              <SessionChecklist
+                onComplete={handleSessionComplete}
+                onSkip={() => setShowChecklist(false)}
+              />
+            </Suspense>
           </div>
         </div>
+      )}
+
+      {/* Session Completion Modal */}
+      {showComplete && currentSession && (
+        <SessionComplete
+          duration={Math.floor(
+            (new Date().getTime() - new Date(currentSession.startTime).getTime()) / (1000 * 60)
+          )}
+          targetDuration={currentSession.duration}
+          onComplete={handleSessionFeedback}
+          onClose={() => setShowComplete(false)}
+        />
       )}
     </div>
   )
