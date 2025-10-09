@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { Button } from '@flowstate/ui'
+
+// Utility function for merging class names
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 interface RitualItem {
   id: string
@@ -108,9 +112,12 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
             ) : ritualItems.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-gray-500 mb-4">No ritual items configured</p>
-                <Button variant="ghost" onClick={() => window.location.href = '/onboarding/ritual'}>
+                <button 
+                  onClick={() => window.location.href = '/onboarding/ritual'}
+                  className="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                >
                   Set up ritual
-                </Button>
+                </button>
               </div>
             ) : (
               <div className="space-y-3">
@@ -175,17 +182,13 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
           {/* Footer */}
           <div className="p-6 border-t dark:border-gray-700">
             <div className="flex gap-3">
-              <Button variant="ghost" onClick={onClose} className="flex-1">
+              <Button variant="secondary" onClick={onClose}>
                 Cancel
               </Button>
               <Button
                 onClick={onBeginFlow}
                 disabled={!allChecked}
-                className={cn(
-                  'flex-1 bg-gradient-to-r from-blue-600 to-purple-600',
-                  'hover:from-blue-700 hover:to-purple-700',
-                  'disabled:from-gray-400 disabled:to-gray-400'
-                )}
+                variant="primary"
               >
                 {allChecked ? 'Begin Flow' : `${checkedItems.size}/${ritualItems.length} Complete`}
               </Button>

@@ -16,7 +16,7 @@ import {
   getDayIndex,
 } from './utils'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { Button } from '@flowstate/ui'
 
 interface WeekViewProps {
   blocks: TimeBlock[]

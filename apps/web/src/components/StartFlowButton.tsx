@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Circle, Loader2, PlayCircle, Clock, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@flowstate/ui'
 import { RitualChecklist } from './RitualChecklist'
-import { cn } from '@/lib/utils'
+
+// Utility function for merging class names
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 type ButtonVariant = 'primary' | 'floating' | 'icon'
 

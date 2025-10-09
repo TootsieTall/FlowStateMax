@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOnboardingStore } from '@/store/onboarding'
 import { ProgressIndicator } from './ProgressIndicator'
-import { Button } from '@/components/ui/button'
+import { Button } from '@flowstate/ui'
 import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 
 interface OnboardingLayoutProps {
