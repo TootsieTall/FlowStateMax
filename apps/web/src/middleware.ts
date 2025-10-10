@@ -3,11 +3,12 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 /**
- * Middleware for Route Protection
+ * Middleware for Route Protection with Guest Mode Support
  * 
  * Handles:
  * - Authentication checks
  * - Onboarding flow enforcement
+ * - Guest mode for onboarding
  * - Redirect logic
  */
 
@@ -15,6 +16,15 @@ const PUBLIC_ROUTES = ['/', '/login', '/signup'];
 const AUTH_ROUTES = ['/login', '/signup'];
 const ONBOARDING_ROUTES = '/onboarding';
 const API_ROUTES = '/api';
+
+// Feature flags - these are checked server-side from env
+function isGuestOnboardingAllowed(): boolean {
+  return process.env.NEXT_PUBLIC_ALLOW_GUEST_ONBOARDING === 'true';
+}
+
+function isOAuthEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_ENABLE_OAUTH === 'true';
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -40,21 +50,30 @@ export async function middleware(request: NextRequest) {
   });
 
   const isAuthenticated = !!token;
+  const isGuest = token?.isGuest === true;
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
   const isOnboardingRoute = pathname.startsWith(ONBOARDING_ROUTES);
 
+  // GUEST MODE: Allow unauthenticated access to onboarding
+  if (isOnboardingRoute && isGuestOnboardingAllowed() && !isAuthenticated) {
+    // Allow guest users to access onboarding without authentication
+    console.log('🎫 Guest onboarding access granted for:', pathname);
+    return NextResponse.next();
+  }
+
   // Redirect authenticated users away from auth pages
   if (isAuthenticated && isAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = '/today';
+    // If they're a guest, send to onboarding; otherwise to main app
+    url.pathname = isGuest ? '/onboarding' : '/today';
     return NextResponse.redirect(url);
   }
 
   // Redirect authenticated users away from landing page
   if (isAuthenticated && pathname === '/') {
     const url = request.nextUrl.clone();
-    url.pathname = '/today';
+    url.pathname = isGuest ? '/onboarding' : '/today';
     return NextResponse.redirect(url);
   }
 
@@ -63,12 +82,42 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Require authentication for protected routes
+  // GUEST MODE: Allow authenticated guest users to access onboarding
+  if (isOnboardingRoute && isAuthenticated) {
+    // Allow both guest and regular users to access onboarding
+    return NextResponse.next();
+  }
+
+  // Require authentication for protected routes (non-onboarding)
   if (!isAuthenticated) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    // Store the intended destination
-    url.searchParams.set('callbackUrl', pathname);
+    
+    // If guest mode is enabled, send to onboarding; otherwise to login
+    if (isGuestOnboardingAllowed()) {
+      url.pathname = '/onboarding';
+    } else {
+      url.pathname = '/login';
+      // Store the intended destination
+      url.searchParams.set('callbackUrl', pathname);
+    }
+    
+    return NextResponse.redirect(url);
+  }
+
+  // Check if guest user is trying to access main app
+  if (isGuest && !isOnboardingRoute) {
+    // Redirect guest users back to onboarding or show them OAuth connection
+    const url = request.nextUrl.clone();
+    
+    if (isOAuthEnabled()) {
+      // If OAuth is enabled, they need to upgrade their account
+      url.pathname = '/onboarding/complete';
+      url.searchParams.set('connectAccount', 'true');
+    } else {
+      // If OAuth is disabled, allow them to use the app as guest
+      return NextResponse.next();
+    }
+    
     return NextResponse.redirect(url);
   }
 

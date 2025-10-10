@@ -1,13 +1,19 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { CheckCircle, Calendar, Target, Sparkles } from 'lucide-react'
+import ConnectAccountPrompt from '@/components/ConnectAccountPrompt'
+import { shouldPromptOAuthConnection } from '@/lib/guest-auth'
 
 export default function OnboardingComplete() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const { data: session } = useSession()
   const [userName, setUserName] = useState('')
   const [isRedirecting, setIsRedirecting] = useState(false)
+  const [showOAuthPrompt, setShowOAuthPrompt] = useState(false)
 
   useEffect(() => {
     // Get user name from session or default
@@ -15,7 +21,13 @@ export default function OnboardingComplete() {
       const storedName = localStorage.getItem('flowstate_user_name') || 'there'
       setUserName(storedName)
     }
-  }, [])
+
+    // Check if we should show OAuth connection prompt
+    const connectAccount = searchParams.get('connectAccount')
+    if (connectAccount === 'true' || shouldPromptOAuthConnection(session?.user)) {
+      setShowOAuthPrompt(true)
+    }
+  }, [session, searchParams])
 
   const handleGetStarted = () => {
     setIsRedirecting(true)
@@ -26,8 +38,17 @@ export default function OnboardingComplete() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center p-4">
-      <div className="bg-background-card border border-gray-700 rounded-2xl shadow-2xl max-w-3xl w-full p-12">
+    <>
+      {/* OAuth Connection Prompt Modal */}
+      {showOAuthPrompt && (
+        <ConnectAccountPrompt 
+          onDismiss={() => setShowOAuthPrompt(false)}
+          showDismiss={true}
+        />
+      )}
+
+      <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center p-4">
+        <div className="bg-background-card border border-gray-700 rounded-2xl shadow-2xl max-w-3xl w-full p-12">
         {/* Success Icon */}
         <div className="flex justify-center mb-6">
           <div className="bg-green-600/20 rounded-full p-4">
@@ -134,8 +155,9 @@ export default function OnboardingComplete() {
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

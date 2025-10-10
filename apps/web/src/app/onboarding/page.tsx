@@ -1,20 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { isGuestOnboardingAllowed, isDevMode, getAuthModeMessage } from '@/lib/guest-auth'
 
 export default function OnboardingStart() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [canAccessAsGuest, setCanAccessAsGuest] = useState(false)
   
-  // If logged in, redirect to goals
-  if (session) {
-    router.push('/onboarding/goals')
-    return null
-  }
+  useEffect(() => {
+    // Check if guest onboarding is allowed
+    setCanAccessAsGuest(isGuestOnboardingAllowed() || isDevMode())
+  }, [])
+
+  useEffect(() => {
+    // If already authenticated, skip to goals
+    if (status === 'authenticated' && session) {
+      router.push('/onboarding/goals')
+    }
+  }, [session, status, router])
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,6 +39,30 @@ export default function OnboardingStart() {
     } else {
       setLoading(false)
     }
+  }
+
+  const handleSkipAuth = () => {
+    // For guest mode, proceed to goals without authentication
+    if (canAccessAsGuest) {
+      router.push('/onboarding/goals')
+    }
+  }
+
+  // Show loading while checking auth
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-300">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If already authenticated, show loading while redirecting
+  if (status === 'authenticated') {
+    return null
   }
   
   return (
@@ -75,9 +107,21 @@ export default function OnboardingStart() {
           >
             {loading ? 'Starting...' : 'Get Started'}
           </button>
+
+          {/* Guest mode: Skip authentication button */}
+          {canAccessAsGuest && (
+            <button
+              type="button"
+              onClick={handleSkipAuth}
+              disabled={loading}
+              className="w-full mt-3 bg-transparent hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 font-medium px-8 py-3 rounded-lg text-base transition-all border border-gray-600"
+            >
+              Continue Without Signing In
+            </button>
+          )}
           
           <p className="mt-4 text-sm text-gray-400 text-center">
-            Development mode - no authentication required
+            {getAuthModeMessage()}
           </p>
         </form>
       </div>
