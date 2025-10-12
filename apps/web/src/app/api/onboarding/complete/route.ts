@@ -9,27 +9,53 @@ import { prisma } from '@/lib/prisma'
  */
 export async function POST(request: Request) {
   try {
+    console.log('[OnboardingAPI] Starting onboarding completion...')
+    
     const session = await getServerSession(authOptions)
     
     if (!session?.user) {
+      console.log('[OnboardingAPI] No session found')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    console.log('[OnboardingAPI] Session user:', {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.name
+    })
+
     const body = await request.json()
     const { goals, recoveryActivities, trackRecovery, hobbiesToTry } = body
+
+    console.log('[OnboardingAPI] Request body:', {
+      goals: typeof goals,
+      recoveryActivities: typeof recoveryActivities,
+      trackRecovery: typeof trackRecovery,
+      hobbiesToTry: typeof hobbiesToTry
+    })
 
     // Parse goals if it's a string
     let parsedGoals = goals
     if (typeof goals === 'string') {
       try {
         parsedGoals = JSON.parse(goals)
-      } catch {
+      } catch (err) {
+        console.warn('[OnboardingAPI] Failed to parse goals:', err)
         parsedGoals = []
       }
     }
     
     // Ensure goals is an array
     const goalsArray = Array.isArray(parsedGoals) ? parsedGoals : []
+    console.log('[OnboardingAPI] Parsed goals array:', goalsArray)
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true, email: true }
+    })
+
+    console.log('[OnboardingAPI] Existing user:', existingUser)
 
     // Update or create user with onboarding complete
     const user = await prisma.user.upsert({
@@ -48,19 +74,29 @@ export async function POST(request: Request) {
       },
     })
 
-    console.log(`[OnboardingAPI] User ${user.id} completed onboarding`)
+    console.log(`[OnboardingAPI] ✅ User ${user.id} completed onboarding successfully`)
 
     return NextResponse.json({
       success: true,
       user: {
         id: user.id,
         onboardingComplete: user.onboardingComplete,
+        goals: user.goals,
       },
     })
   } catch (error) {
-    console.error('[OnboardingAPI] Error completing onboarding:', error)
+    console.error('[OnboardingAPI] ❌ Error completing onboarding:', error)
+    console.error('[OnboardingAPI] Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
+    
     return NextResponse.json(
-      { error: 'Failed to complete onboarding' },
+      { 
+        error: 'Failed to complete onboarding',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }
