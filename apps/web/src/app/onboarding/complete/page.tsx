@@ -44,6 +44,8 @@ export default function OnboardingComplete() {
     
     // Mark onboarding as complete in database
     try {
+      console.log('🚀 Starting onboarding completion...')
+      
       const response = await fetch('/api/onboarding/complete', {
         method: 'POST',
         headers: {
@@ -58,7 +60,9 @@ export default function OnboardingComplete() {
       })
 
       if (!response.ok) {
-        console.error('Failed to mark onboarding complete:', await response.text())
+        const errorText = await response.text()
+        console.error('❌ Failed to mark onboarding complete:', errorText)
+        alert('Failed to complete onboarding. Please try again.')
         setIsRedirecting(false)
         return
       }
@@ -66,18 +70,28 @@ export default function OnboardingComplete() {
       const data = await response.json()
       console.log('✅ Onboarding marked as complete:', data)
       
-      // Update the session to reflect the new onboarding status
-      await updateSession()
+      // Try to update the session, but don't let it block the redirect
+      try {
+        console.log('🔄 Updating session...')
+        await Promise.race([
+          updateSession(),
+          new Promise((resolve) => setTimeout(resolve, 2000)) // 2 second timeout
+        ])
+        console.log('✅ Session updated (or timed out)')
+      } catch (sessionError) {
+        console.warn('⚠️ Session update failed, but continuing anyway:', sessionError)
+      }
       
-      // Wait a bit more for session to update, then do a hard redirect
-      // Using window.location instead of router.push to force a full page reload
-      // which will fetch the updated session with onboardingComplete: true
+      // Always redirect, even if session update fails
+      // The middleware will fetch fresh data on page load
+      console.log('🎯 Redirecting to /today...')
       setTimeout(() => {
         window.location.href = '/today'
-      }, 1000)
+      }, 500)
       
     } catch (error) {
-      console.error('Error marking onboarding complete:', error)
+      console.error('❌ Error marking onboarding complete:', error)
+      alert('An error occurred. Please try again or refresh the page.')
       setIsRedirecting(false)
     }
   }

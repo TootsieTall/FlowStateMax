@@ -127,19 +127,25 @@ export async function middleware(request: NextRequest) {
 
   // Check if guest user is trying to access main app
   if (isGuest && !isOnboardingRoute) {
-    // Redirect guest users back to onboarding or show them OAuth connection
-    const url = request.nextUrl.clone();
+    const onboardingComplete = token?.onboardingComplete === true;
     
-    if (isOAuthEnabled()) {
-      // If OAuth is enabled, they need to upgrade their account
-      url.pathname = '/onboarding/complete';
-      url.searchParams.set('connectAccount', 'true');
-    } else {
-      // If OAuth is disabled, allow them to use the app as guest
+    // If guest completed onboarding, allow them to use the app
+    if (onboardingComplete) {
+      console.log('✅ Guest user with completed onboarding, allowing access');
       return NextResponse.next();
     }
     
-    return NextResponse.redirect(url);
+    // If OAuth is enabled and onboarding not complete, redirect to complete page
+    if (isOAuthEnabled()) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/onboarding/complete';
+      url.searchParams.set('connectAccount', 'true');
+      console.log('🔗 Guest needs to connect account');
+      return NextResponse.redirect(url);
+    }
+    
+    // If OAuth is disabled, allow them to use the app as guest
+    return NextResponse.next();
   }
 
   return NextResponse.next();
