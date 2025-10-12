@@ -269,17 +269,21 @@ export default function CapturePage() {
         <div className="space-y-3">
           {filteredItems.length === 0 ? (
             <div className="text-center py-16 card-elevated animate-bounce-in">
-              <Sparkles className="w-16 h-16 text-gold-400 mx-auto mb-4 animate-pulse" />
-              <h3 className="text-h2 text-bark-500 mb-2">
-                No items found
+              <div className="relative inline-block mb-4">
+                <div className="absolute inset-0 bg-gold-200 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                <Sparkles className="w-16 h-16 text-gold-400 relative animate-pulse" />
+              </div>
+              <h3 className="text-h2 text-transparent bg-clip-text bg-gradient-to-r from-sunset-500 to-gold-500 mb-2">
+                Your canvas awaits
               </h3>
               <p className="text-body text-bark-300 mb-6">
-                Start capturing your thoughts and tasks ✨
+                Start capturing your brilliant thoughts and tasks ✨
               </p>
               <button
                 onClick={toggleQuickCapture}
-                className="btn-primary"
+                className="btn-primary animate-pulse-glow"
               >
+                <Sparkles className="w-4 h-4 inline-block mr-2" />
                 Create Your First Capture
               </button>
             </div>

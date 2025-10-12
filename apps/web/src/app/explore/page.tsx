@@ -80,13 +80,13 @@ export default function ExplorePage() {
   return (
     <div className="min-h-screen bg-dawn-100">
       {/* Header */}
-      <div className="bg-white border-b border-border-light shadow-warm-sm">
+      <div className="layer-floating sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3">
-            <Compass className="w-8 h-8 text-gradient-sunset" />
+            <Compass className="w-8 h-8 text-sunset-500 icon-hover" />
             <div>
-              <h1 className="text-display-md text-bark-500">
-                Explore
+              <h1 className="text-display-md text-gradient-sunset">
+                Explore ✨
               </h1>
               <p className="text-body text-bark-300 mt-1">
                 Enhance your deep work practice with curated resources

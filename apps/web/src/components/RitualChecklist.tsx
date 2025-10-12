@@ -111,7 +111,11 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
               <div className="text-center py-8 text-gray-500">Loading ritual...</div>
             ) : ritualItems.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">No ritual items configured</p>
+                <div className="text-center py-6">
+                  <span className="text-4xl mb-3 block">🌄</span>
+                  <p className="text-bark-400 mb-2">No ritual items configured yet</p>
+                  <p className="text-body-sm text-bark-300">Visit Settings to create your perfect pre-work ritual</p>
+                </div>
                 <button 
                   onClick={() => window.location.href = '/onboarding/ritual'}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"

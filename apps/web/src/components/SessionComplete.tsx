@@ -47,25 +47,28 @@ export function SessionComplete({
           <X className="w-6 h-6" />
         </button>
 
-        {/* Success Icon */}
+        {/* Success Icon with glow */}
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full flex items-center justify-center shadow-glow-gold">
-            <CheckCircle className="w-12 h-12 text-white" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-gold-300 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+            <div className="w-20 h-20 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full flex items-center justify-center shadow-glow-gold relative animate-bounce-in">
+              <CheckCircle className="w-12 h-12 text-white animate-icon-bounce" />
+            </div>
           </div>
         </div>
 
-        {/* Title */}
-        <h2 className="text-display-md text-center text-bark-500 mb-2">
-          Session Complete!
+        {/* Title with gradient */}
+        <h2 className="text-display-md text-center text-transparent bg-clip-text bg-gradient-to-r from-sunset-500 via-gold-500 to-sunset-500 mb-2 animate-shine-sweep">
+          Session Complete! ✨
         </h2>
 
-        {/* Duration Stats */}
+        {/* Duration Stats with gradient numbers */}
         <div className="text-center mb-6">
           <p className="text-body text-bark-400">
-            You focused for <span className="font-bold text-gradient-sunset">{duration} minutes</span>
+            You focused for <span className="stat-number text-2xl">{duration}</span> <span className="text-bark-400">minutes</span>
           </p>
           <p className="text-body-sm text-bark-200 mt-1">
-            Target was {targetDuration} minutes
+            Target was <span className="font-semibold text-bark-300">{targetDuration}</span> minutes
           </p>
         </div>
 

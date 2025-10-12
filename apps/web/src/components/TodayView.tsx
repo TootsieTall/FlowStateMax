@@ -160,13 +160,13 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
         {dailyGoals.length > 0 && (
           <div className="card-shiny p-6">
             <h2 className="text-h3 text-bark-500 mb-4 flex items-center">
-              <CheckCircle className="w-5 h-5 mr-2 text-gold-400" />
+              <CheckCircle className="w-5 h-5 mr-2 text-gold-400 icon-hover" />
               Today's Goals
             </h2>
             <ul className="space-y-3">
               {dailyGoals.map((goal, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="text-sunset-500 font-bold mr-3 text-lg">{index + 1}.</span>
+                <li key={index} className="flex items-start group">
+                  <span className="stat-number mr-3 text-lg group-hover:scale-110 transition-transform duration-fast">{index + 1}.</span>
                   <span className="text-body text-bark-400 leading-relaxed">{goal}</span>
                 </li>
               ))}
@@ -189,9 +189,13 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
             </div>
           </div>
         ) : (
-          <div className="layer-elevated p-8 rounded-warm-lg text-center">
-            <p className="text-body text-bark-300">No active time block right now</p>
-            <p className="text-body-sm text-bark-200 mt-2">Your next block is coming up soon</p>
+          <div className="layer-elevated p-8 rounded-warm-lg text-center animate-bounce-in">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-dawn-50 to-dawn-200 flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">☕</span>
+            </div>
+            <h3 className="text-h3 text-bark-500 mb-2">Between blocks</h3>
+            <p className="text-body text-bark-300 mb-2">No active time block right now</p>
+            <p className="text-body-sm text-bark-200">Your next block is coming up soon ⏰</p>
           </div>
         )}
 
@@ -212,15 +216,21 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
               ))}
             </div>
           ) : (
-            <div className="layer-elevated p-8 rounded-warm-lg text-center">
-              <p className="text-body text-bark-300">No upcoming blocks for today</p>
+            <div className="layer-elevated p-8 rounded-warm-lg text-center animate-bounce-in">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-100 to-sunset-100 flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">🌅</span>
+              </div>
+              <h3 className="text-h3 text-bark-500 mb-2">All clear ahead!</h3>
+              <p className="text-body text-bark-300">
+                No upcoming blocks scheduled. Time to plan your perfect day. ✨
+              </p>
             </div>
           )}
         </div>
 
-        {/* Quick Capture Button - Floating action */}
+        {/* Quick Capture Button - Floating action with glow */}
         <button
-          className="fixed bottom-8 right-8 bg-sunset-500 hover:bg-sunset-600 text-white rounded-full p-4 shadow-warm-lg hover:shadow-glow-sunset transition-all hover:scale-110 group z-40"
+          className="fixed bottom-8 right-8 bg-gradient-to-br from-sunset-500 to-gold-500 hover:from-sunset-600 hover:to-gold-600 text-white rounded-full p-4 shadow-warm-lg hover:shadow-glow-sunset transition-all hover:scale-110 group z-40 animate-pulse-glow"
           onClick={toggleQuickCapture}
           title="Quick Capture (⌘K)"
         >
