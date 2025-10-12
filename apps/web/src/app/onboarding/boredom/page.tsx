@@ -146,7 +146,7 @@ export default function BoredomPage() {
                     {option.features.map((feature, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <div className={`w-1.5 h-1.5 rounded-full ${
-                          selectedOption === option.id ? 'bg-primary-600' : 'bg-gray-400'
+                          selectedOption === option.id ? 'bg-sunset-500' : 'bg-bark-200'
                         }`} />
                         <span className={`text-sm ${
                           selectedOption === option.id ? 'text-sunset-600' : 'text-gray-600'

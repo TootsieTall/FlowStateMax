@@ -134,13 +134,13 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
             {/* Work Anywhere Option */}
             <button
               onClick={() => setSelectedLocation('anywhere')}
-              className={`w-full p-3 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
+              className={`w-full p-3 rounded-warm border-2 transition-all text-left flex items-center justify-between ${
                 selectedLocation === 'anywhere'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
-              <span className={`font-medium ${selectedLocation === 'anywhere' ? 'text-primary-700' : 'text-gray-700'}`}>
+              <span className={`font-medium ${selectedLocation === 'anywhere' ? 'text-sunset-600' : 'text-bark-400'}`}>
                 🌍 Work from anywhere (no location required)
               </span>
             </button>
@@ -150,14 +150,14 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
               <button
                 key={location.id}
                 onClick={() => setSelectedLocation(location.id)}
-                className={`w-full p-3 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
+                className={`w-full p-3 rounded-warm border-2 transition-all text-left flex items-center justify-between ${
                   selectedLocation === location.id
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-sunset-400 bg-sunset-50'
+                    : 'border-border hover:border-sunset-200'
                 }`}
               >
                 <div>
-                  <span className={`font-medium ${selectedLocation === location.id ? 'text-primary-700' : 'text-gray-700'}`}>
+                  <span className={`font-medium ${selectedLocation === location.id ? 'text-sunset-600' : 'text-bark-400'}`}>
                     {location.name}
                   </span>
                   {location.latitude && location.longitude && (

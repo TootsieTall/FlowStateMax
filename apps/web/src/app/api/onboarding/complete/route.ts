@@ -18,19 +18,32 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { goals, recoveryActivities, trackRecovery, hobbiesToTry } = body
 
+    // Parse goals if it's a string
+    let parsedGoals = goals
+    if (typeof goals === 'string') {
+      try {
+        parsedGoals = JSON.parse(goals)
+      } catch {
+        parsedGoals = []
+      }
+    }
+    
+    // Ensure goals is an array
+    const goalsArray = Array.isArray(parsedGoals) ? parsedGoals : []
+
     // Update or create user with onboarding complete
     const user = await prisma.user.upsert({
       where: { id: session.user.id },
       update: {
         onboardingComplete: true,
-        goals: goals || [],
+        goals: goalsArray,
       },
       create: {
         id: session.user.id,
         email: session.user.email || `user-${session.user.id}@flowstate.app`,
         name: session.user.name || 'User',
         onboardingComplete: true,
-        goals: goals || [],
+        goals: goalsArray,
         podcastGenres: [],
       },
     })

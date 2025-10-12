@@ -134,11 +134,11 @@ export default function AppsPage() {
               onChange={(e) => setCustomApp(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomApp()}
               placeholder="e.g., Discord, Slack, WhatsApp"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900"
+              className="input"
             />
             <button
               onClick={addCustomApp}
-              className="px-4 py-2 bg-primary-700 text-white rounded-lg hover:bg-primary-800 transition-colors"
+              className="btn-primary"
             >
               Add
             </button>

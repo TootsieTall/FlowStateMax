@@ -110,6 +110,12 @@ export async function middleware(request: NextRequest) {
   if (isAuthenticated && !isOnboardingRoute) {
     const onboardingComplete = token?.onboardingComplete === true;
     
+    console.log(`[Middleware] Checking onboarding for ${pathname}:`, {
+      onboardingComplete,
+      isGuest,
+      userId: token?.sub
+    });
+    
     // If onboarding is not complete and user is trying to access protected routes
     if (!onboardingComplete && !isGuest) {
       const url = request.nextUrl.clone();

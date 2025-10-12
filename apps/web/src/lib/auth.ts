@@ -121,12 +121,14 @@ export const authOptions: NextAuthOptions = {
           
           if (dbUser) {
             token.onboardingComplete = dbUser.onboardingComplete
+            console.log(`[Auth] Fetched onboarding status for ${token.sub}:`, dbUser.onboardingComplete)
           } else {
             // User doesn't exist in DB yet (e.g., guest user)
             token.onboardingComplete = false
+            console.log(`[Auth] User ${token.sub} not found in DB, setting onboardingComplete: false`)
           }
         } catch (error) {
-          console.error('Error fetching onboarding status:', error)
+          console.error('[Auth] Error fetching onboarding status:', error)
           // Default to false if we can't fetch
           token.onboardingComplete = false
         }

@@ -153,7 +153,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
           <button
             onClick={handleCheckLocation}
             disabled={isCheckingLocation}
-            className="text-sm text-primary-700 hover:text-primary-800 disabled:text-gray-400"
+            className="text-sm text-sunset-600 hover:text-sunset-700 disabled:text-bark-200"
           >
             {isCheckingLocation ? 'Checking...' : 'Check current location'}
           </button>
@@ -172,13 +172,13 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
           {/* Work Anywhere */}
           <button
             onClick={() => setSelectedLocation('anywhere')}
-            className={`w-full p-3 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
+            className={`w-full p-3 rounded-warm border-2 transition-all text-left flex items-center justify-between ${
               selectedLocation === 'anywhere'
-                ? 'border-primary-600 bg-primary-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-sunset-400 bg-sunset-50'
+                : 'border-border hover:border-sunset-200'
             }`}
           >
-            <span className={`text-sm font-medium ${selectedLocation === 'anywhere' ? 'text-primary-700' : 'text-gray-700'}`}>
+            <span className={`text-sm font-medium ${selectedLocation === 'anywhere' ? 'text-sunset-600' : 'text-bark-400'}`}>
               🌍 Work from anywhere
             </span>
           </button>
@@ -193,13 +193,13 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
                   toggleChecklistItem('location', true)
                 }
               }}
-              className={`w-full p-3 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
+              className={`w-full p-3 rounded-warm border-2 transition-all text-left flex items-center justify-between ${
                 selectedLocation === location.id
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
-              <span className={`text-sm font-medium ${selectedLocation === location.id ? 'text-primary-700' : 'text-gray-700'}`}>
+              <span className={`text-sm font-medium ${selectedLocation === location.id ? 'text-sunset-600' : 'text-bark-400'}`}>
                 {location.name}
               </span>
               {currentLocation?.id === location.id && (
@@ -282,7 +282,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
           placeholder="e.g., Finish report, Code feature, Study chapter 3"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900"
+          className="input"
         />
       </div>
 
@@ -299,7 +299,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
         <button
           onClick={handleStart}
           disabled={!canStartSession()}
-          className="flex-1 px-6 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Start Deep Work
         </button>

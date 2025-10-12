@@ -32,6 +32,16 @@ export default function OnboardingComplete() {
   const handleGetStarted = async () => {
     setIsRedirecting(true)
     
+    // Parse data from localStorage
+    const parseLocalStorage = (key: string) => {
+      try {
+        const item = localStorage.getItem(key)
+        return item ? JSON.parse(item) : null
+      } catch {
+        return localStorage.getItem(key)
+      }
+    }
+    
     // Mark onboarding as complete in database
     try {
       const response = await fetch('/api/onboarding/complete', {
@@ -40,29 +50,36 @@ export default function OnboardingComplete() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          goals: localStorage.getItem('flowstate_goals'),
-          recoveryActivities: localStorage.getItem('flowstate_recovery_activities'),
-          trackRecovery: localStorage.getItem('flowstate_track_recovery'),
-          hobbiesToTry: localStorage.getItem('flowstate_hobbies_to_try'),
+          goals: parseLocalStorage('flowstate_goals'),
+          recoveryActivities: parseLocalStorage('flowstate_recovery_activities'),
+          trackRecovery: parseLocalStorage('flowstate_track_recovery'),
+          hobbiesToTry: parseLocalStorage('flowstate_hobbies_to_try'),
         }),
       })
 
       if (!response.ok) {
         console.error('Failed to mark onboarding complete:', await response.text())
-      } else {
-        console.log('Onboarding marked as complete')
-        
-        // Update the session to reflect the new onboarding status
-        await updateSession()
+        setIsRedirecting(false)
+        return
       }
+      
+      const data = await response.json()
+      console.log('✅ Onboarding marked as complete:', data)
+      
+      // Update the session to reflect the new onboarding status
+      await updateSession()
+      
+      // Wait a bit more for session to update, then do a hard redirect
+      // Using window.location instead of router.push to force a full page reload
+      // which will fetch the updated session with onboardingComplete: true
+      setTimeout(() => {
+        window.location.href = '/today'
+      }, 1000)
+      
     } catch (error) {
       console.error('Error marking onboarding complete:', error)
+      setIsRedirecting(false)
     }
-
-    // Redirect to main dashboard/today view
-    setTimeout(() => {
-      router.push('/today')
-    }, 500)
   }
 
   return (

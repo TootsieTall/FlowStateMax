@@ -89,10 +89,10 @@ export default function IntegrationsPage() {
 
             <button
               onClick={() => setSelectedCalendar('outlook')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedCalendar === 'outlook'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -101,26 +101,26 @@ export default function IntegrationsPage() {
                     <span className="text-xl">📧</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'outlook' ? 'text-primary-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'outlook' ? 'text-sunset-600' : 'text-bark-500'}`}>
                       Outlook Calendar
                     </h3>
                     <p className="text-sm text-gray-500">Sync with Microsoft 365 and Outlook</p>
                   </div>
                 </div>
                 {selectedCalendar === 'outlook' ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </div>
             </button>
 
             <button
               onClick={() => setSelectedCalendar('apple')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedCalendar === 'apple'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -129,16 +129,16 @@ export default function IntegrationsPage() {
                     <span className="text-xl">🍎</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'apple' ? 'text-primary-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'apple' ? 'text-sunset-600' : 'text-bark-500'}`}>
                       Apple Calendar
                     </h3>
                     <p className="text-sm text-gray-500">Sync with iCloud Calendar</p>
                   </div>
                 </div>
                 {selectedCalendar === 'apple' ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </div>
             </button>
@@ -157,10 +157,10 @@ export default function IntegrationsPage() {
           <div className="space-y-3">
             <button
               onClick={() => setSelectedEmail('google')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedEmail === 'google'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -169,26 +169,26 @@ export default function IntegrationsPage() {
                     <span className="text-xl">✉️</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedEmail === 'google' ? 'text-primary-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${selectedEmail === 'google' ? 'text-sunset-600' : 'text-bark-500'}`}>
                       Gmail / Google Workspace
                     </h3>
                     <p className="text-sm text-gray-500">Connect your Gmail account</p>
                   </div>
                 </div>
                 {selectedEmail === 'google' ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </div>
             </button>
 
             <button
               onClick={() => setSelectedEmail('outlook')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedEmail === 'outlook'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-sunset-50'
+                  : 'border-border hover:border-sunset-200'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -197,16 +197,16 @@ export default function IntegrationsPage() {
                     <span className="text-xl">📨</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedEmail === 'outlook' ? 'text-primary-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${selectedEmail === 'outlook' ? 'text-sunset-600' : 'text-bark-500'}`}>
                       Outlook / Microsoft 365
                     </h3>
                     <p className="text-sm text-gray-500">Connect your Outlook account</p>
                   </div>
                 </div>
                 {selectedEmail === 'outlook' ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </div>
             </button>

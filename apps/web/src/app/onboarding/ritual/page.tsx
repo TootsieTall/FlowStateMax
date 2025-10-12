@@ -146,11 +146,11 @@ export default function RitualPage() {
               onChange={(e) => setNewItem(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomItem()}
               placeholder="e.g., Light a candle, Stretch for 2 minutes"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900"
+              className="input"
             />
             <button
               onClick={addCustomItem}
-              className="px-4 py-2 bg-primary-700 text-white rounded-lg hover:bg-primary-800 transition-colors flex items-center gap-2"
+              className="btn-primary flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Add

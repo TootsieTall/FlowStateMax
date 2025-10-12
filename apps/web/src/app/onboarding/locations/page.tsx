@@ -127,11 +127,11 @@ export default function LocationsPage() {
               onChange={(e) => setNewLocationName(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addManualLocation()}
               placeholder="e.g., Home Office, Library, Coffee Shop"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900"
+              className="input"
             />
             <button
               onClick={addManualLocation}
-              className="px-4 py-2 bg-primary-700 text-white rounded-lg hover:bg-primary-800 transition-colors flex items-center gap-2"
+              className="btn-primary flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Add
@@ -144,7 +144,7 @@ export default function LocationsPage() {
           <button
             onClick={addCurrentLocation}
             disabled={isGettingLocation}
-            className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors flex items-center justify-center gap-2 text-bark-500 hover:text-sunset-600 disabled:opacity-50"
+            className="w-full px-4 py-3 border-2 border-dashed border-border rounded-warm hover:border-sunset-400 hover:bg-sunset-50 transition-colors flex items-center justify-center gap-2 text-bark-500 hover:text-sunset-600 disabled:opacity-50"
           >
             <Locate className={`w-5 h-5 ${isGettingLocation ? 'animate-pulse' : ''}`} />
             {isGettingLocation ? 'Getting your location...' : 'Add Current Location (with GPS)'}
@@ -177,7 +177,7 @@ export default function LocationsPage() {
                       type="text"
                       value={location.name}
                       onChange={(e) => updateLocationName(location.id, e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900 font-medium"
+                      className="input font-medium"
                     />
                     {location.latitude && location.longitude && (
                       <p className="text-xs text-bark-300 mt-1">
