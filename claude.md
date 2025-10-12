@@ -140,6 +140,90 @@ Located in `apps/web/src/store/`:
 5. **Native Feel:** Should feel like a built-in OS feature
 6. **Respect User Time:** Max 15 min/day management overhead
 
+## Design System Principles (Daybreak Golden Hour Theme)
+
+### Color Layering for Depth
+**Foundation:** Create 3-4 shades of your base color by increasing lightness by 0.1 increments
+
+**Hierarchy Principle:**
+- **Lighter = elevated/important** (dawn-50 = most elevated)
+- **Darker = deeper/background** (dawn-200 = base layer)
+
+**Layering Effect:**
+- Stack lighter shades on darker ones to create visual elevation
+- **No borders needed:** Color contrast alone separates elements with proper layering
+
+**Example Color Scale:**
+```css
+dawn: {
+  50: '#FCFAF8',   // L: 0.98 - Most elevated (modals, peak highlights)
+  100: '#F5F2ED',  // L: 0.93 - Highly elevated (cards, surfaces)
+  200: '#EDE9E2',  // L: 0.88 - Elevated (hover states)
+  300: '#E6DFD7',  // L: 0.83 - Standard surface
+  400: '#DED6CB',  // L: 0.78 - Lower surface (pressed states)
+  500: '#D6CDBF',  // L: 0.73 - Deep background
+}
+```
+
+### Two-Layer Shadow System
+**Realism through dual shadows:** Combine light (top) + dark (bottom) shadows instead of one generic shadow
+
+**Three depth levels:**
+1. **warm-sm** - Subtle (cards on page)
+2. **warm-md** - Standard (elevated cards, hover states)
+3. **warm-lg/xl** - Prominent (modals, floating elements)
+
+**Light from above concept:**
+- Light shadow on top (rgba(255, 255, 255, 0.15))
+- Dark shadow on bottom (rgba(44, 24, 16, 0.10))
+
+**Gradient enhancement:**
+```css
+/* Linear gradient + inner shadow = shiny, elevated effect */
+background: linear-gradient(180deg, #FCFAF8 0%, #F5F2ED 100%);
+box-shadow: 
+  inset 0 1px 1px rgba(255, 255, 255, 0.3),  /* Inner highlight */
+  0 2px 4px rgba(255, 255, 255, 0.15),        /* Top light */
+  0 4px 8px rgba(44, 24, 16, 0.10);           /* Bottom dark */
+```
+
+**Inset vs Outset:**
+- **Inset shadows:** Push in (sunken effect) - use for inputs
+- **Outset shadows:** Lift up (raised effect) - use for cards/buttons
+
+### Depth Layer Utility Classes
+Use these semantic classes to create visual hierarchy:
+
+```css
+.layer-base         /* bg-dawn-200 - Deepest background */
+.layer-elevated     /* bg-dawn-100 + shadow-warm-sm */
+.layer-floating     /* bg-dawn-50 + shadow-warm-md */
+.layer-modal        /* bg-white + shadow-warm-xl - Highest elevation */
+.layer-inset        /* bg-white + shadow-warm-inset - Sunken (inputs) */
+```
+
+### Responsive Layout Principles
+
+**Principle 1: System of Boxes**
+- Every design starts as a system of boxes
+- Build layouts where everything has a clear relationship and natural balance
+- The structure itself should feel flexible before it ever responds
+
+**Principle 2: Rearrange with Purpose**
+- A responsive layout isn't about shrinking — it's about rearranging
+- As space changes, elements should shift, flow, or reprioritize
+- Maintain clarity and rhythm at all breakpoints
+
+**Implementation:**
+```jsx
+/* Good - Responsive container with proper spacing */
+<main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+  {/* Cards stack naturally with consistent gaps */}
+  <div className="card-shiny p-6">...</div>
+  <div className="layer-modal p-8 rounded-warm-lg">...</div>
+</main>
+```
+
 ## UI Component Guidelines (Daybreak Theme)
 
 ### Design System Overview
