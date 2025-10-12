@@ -115,24 +115,24 @@ export default function RecoveryPage() {
   const selectedCount = activities.filter(a => a.selected).length
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated animate-slide-in-right max-w-3xl w-full p-8">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 8 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-overline text-sunset-600 mb-2">STEP 8 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">
             Plan Your Active Recovery
           </h1>
-          <p className="text-gray-600">
+          <p className="text-body text-bark-300">
             What activities help you recharge between deep work sessions?
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
           <h3 className="text-sm font-semibold text-blue-900 mb-1">
             🏃 Why Recovery Matters
           </h3>
-          <p className="text-sm text-blue-700">
+          <p className="text-sm text-bark-400">
             Deep work is mentally demanding. Strategic recovery through physical activity and leisure 
             helps restore your cognitive resources and prevents burnout. Cal Newport emphasizes the 
             importance of having a life outside of work.
@@ -141,7 +141,7 @@ export default function RecoveryPage() {
 
         {/* Activities Selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-bark-500 mb-3">
             Select your recovery activities
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -152,7 +152,7 @@ export default function RecoveryPage() {
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   activity.selected
                     ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -160,7 +160,7 @@ export default function RecoveryPage() {
                     <h3 className={`font-semibold ${activity.selected ? 'text-green-700' : 'text-gray-900'}`}>
                       {activity.title}
                     </h3>
-                    <p className={`text-sm ${activity.selected ? 'text-green-600' : 'text-gray-500'}`}>
+                    <p className={`text-sm ${activity.selected ? 'text-green-600' : 'text-bark-300'}`}>
                       {activity.description}
                     </p>
                   </div>
@@ -175,7 +175,7 @@ export default function RecoveryPage() {
 
         {/* Add Custom Activity */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bark-500 mb-2">
             Add another activity
           </label>
           <div className="flex gap-2">
@@ -198,7 +198,7 @@ export default function RecoveryPage() {
 
         {/* Tracking Preference */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-bark-500 mb-3">
             Do you want to track these activities?
           </label>
           <div className="space-y-3">
@@ -206,21 +206,21 @@ export default function RecoveryPage() {
               onClick={() => setTrackRecovery(true)}
               className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                 trackRecovery === true
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
+                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className={`font-semibold ${trackRecovery === true ? 'text-primary-700' : 'text-gray-900'}`}>
+                  <h3 className={`font-semibold ${trackRecovery === true ? 'text-sunset-600' : 'text-gray-900'}`}>
                     ✅ Yes, help me track
                   </h3>
-                  <p className={`text-sm ${trackRecovery === true ? 'text-primary-600' : 'text-gray-500'}`}>
+                  <p className={`text-sm ${trackRecovery === true ? 'text-gold-500' : 'text-bark-300'}`}>
                     Log activities and see patterns in your energy levels
                   </p>
                 </div>
                 {trackRecovery === true && (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 )}
               </div>
             </button>
@@ -229,21 +229,21 @@ export default function RecoveryPage() {
               onClick={() => setTrackRecovery(false)}
               className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                 trackRecovery === false
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
+                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className={`font-semibold ${trackRecovery === false ? 'text-primary-700' : 'text-gray-900'}`}>
+                  <h3 className={`font-semibold ${trackRecovery === false ? 'text-sunset-600' : 'text-gray-900'}`}>
                     🎯 No, keep it simple
                   </h3>
-                  <p className={`text-sm ${trackRecovery === false ? 'text-primary-600' : 'text-gray-500'}`}>
+                  <p className={`text-sm ${trackRecovery === false ? 'text-gold-500' : 'text-bark-300'}`}>
                     Just use this list as a reminder of healthy activities
                   </p>
                 </div>
                 {trackRecovery === false && (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500" />
                 )}
               </div>
             </button>
@@ -254,11 +254,11 @@ export default function RecoveryPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-purple-600" />
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bark-500">
               Hobbies you've wanted to try
             </label>
           </div>
-          <p className="text-sm text-gray-500 mb-3">
+          <p className="text-sm text-bark-300 mb-3">
             We'll periodically remind you to explore these new interests during your recovery time
           </p>
           
@@ -314,26 +314,26 @@ export default function RecoveryPage() {
         <div className="flex justify-between items-center">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-2 btn-ghost"
           >
             Back
           </button>
           <div className="flex items-center gap-4">
             {selectedCount > 0 && (
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-body text-bark-300">
                 {selectedCount} activit{selectedCount !== 1 ? 'ies' : 'y'} selected
               </span>
             )}
             <div className="flex gap-3">
               <button
                 onClick={handleSkip}
-                className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="px-6 py-2 btn-ghost"
               >
                 Skip
               </button>
               <button
                 onClick={handleContinue}
-                className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                className="px-8 py-3 btn-primary transition-colors"
               >
                 Continue
               </button>

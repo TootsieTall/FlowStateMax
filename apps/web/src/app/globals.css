@@ -2,108 +2,284 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================================
+   DAYBREAK GOLDEN HOUR DESIGN SYSTEM
+   ======================================== */
+
 :root {
-  /* Light black/charcoal color scheme */
-  --background-primary: 26, 26, 26;      /* #1a1a1a - Darkest background */
-  --background-secondary: 36, 36, 36;    /* #242424 - Secondary dark */
-  --background-tertiary: 48, 48, 48;     /* #303030 - Tertiary dark */
-  --background-card: 42, 42, 42;         /* #2a2a2a - Card background */
+  /* Daybreak Theme - Warm Golden Hour Colors */
+  --background-primary: 255, 249, 240;    /* #FFF9F0 - Warm cream */
+  --background-secondary: 255, 245, 230;  /* #FFF5E6 - Lighter peach */
+  --background-elevated: 255, 228, 204;   /* #FFE4CC - Soft peachy */
+  --background-card: 255, 255, 255;       /* #FFFFFF - Pure white cards */
   
-  --foreground-primary: 245, 245, 245;   /* #f5f5f5 - Almost white text */
-  --foreground-secondary: 208, 208, 208; /* #d0d0d0 - Light gray text */
-  --foreground-tertiary: 160, 160, 160;  /* #a0a0a0 - Medium gray text */
-  --foreground-muted: 112, 112, 112;     /* #707070 - Muted gray */
+  --foreground-primary: 44, 24, 16;       /* #2C1810 - Deep warm brown */
+  --foreground-secondary: 107, 68, 35;    /* #6B4423 - Medium brown */
+  --foreground-tertiary: 166, 124, 82;    /* #A67C52 - Light brown */
+  --foreground-muted: 139, 100, 66;       /* #8B6442 - Muted brown */
   
-  --primary: 48, 48, 48;                 /* #303030 - Primary brand color */
-  --primary-hover: 64, 64, 64;           /* #404040 - Hover state */
+  --primary: 255, 107, 53;                /* #FF6B35 - Sunset orange */
+  --primary-hover: 229, 90, 40;           /* #E55A28 - Darker orange */
+  --primary-foreground: 255, 255, 255;    /* White text on primary */
   
-  /* Accent colors */
-  --accent-blue: 96, 165, 250;           /* #60a5fa */
-  --accent-green: 134, 239, 172;         /* #86efac */
-  --accent-orange: 253, 186, 116;        /* #fdba74 */
-  --accent-purple: 192, 132, 252;        /* #c084fc */
+  /* Semantic colors */
+  --success: 255, 184, 77;                /* #FFB84D - Golden yellow */
+  --warning: 255, 230, 156;               /* #FFE69C - Warm yellow */
+  --error: 255, 153, 153;                 /* #FF9999 - Soft red */
+  
+  /* Border colors */
+  --border-light: 255, 224, 204;          /* #FFE0CC */
+  --border-default: 255, 212, 179;        /* #FFD4B3 */
+  --border-strong: 255, 194, 153;         /* #FFC299 */
 }
 
-body {
-  color: rgb(var(--foreground-primary));
-  background: rgb(var(--background-primary));
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'cv05', 'cv08', 'cv11'; /* Inter font features for better readability */
+@layer base {
+  * {
+    @apply border-border-light;
+  }
+  
+  html {
+    @apply scroll-smooth bg-dawn-100;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  
+  body {
+    @apply bg-dawn-100 text-bark-500 antialiased;
+    font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Selection styling - warm highlight */
+  ::selection {
+    @apply bg-sunset-200 text-bark-500;
+  }
+  
+  ::-moz-selection {
+    @apply bg-sunset-200 text-bark-500;
+  }
 }
 
-/* Force dark theme globally */
-* {
-  border-color: rgba(255, 255, 255, 0.1);
+@layer components {
+  /* ========================================
+     BUTTON SYSTEM - ShadCN Compatible
+     ======================================== */
+  
+  .btn {
+    @apply inline-flex items-center justify-center rounded-warm-lg;
+    @apply px-4 py-2 text-sm font-medium;
+    @apply transition-all duration-fast;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dawn-100;
+    @apply disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-primary {
+    @apply btn bg-sunset-500 text-white shadow-warm-md;
+    @apply hover:bg-sunset-600 hover:shadow-warm-lg hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:shadow-warm-sm active:bg-sunset-700;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-white border-2 border-border text-bark-400;
+    @apply hover:border-sand-400 hover:bg-dawn-50 hover:text-bark-500;
+    @apply active:bg-dawn-100;
+  }
+  
+  .btn-ghost {
+    @apply btn bg-transparent text-bark-400;
+    @apply hover:bg-dawn-200 hover:text-bark-500;
+    @apply active:bg-dawn-300;
+  }
+  
+  .btn-success {
+    @apply btn bg-gold-400 text-white shadow-warm-md;
+    @apply hover:bg-gold-500 hover:shadow-glow-gold hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:bg-gold-600;
+  }
+  
+  /* ========================================
+     CARD SYSTEM
+     ======================================== */
+  
+  .card {
+    @apply bg-white rounded-warm-lg shadow-warm-sm;
+    @apply border border-border-light;
+  }
+  
+  .card-elevated {
+    @apply rounded-warm-lg shadow-warm-md;
+    @apply border border-border-light;
+    background: linear-gradient(180deg, #FFF5E6 0%, #FFFFFF 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 6px rgba(255, 107, 53, 0.10), 0 2px 4px rgba(44, 24, 16, 0.06);
+  }
+  
+  .card-interactive {
+    @apply card transition-all duration-normal cursor-pointer;
+    @apply hover:shadow-warm-md hover:-translate-y-1;
+    @apply active:translate-y-0 active:shadow-warm-sm;
+  }
+  
+  /* ========================================
+     INPUT SYSTEM
+     ======================================== */
+  
+  .input {
+    @apply w-full px-4 py-2 rounded-warm;
+    @apply bg-white border-2 border-border-light;
+    @apply text-bark-500 placeholder:text-bark-100;
+    @apply shadow-warm-sm;
+    @apply transition-all duration-fast;
+    @apply focus:border-sunset-400 focus:ring-2 focus:ring-sunset-400/20 focus:outline-none;
+  }
+  
+  .input:disabled {
+    @apply bg-dawn-100 text-bark-200 cursor-not-allowed opacity-60;
+  }
+  
+  .textarea {
+    @apply input min-h-[100px] resize-y;
+  }
+  
+  .select {
+    @apply input appearance-none cursor-pointer;
+  }
+  
+  /* ========================================
+     TIME BLOCK VARIANTS
+     ======================================== */
+  
+  .time-block-deep-work {
+    @apply bg-sunset-100 border-2 border-sunset-500;
+    @apply text-bark-500 shadow-warm-sm rounded-warm-lg;
+    @apply transition-all duration-normal;
+  }
+  
+  .time-block-deep-work.active {
+    @apply bg-sunset-200 border-sunset-600 shadow-warm-md;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15), 0 4px 6px rgba(255, 107, 53, 0.10), 0 2px 4px rgba(44, 24, 16, 0.06);
+  }
+  
+  .time-block-meeting {
+    @apply bg-sand-100 border-2 border-sand-400;
+    @apply text-bark-400 shadow-warm-sm rounded-warm-lg;
+    @apply transition-all duration-normal;
+  }
+  
+  .time-block-meeting.active {
+    @apply bg-sand-200 border-sand-500 shadow-warm-md;
+  }
+  
+  .time-block-break {
+    @apply bg-dawn-300 border-2 border-dawn-400;
+    @apply text-bark-300 shadow-warm-sm rounded-warm-lg;
+    @apply transition-all duration-normal;
+  }
+  
+  .time-block-break.active {
+    @apply bg-dawn-400 border-border-strong shadow-warm-md;
+  }
+  
+  .time-block-blocked {
+    @apply bg-warning-light border-2 border-warning-DEFAULT;
+    @apply text-bark-300 opacity-60 rounded-warm-lg;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 230, 153, 0.3) 10px,
+      rgba(255, 230, 153, 0.3) 20px
+    );
+  }
 }
 
-/* Input fields - ensure visibility */
+/* ========================================
+   INPUT FIELDS - Global Styling
+   ======================================== */
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
 textarea,
 select {
-  background-color: rgb(var(--background-tertiary)) !important;
-  color: rgb(var(--foreground-primary)) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  @apply input;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="search"]:focus,
-textarea:focus,
-select:focus {
-  background-color: rgb(var(--background-card)) !important;
-  border-color: rgb(var(--accent-blue)) !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3) !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgb(var(--foreground-muted)) !important;
-  opacity: 0.6;
-}
-
-/* Quote blocks - beautiful and readable */
+/* Quote blocks - warm and inviting */
 blockquote {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%) !important;
-  border-left: 4px solid #f59e0b !important;
-  color: #fef3c7 !important;
-  padding: 1.5rem 1.5rem 1.5rem 1.75rem !important;
-  border-radius: 0 0.5rem 0.5rem 0 !important;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1);
+  @apply bg-gradient-to-br from-gold-100 to-dawn-200;
+  @apply border-l-4 border-gold-400;
+  @apply text-bark-500 px-6 py-4 rounded-r-lg;
+  @apply shadow-warm-sm;
 }
 
 blockquote p {
-  color: #fde68a !important;
-  margin-bottom: 0.75rem !important;
+  @apply text-bark-400 mb-3;
 }
 
 blockquote footer {
-  color: #fbbf24 !important;
-  font-weight: 500 !important;
-  font-style: normal !important;
-}
-
-/* Smooth transitions for grayscale mode */
-html {
-  transition: filter 1s ease-in-out;
+  @apply text-bark-300 font-medium italic;
 }
 
 @layer utilities {
+  /* ========================================
+     TEXT UTILITIES
+     ======================================== */
+  
   .text-balance {
     text-wrap: balance;
   }
   
-  /* Dark theme utilities */
+  .text-gradient-sunset {
+    @apply bg-gradient-to-r from-sunset-500 to-gold-400 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-400 to-gold-500 bg-clip-text text-transparent;
+  }
+  
+  /* Typography Scale */
+  .text-display-xl {
+    @apply font-display text-6xl font-bold tracking-tight;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  
+  .text-display-lg {
+    @apply font-display text-5xl font-bold tracking-tight;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  
+  .text-display-md {
+    @apply font-display text-4xl font-semibold tracking-tight;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  
+  .text-h1 { @apply text-3xl font-semibold leading-tight; }
+  .text-h2 { @apply text-2xl font-semibold leading-tight; }
+  .text-h3 { @apply text-xl font-semibold leading-snug; }
+  .text-h4 { @apply text-lg font-medium leading-snug; }
+  
+  .text-body-lg { @apply text-lg leading-relaxed; }
+  .text-body { @apply text-base leading-relaxed; }
+  .text-body-sm { @apply text-sm leading-relaxed; }
+  
+  .text-label { @apply text-sm font-medium leading-snug; }
+  .text-caption { @apply text-xs leading-snug; }
+  .text-overline { @apply text-xs font-semibold uppercase tracking-wider; }
+  
+  /* ========================================
+     BACKGROUND UTILITIES
+     ======================================== */
+  
   .bg-app {
     background-color: rgb(var(--background-primary));
   }
@@ -112,96 +288,107 @@ html {
     background-color: rgb(var(--background-secondary));
   }
   
-  .bg-app-tertiary {
-    background-color: rgb(var(--background-tertiary));
+  .bg-app-elevated {
+    background-color: rgb(var(--background-elevated));
   }
   
-  .bg-card {
+  .bg-card-daybreak {
     background-color: rgb(var(--background-card));
   }
   
-  .text-app {
-    color: rgb(var(--foreground-primary));
+  /* ========================================
+     SPECIAL EFFECTS
+     ======================================== */
+  
+  .skeleton-loader {
+    background: linear-gradient(
+      90deg,
+      #FFF5E6 0%,
+      #FFE4CC 50%,
+      #FFF5E6 100%
+    );
+    background-size: 1000px 100%;
+    @apply animate-shimmer;
   }
   
-  .text-app-secondary {
-    color: rgb(var(--foreground-secondary));
+  .completion-shine {
+    @apply relative overflow-hidden;
   }
   
-  .text-app-muted {
-    color: rgb(var(--foreground-muted));
+  .completion-shine::before {
+    content: '';
+    @apply absolute inset-y-0 w-1/2;
+    left: -100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    @apply animate-shine;
   }
   
-  /* Override white backgrounds with dark */
-  .bg-white {
-    background-color: rgb(var(--background-card)) !important;
+  /* ========================================
+     FOCUS & INTERACTION STATES
+     ======================================== */
+  
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-400 focus-visible:ring-offset-2 focus-visible:ring-offset-dawn-100;
   }
   
-  .text-gray-900 {
-    color: rgb(var(--foreground-primary)) !important;
+  .focus-ring-animated {
+    @apply focus-visible:outline-none;
+    @apply focus-visible:animate-focus-ring-pulse;
   }
   
-  .text-gray-700 {
-    color: rgb(var(--foreground-secondary)) !important;
+  .hover-lift {
+    @apply transition-all duration-normal;
+    @apply hover:-translate-y-1 hover:shadow-warm-md;
   }
   
-  .text-gray-600 {
-    color: rgb(var(--foreground-secondary)) !important;
-  }
-  
-  .text-gray-500 {
-    color: rgb(var(--foreground-tertiary)) !important;
-  }
-  
-  .bg-gray-50 {
-    background-color: rgb(var(--background-secondary)) !important;
-  }
-  
-  .bg-gray-100 {
-    background-color: rgb(var(--background-tertiary)) !important;
-  }
-  
-  .border-gray-200 {
-    border-color: rgba(255, 255, 255, 0.1) !important;
-  }
-  
-  .border-gray-300 {
-    border-color: rgba(255, 255, 255, 0.15) !important;
+  .hover-glow {
+    @apply transition-all duration-normal;
+    @apply hover:shadow-glow-amber;
   }
 }
 
-/* Custom scrollbar for dark theme */
+/* ========================================
+   SCROLLBAR - Warm Golden Hour Theme
+   ======================================== */
+
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  @apply bg-dawn-200;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #505050;
-  border-radius: 5px;
-  border: 2px solid #1a1a1a;
+  @apply bg-sand-400 rounded-full;
+  border: 2px solid #FFF5E6;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #686868;
+  @apply bg-sand-500;
 }
 
 ::-webkit-scrollbar-corner {
-  background: #1a1a1a;
+  @apply bg-dawn-200;
 }
 
-/* Animations */
+/* ========================================
+   ADDITIONAL ANIMATIONS
+   ======================================== */
+
 @keyframes breathe {
   0%, 100% {
     transform: scale(1);
-    opacity: 0.7;
+    opacity: 0.8;
   }
   50% {
-    transform: scale(1.5);
+    transform: scale(1.3);
     opacity: 1;
   }
 }
@@ -210,9 +397,65 @@ html {
   animation: breathe 10s ease-in-out infinite;
 }
 
-/* Focus visible for accessibility */
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 1s ease-in-out infinite;
+}
+
+@keyframes progress-fill {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.animate-progress {
+  animation: progress-fill 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Enhanced focus visibility with warm colors */
 *:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  @apply outline-none ring-2 ring-sunset-400 ring-offset-2 ring-offset-dawn-100;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-pulse-glow,
+  .animate-breathe,
+  .animate-gentle-pulse {
+    animation: none !important;
+  }
+}
+
+/* Skip to main content link (accessibility) */
+.skip-link {
+  @apply sr-only focus:not-sr-only;
+  @apply focus:fixed focus:top-4 focus:left-4 focus:z-50;
+  @apply btn-primary;
 }
 

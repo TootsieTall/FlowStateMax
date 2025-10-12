@@ -47,21 +47,21 @@ export default function OnboardingComplete() {
         />
       )}
 
-      <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center p-4">
-        <div className="bg-background-card border border-gray-700 rounded-2xl shadow-2xl max-w-3xl w-full p-12">
+      <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+        <div className="card-elevated max-w-3xl w-full p-12 shadow-warm-2xl animate-bounce-in">
         {/* Success Icon */}
         <div className="flex justify-center mb-6">
-          <div className="bg-green-600/20 rounded-full p-4">
-            <CheckCircle className="w-16 h-16 text-green-400" />
+          <div className="bg-gradient-to-br from-gold-300 to-sunset-300 rounded-full p-4 shadow-glow-gold">
+            <CheckCircle className="w-16 h-16 text-white animate-pulse" />
           </div>
         </div>
 
         {/* Heading */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-100 mb-3">
+          <h1 className="text-display-lg text-gradient-sunset mb-3">
             You're All Set{userName ? `, ${userName}` : ''}! 🎉
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-h4 text-bark-400">
             Your deep work journey begins now
           </p>
         </div>
@@ -123,12 +123,12 @@ export default function OnboardingComplete() {
           <button
             onClick={handleGetStarted}
             disabled={isRedirecting}
-            className="w-full bg-coral-600 hover:bg-coral-500 disabled:bg-gray-600 text-white font-bold px-10 py-4 rounded-lg text-lg transition-all shadow-lg hover:shadow-coral-500/20"
+            className="btn-primary w-full text-lg py-4 shadow-warm-2xl hover:shadow-glow-sunset"
           >
-            {isRedirecting ? 'Launching Dashboard...' : 'Start Your First Flow Session →'}
+            {isRedirecting ? 'Launching Dashboard... ✨' : 'Start Your First Flow Session →'}
           </button>
           
-          <p className="text-sm text-gray-400">
+          <p className="text-body-sm text-bark-300">
             You can always adjust these settings later in your profile
           </p>
         </div>

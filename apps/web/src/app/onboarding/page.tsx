@@ -51,10 +51,10 @@ export default function OnboardingStart() {
   // Show loading while checking auth
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-300">Loading...</p>
+          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-bark-300">Loading...</p>
         </div>
       </div>
     )
@@ -66,26 +66,26 @@ export default function OnboardingStart() {
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-800 to-primary-900 flex items-center justify-center p-4">
-      <div className="bg-background-card rounded-2xl shadow-2xl max-w-2xl w-full p-12 border border-gray-700">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated max-w-2xl w-full p-12 shadow-warm-2xl animate-bounce-in">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-100 mb-4">
-            Welcome to FlowState
+          <h1 className="text-display-lg text-gradient-sunset mb-4">
+            Welcome to Daybreak 🌅
           </h1>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-h4 text-bark-400 mb-8">
             Your deep work companion, inspired by Cal Newport's methodology
           </p>
-          <blockquote className="text-lg italic text-amber-200 mb-8 border-l-4 border-amber-500 pl-6 pr-4 py-4 text-left max-w-lg mx-auto bg-amber-500/10 rounded-r-lg backdrop-blur-sm">
-            <span className="text-amber-100">"Deep Work is the ability to focus without distraction on a cognitively demanding task.
+          <blockquote className="text-body italic text-gold-700 mb-8 border-l-4 border-gold-400 pl-6 pr-4 py-4 text-left max-w-lg mx-auto bg-gradient-to-r from-gold-100 to-sunset-100 rounded-r-xl shadow-warm-md">
+            <span className="text-bark-500">"Deep Work is the ability to focus without distraction on a cognitively demanding task.
             It's a skill that allows you to quickly master complicated information and produce better
             results in less time."</span>
-            <footer className="text-sm mt-3 not-italic text-amber-300 font-medium">— Cal Newport</footer>
+            <footer className="text-caption mt-3 not-italic text-sunset-600 font-semibold">— Cal Newport</footer>
           </blockquote>
         </div>
         
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           <div className="mb-6">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="name" className="block text-body-sm font-medium text-bark-400 mb-2">
               What's your name?
             </label>
             <input
@@ -94,7 +94,7 @@ export default function OnboardingStart() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
-              className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-coral-500 focus:border-transparent outline-none bg-primary-800 text-gray-100 placeholder-gray-500"
+              className="input"
               required
               disabled={loading}
             />
@@ -103,9 +103,9 @@ export default function OnboardingStart() {
           <button
             type="submit"
             disabled={loading || !name.trim()}
-            className="w-full bg-coral-600 hover:bg-coral-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all shadow-lg hover:shadow-coral-500/20"
+            className="btn-primary w-full text-lg py-4 shadow-warm-lg hover:shadow-glow-sunset"
           >
-            {loading ? 'Starting...' : 'Get Started'}
+            {loading ? 'Starting...' : 'Get Started ✨'}
           </button>
 
           {/* Guest mode: Skip authentication button */}
@@ -114,13 +114,13 @@ export default function OnboardingStart() {
               type="button"
               onClick={handleSkipAuth}
               disabled={loading}
-              className="w-full mt-3 bg-transparent hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-300 font-medium px-8 py-3 rounded-lg text-base transition-all border border-gray-600"
+              className="btn-ghost w-full mt-3"
             >
               Continue Without Signing In
             </button>
           )}
           
-          <p className="mt-4 text-sm text-gray-400 text-center">
+          <p className="mt-4 text-caption text-bark-300 text-center">
             {getAuthModeMessage()}
           </p>
         </form>

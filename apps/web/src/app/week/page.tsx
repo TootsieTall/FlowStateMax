@@ -56,25 +56,25 @@ export default function WeekViewPage() {
   const nextWeek = () => setCurrentWeek(addDays(currentWeek, 7))
 
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen bg-dawn-100">
       {/* Navigation */}
-      <nav className="bg-background-card border-b border-gray-700">
+      <nav className="bg-white border-b border-border-light shadow-warm-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-teal-500">FlowState</h1>
+              <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
             </div>
             <div className="flex items-center space-x-8">
-              <a href="/week" className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
+              <a href="/week" className="text-sunset-500 font-semibold border-b-2 border-sunset-500 pb-1">
                 Week
               </a>
-              <a href="/today" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="/today" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Today
               </a>
-              <a href="/explore" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="/explore" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Explore
               </a>
-              <a href="/settings" className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href="/settings" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -89,16 +89,16 @@ export default function WeekViewPage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={previousWeek}
-            className="p-2 hover:bg-primary-700 rounded-lg transition-colors text-gray-300"
+            className="p-2 hover:bg-dawn-200 rounded-lg transition-all duration-fast text-bark-400 hover:text-sunset-500 hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold text-gray-200">
+          <h2 className="text-h2 text-bark-500">
             {format(weekStart, 'MMMM d')} - {format(addDays(weekStart, 6), 'MMMM d, yyyy')}
           </h2>
           <button
             onClick={nextWeek}
-            className="p-2 hover:bg-primary-700 rounded-lg transition-colors text-gray-300"
+            className="p-2 hover:bg-dawn-200 rounded-lg transition-all duration-fast text-bark-400 hover:text-sunset-500 hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -106,7 +106,10 @@ export default function WeekViewPage() {
 
         {/* Calendar Grid */}
         {loading ? (
-          <div className="text-center py-12 text-gray-400">Loading...</div>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-body text-bark-300">Loading your week...</p>
+          </div>
         ) : (
           <div className="grid grid-cols-7 gap-4">
             {days.map((day) => {
@@ -116,15 +119,15 @@ export default function WeekViewPage() {
               return (
                 <div
                   key={day.toISOString()}
-                  className={`bg-background-card rounded-lg border-2 p-4 min-h-[400px] ${
-                    isToday ? 'border-teal-500' : 'border-gray-700'
+                  className={`card p-4 min-h-[400px] transition-all duration-normal hover:-translate-y-1 hover:shadow-warm-md ${
+                    isToday ? 'border-2 border-sunset-400 shadow-glow-amber' : ''
                   }`}
                 >
                   <div className="mb-4">
-                    <div className="text-sm text-gray-400 font-medium">{format(day, 'EEE')}</div>
+                    <div className="text-overline text-bark-200">{format(day, 'EEE')}</div>
                     <div
-                      className={`text-2xl font-bold ${
-                        isToday ? 'text-teal-500' : 'text-gray-200'
+                      className={`text-h1 ${
+                        isToday ? 'text-gradient-sunset' : 'text-bark-500'
                       }`}
                     >
                       {format(day, 'd')}
@@ -145,12 +148,12 @@ export default function WeekViewPage() {
                   </div>
 
                   <button
-                    className="w-full mt-4 p-2 border-2 border-dashed border-gray-600 rounded-lg hover:border-teal-500 hover:bg-teal-500 hover:bg-opacity-10 transition-colors flex items-center justify-center text-gray-400 hover:text-teal-400"
+                    className="w-full mt-4 p-2 border-2 border-dashed border-border-DEFAULT rounded-warm-lg hover:border-sunset-400 hover:bg-sunset-50 transition-all duration-fast flex items-center justify-center text-bark-200 hover:text-sunset-500 group"
                     onClick={() => {
                       // Handle adding new block
                     }}
                   >
-                    <Plus className="w-4 h-4 mr-1" />
+                    <Plus className="w-4 h-4 mr-1 group-hover:animate-icon-bounce" />
                     <span className="text-sm">Add block</span>
                   </button>
                 </div>
@@ -162,7 +165,7 @@ export default function WeekViewPage() {
 
       {/* Quick Capture Button */}
       <button
-        className="fixed bottom-8 right-8 bg-teal-600 hover:bg-teal-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl"
+        className="fixed bottom-8 right-8 bg-gradient-to-br from-sunset-400 to-gold-400 hover:from-sunset-500 hover:to-gold-500 text-white rounded-full p-4 shadow-warm-2xl hover:shadow-glow-sunset transition-all duration-fast hover:scale-110 animate-pulse-glow"
         onClick={() => (window.location.href = '/capture')}
       >
         <Plus className="w-6 h-6" />

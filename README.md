@@ -1,8 +1,8 @@
-# FlowState - Deep Work Companion
+# 🌅 Daybreak - Flow State Productivity
 
-> **Cal Newport's Deep Work methodology as a complete daily operating system**
+> **Capture the golden hour of productivity. Deep work made easy and rewarding.**
 
-FlowState is a productivity app that helps you achieve deep focus and eliminate distractions through location-based triggers, app blocking, and structured planning.
+Daybreak (formerly FlowStateMax) is a productivity app based on Cal Newport's Deep Work methodology. It helps you achieve deep focus and eliminate distractions through location-based triggers, app blocking, and structured planning with a warm, inviting golden hour design.
 
 ## ✨ Key Features
 

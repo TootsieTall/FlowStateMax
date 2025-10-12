@@ -168,29 +168,33 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
     validationError ? 'ring-2 ring-red-500' : ''
   )
 
-  // Variant-specific styling
+  // Variant-specific styling - Daybreak Theme
   const variantClasses = {
     primary: cn(
       'px-8 py-6 text-lg font-semibold rounded-2xl',
-      'bg-gradient-to-r from-blue-600 to-purple-600',
-      'hover:from-blue-700 hover:to-purple-700',
-      'text-white shadow-lg hover:shadow-xl',
-      'flex items-center gap-3 justify-center min-w-[240px]'
+      'bg-gradient-to-r from-sunset-500 to-gold-400',
+      'hover:from-sunset-600 hover:to-gold-500',
+      'text-white shadow-warm-lg hover:shadow-warm-xl',
+      'flex items-center gap-3 justify-center min-w-[240px]',
+      'transition-all duration-fast hover:-translate-y-0.5'
     ),
     floating: cn(
       'fixed bottom-6 right-6 z-50',
       'w-16 h-16 rounded-full',
-      'bg-gradient-to-r from-blue-600 to-purple-600',
-      'hover:from-blue-700 hover:to-purple-700',
-      'text-white shadow-2xl hover:shadow-3xl',
+      'bg-gradient-to-br from-sunset-400 to-gold-400',
+      'hover:from-sunset-500 hover:to-gold-500',
+      'text-white shadow-warm-2xl hover:shadow-glow-sunset',
       'flex items-center justify-center',
-      'hover:scale-110 active:scale-95'
+      'transition-all duration-fast',
+      'hover:scale-110 active:scale-95',
+      'animate-pulse-glow'
     ),
     icon: cn(
       'w-10 h-10 rounded-lg',
-      'bg-blue-600 hover:bg-blue-700',
-      'text-white',
-      'flex items-center justify-center'
+      'bg-sunset-500 hover:bg-sunset-600',
+      'text-white shadow-warm-md hover:shadow-warm-lg',
+      'flex items-center justify-center',
+      'transition-all duration-fast'
     ),
   }
 
@@ -210,10 +214,10 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
           {getButtonContent()}
         </button>
 
-        {/* Pulsing ring animation for primary variant */}
+        {/* Pulsing ring animation for primary variant - Daybreak glow */}
         {variant === 'primary' && !isLoading && (
           <motion.div
-            className="absolute inset-0 rounded-2xl bg-blue-600"
+            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sunset-400 to-gold-400"
             initial={{ scale: 1, opacity: 0.5 }}
             animate={{ scale: 1.05, opacity: 0 }}
             transition={{
@@ -228,7 +232,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
         <AnimatePresence>
           {validationError && variant === 'primary' && (
             <motion.div
-              className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-red-600 text-sm"
+              className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-error-strong text-sm font-medium"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}

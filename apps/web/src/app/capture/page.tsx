@@ -163,17 +163,17 @@ export default function CapturePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-dawn-100">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading your captures...</p>
+          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-bark-300">Loading your captures...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-dawn-100">
       <QuickCapture />
       
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -181,67 +181,67 @@ export default function CapturePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              <h1 className="text-display-md text-bark-500 mb-2">
                 Quick Capture
               </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Capture thoughts, tasks, and ideas instantly
+              <p className="text-body text-bark-300">
+                Capture thoughts, tasks, and ideas instantly ✨
               </p>
             </div>
             <button
               onClick={toggleQuickCapture}
-              className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/30"
+              className="btn-primary group"
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-5 h-5 group-hover:animate-icon-bounce" />
               New Capture
             </button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 mt-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Items</div>
+            <div className="card p-4 hover-lift">
+              <div className="text-h2 text-bark-500">{stats.total}</div>
+              <div className="text-caption text-bark-200">Total Items</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-              <div className="text-2xl font-bold text-indigo-600">{stats.active}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Active</div>
+            <div className="card p-4 hover-lift">
+              <div className="text-h2 text-gradient-sunset">{stats.active}</div>
+              <div className="text-caption text-bark-200">Active</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-              <div className="text-2xl font-bold text-green-600">{stats.completed}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+            <div className="card p-4 hover-lift">
+              <div className="text-h2 text-gradient-gold">{stats.completed}</div>
+              <div className="text-caption text-bark-200">Completed</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-              <div className="text-2xl font-bold text-orange-600">{stats.highImpact}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">High Impact</div>
+            <div className="card p-4 hover-lift">
+              <div className="text-h2 text-sunset-600">{stats.highImpact}</div>
+              <div className="text-caption text-bark-200">High Impact</div>
             </div>
           </div>
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 border border-gray-200 dark:border-gray-700">
+        <div className="card-elevated p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
             {/* Search */}
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-bark-200" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search captures..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                  className="input pl-10"
                 />
               </div>
             </div>
 
             {/* Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-500" />
+              <Filter className="w-5 h-5 text-bark-300" />
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as any)}
-                className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="select"
               >
                 <option value="all">All Items</option>
                 <option value="active">Active</option>
@@ -251,11 +251,11 @@ export default function CapturePage() {
 
             {/* Sort */}
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-5 h-5 text-gray-500" />
+              <ArrowUpDown className="w-5 h-5 text-bark-300" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="select"
               >
                 <option value="recent">Recent First</option>
                 <option value="deadline">By Deadline</option>
@@ -268,17 +268,17 @@ export default function CapturePage() {
         {/* Items List */}
         <div className="space-y-3">
           {filteredItems.length === 0 ? (
-            <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-              <Sparkles className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <div className="text-center py-16 card-elevated animate-bounce-in">
+              <Sparkles className="w-16 h-16 text-gold-400 mx-auto mb-4 animate-pulse" />
+              <h3 className="text-h2 text-bark-500 mb-2">
                 No items found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Start capturing your thoughts and tasks
+              <p className="text-body text-bark-300 mb-6">
+                Start capturing your thoughts and tasks ✨
               </p>
               <button
                 onClick={toggleQuickCapture}
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-all"
+                className="btn-primary"
               >
                 Create Your First Capture
               </button>
@@ -287,39 +287,39 @@ export default function CapturePage() {
             filteredItems.map((item) => (
               <div
                 key={item.id}
-                className={`bg-white dark:bg-gray-800 rounded-xl p-4 border transition-all hover:shadow-md ${
+                className={`card-interactive ${
                   item.completed
-                    ? 'border-gray-200 dark:border-gray-700 opacity-60'
-                    : 'border-gray-200 dark:border-gray-700'
+                    ? 'opacity-60'
+                    : ''
                 }`}
               >
                 <div className="flex items-start gap-4">
                   {/* Checkbox */}
                   <button
                     onClick={() => handleToggleComplete(item.id, item.completed)}
-                    className="mt-1 flex-shrink-0"
+                    className="mt-1 flex-shrink-0 group"
                   >
                     {item.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-green-600" />
+                      <CheckCircle2 className="w-6 h-6 text-gold-500 completion-shine" />
                     ) : (
-                      <Circle className="w-6 h-6 text-gray-400 hover:text-indigo-600 transition-colors" />
+                      <Circle className="w-6 h-6 text-bark-200 hover:text-sunset-500 transition-colors group-hover:animate-icon-bounce" />
                     )}
                   </button>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className={`text-lg font-medium ${
+                      <h3 className={`text-h4 ${
                         item.completed
-                          ? 'text-gray-500 dark:text-gray-500 line-through'
-                          : 'text-gray-900 dark:text-white'
+                          ? 'text-bark-200 line-through'
+                          : 'text-bark-500'
                       }`}>
                         {item.title}
                       </h3>
 
                       {/* Impact Badge */}
                       {item.impact === 'HIGH' && !item.completed && (
-                        <span className="flex items-center gap-1 px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-medium rounded-lg flex-shrink-0">
+                        <span className="flex items-center gap-1 px-2 py-1 bg-sunset-100 text-sunset-700 text-xs font-medium rounded-lg flex-shrink-0">
                           <Flag className="w-3 h-3" />
                           High Impact
                         </span>
@@ -327,13 +327,13 @@ export default function CapturePage() {
                     </div>
 
                     {item.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      <p className="text-body-sm text-bark-300 mb-3 line-clamp-2">
                         {item.description}
                       </p>
                     )}
 
                     {/* Meta Info */}
-                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-4 text-caption text-bark-200">
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span>{new Date(item.createdAt).toLocaleDateString()}</span>
@@ -358,9 +358,9 @@ export default function CapturePage() {
                   {/* Delete Button */}
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
+                    className="p-2 text-bark-200 hover:text-error-strong hover:bg-error-light rounded-lg transition-all duration-fast flex-shrink-0 group"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-5 h-5 group-hover:animate-icon-bounce" />
                   </button>
                 </div>
               </div>
@@ -370,8 +370,8 @@ export default function CapturePage() {
 
         {/* Keyboard Hint */}
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            💡 Tip: Press <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">⌘K</kbd> anywhere to quick capture
+          <p className="text-body-sm text-bark-300">
+            💡 Tip: Press <kbd className="px-2 py-1 bg-dawn-200 border border-border-DEFAULT rounded text-xs text-bark-400">⌘K</kbd> anywhere to quick capture
           </p>
         </div>
       </div>

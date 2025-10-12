@@ -60,26 +60,26 @@ export default function AppsPage() {
   const selectedCount = blockedApps.filter(app => app.selected).length
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated animate-slide-in-right max-w-2xl w-full p-8">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 5 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-overline text-sunset-600 mb-2">STEP 5 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">
             Which apps distract you?
           </h1>
-          <p className="text-gray-600">
+          <p className="text-body text-bark-300">
             Select apps to block during deep work sessions. You'll see a breathing exercise before opening them.
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-blue-900 mb-1">
               How App Blocking Works
             </h3>
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-bark-400">
               When you try to open a blocked app during a deep work session, you'll be prompted with a 
               10-second breathing exercise. This pause helps you decide if it's truly necessary or just a distraction.
             </p>
@@ -88,7 +88,7 @@ export default function AppsPage() {
 
         {/* Suggested Apps */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-bark-500 mb-3">
             <Smartphone className="w-4 h-4 inline mr-1" />
             Common distractions
           </label>
@@ -105,10 +105,10 @@ export default function AppsPage() {
                   className={`p-4 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
                     app.selected
                       ? 'border-red-500 bg-red-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
                   }`}
                 >
-                  <span className={`font-medium ${app.selected ? 'text-red-700' : 'text-gray-700'}`}>
+                  <span className={`font-medium ${app.selected ? 'text-red-700' : 'text-bark-500'}`}>
                     {app.name}
                   </span>
                   {app.selected ? (
@@ -124,7 +124,7 @@ export default function AppsPage() {
 
         {/* Custom App Input */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bark-500 mb-2">
             Add another app
           </label>
           <div className="flex gap-2">
@@ -148,7 +148,7 @@ export default function AppsPage() {
         {/* Selected Apps List */}
         {blockedApps.filter(app => app.selected && !SUGGESTED_BLOCKED_APPS.some(s => s.identifier === app.identifier)).length > 0 && (
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bark-500 mb-2">
               Custom blocked apps
             </label>
             <div className="space-y-2">
@@ -189,26 +189,26 @@ export default function AppsPage() {
         <div className="flex justify-between items-center">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-2 btn-ghost"
           >
             Back
           </button>
           <div className="flex items-center gap-4">
             {selectedCount > 0 && (
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-body text-bark-300">
                 {selectedCount} app{selectedCount !== 1 ? 's' : ''} selected
               </span>
             )}
             <div className="flex gap-3">
               <button
                 onClick={handleSkip}
-                className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="px-6 py-2 btn-ghost"
               >
                 Skip
               </button>
               <button
                 onClick={handleContinue}
-                className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                className="px-8 py-3 btn-primary transition-colors"
               >
                 Continue
               </button>

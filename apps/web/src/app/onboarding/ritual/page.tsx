@@ -65,24 +65,24 @@ export default function RitualPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated animate-slide-in-right max-w-2xl w-full p-8">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 6 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-overline text-sunset-600 mb-2">STEP 6 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">
             Create Your Flow Ritual
           </h1>
-          <p className="text-gray-600">
+          <p className="text-body text-bark-300">
             Build a consistent pre-work routine to signal your brain it's time for deep focus
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-6 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
           <h3 className="text-sm font-semibold text-blue-900 mb-1">
             💡 Why Rituals Matter
           </h3>
-          <p className="text-sm text-blue-700">
+          <p className="text-sm text-bark-400">
             A consistent ritual trains your brain to enter focus mode faster. Like athletes warming up, 
             your ritual prepares your mind for peak performance.
           </p>
@@ -110,10 +110,10 @@ export default function RitualPage() {
                     {item.checked ? (
                       <CheckCircle className="w-5 h-5 text-green-600" />
                     ) : (
-                      <Circle className="w-5 h-5 text-gray-400" />
+                      <Circle className="w-5 h-5 text-bark-200" />
                     )}
                   </div>
-                  <span className={`flex-1 ${item.checked ? 'text-green-700 font-medium' : 'text-gray-700'}`}>
+                  <span className={`flex-1 ${item.checked ? 'text-green-700 font-medium' : 'text-bark-500'}`}>
                     {item.text}
                   </span>
                   {!item.isDefault && (
@@ -123,7 +123,7 @@ export default function RitualPage() {
                         removeItem(item.id)
                       }}
                       type="button"
-                      className="flex-shrink-0 text-gray-400 hover:text-red-600 transition-colors pointer-events-auto"
+                      className="flex-shrink-0 text-bark-200 hover:text-red-600 transition-colors pointer-events-auto"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -136,7 +136,7 @@ export default function RitualPage() {
 
         {/* Add Custom Item */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bark-500 mb-2">
             Add a custom step
           </label>
           <div className="flex gap-2">
@@ -166,39 +166,39 @@ export default function RitualPage() {
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setNewItem('Put on headphones 🎧')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               <Music className="w-4 h-4 inline mr-1" />
               Put on headphones
             </button>
             <button
               onClick={() => setNewItem('Set phone to airplane mode ✈️')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               <Phone className="w-4 h-4 inline mr-1" />
               Airplane mode
             </button>
             <button
               onClick={() => setNewItem('Quick 5-min meditation 🧘')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               Quick meditation
             </button>
             <button
               onClick={() => setNewItem('Review daily goals 🎯')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               Review goals
             </button>
             <button
               onClick={() => setNewItem('Drink water 💧')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               Drink water
             </button>
             <button
               onClick={() => setNewItem('Open focus app/tool 💻')}
-              className="text-left text-sm text-gray-700 hover:text-primary-700 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
             >
               Open focus app
             </button>
@@ -218,20 +218,20 @@ export default function RitualPage() {
         <div className="flex justify-between">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-2 btn-ghost"
           >
             Back
           </button>
           <div className="flex gap-3">
             <button
               onClick={handleSkip}
-              className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="px-6 py-2 btn-ghost"
             >
               Skip
             </button>
             <button
               onClick={handleContinue}
-              className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+              className="px-8 py-3 btn-primary transition-colors"
             >
               Continue
             </button>

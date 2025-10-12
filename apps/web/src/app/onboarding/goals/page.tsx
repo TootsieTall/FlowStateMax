@@ -23,12 +23,12 @@ export default function GoalsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated max-w-2xl w-full p-8 animate-slide-in-right">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 2 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">What brings you here?</h1>
-          <p className="text-gray-600">Select your focus areas (choose as many as apply)</p>
+          <div className="text-overline text-sunset-600 mb-2">STEP 2 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">What brings you here? 🎯</h1>
+          <p className="text-body text-bark-300">Select your focus areas (choose as many as apply)</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
@@ -38,19 +38,19 @@ export default function GoalsPage() {
               <button
                 key={area}
                 onClick={() => toggleGoal(area)}
-                className={`p-4 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
+                className={`p-4 rounded-warm-lg border-2 transition-all duration-fast text-left flex items-center justify-between hover-lift ${
                   selected
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
+                    : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
                 }`}
               >
-                <span className={`font-medium ${selected ? 'text-primary-700' : 'text-gray-700'}`}>
+                <span className={`font-medium ${selected ? 'text-sunset-600' : 'text-bark-400'}`}>
                   {area}
                 </span>
                 {selected ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500 animate-bounce-in" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </button>
             )
@@ -60,16 +60,16 @@ export default function GoalsPage() {
         <div className="flex justify-between">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="btn-ghost"
           >
             Back
           </button>
           <button
             onClick={handleContinue}
             disabled={selectedGoals.length === 0}
-            className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary"
           >
-            Continue
+            Continue →
           </button>
         </div>
       </div>

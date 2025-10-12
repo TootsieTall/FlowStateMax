@@ -103,21 +103,21 @@ export default function LocationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated animate-slide-in-right max-w-2xl w-full p-8">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 4 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-overline text-sunset-600 mb-2">STEP 4 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">
             Where do you do your best work?
           </h1>
-          <p className="text-gray-600">
+          <p className="text-body text-bark-300">
             Add your flow zones so we can remind you to start deep work sessions when you arrive
           </p>
         </div>
 
         {/* Add Manual Location */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bark-500 mb-2">
             Add a location manually
           </label>
           <div className="flex gap-2">
@@ -144,7 +144,7 @@ export default function LocationsPage() {
           <button
             onClick={addCurrentLocation}
             disabled={isGettingLocation}
-            className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors flex items-center justify-center gap-2 text-gray-700 hover:text-primary-700 disabled:opacity-50"
+            className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-colors flex items-center justify-center gap-2 text-bark-500 hover:text-sunset-600 disabled:opacity-50"
           >
             <Locate className={`w-5 h-5 ${isGettingLocation ? 'animate-pulse' : ''}`} />
             {isGettingLocation ? 'Getting your location...' : 'Add Current Location (with GPS)'}
@@ -162,7 +162,7 @@ export default function LocationsPage() {
         {/* Locations List */}
         {locations.length > 0 && (
           <div className="mb-8 space-y-3">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bark-500 mb-2">
               Your work zones ({locations.length})
             </label>
             {locations.map((location) => (
@@ -171,7 +171,7 @@ export default function LocationsPage() {
                 className="p-4 border border-gray-200 rounded-lg bg-gray-50"
               >
                 <div className="flex items-start gap-3 mb-3">
-                  <MapPin className="w-5 h-5 text-primary-700 flex-shrink-0 mt-1" />
+                  <MapPin className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-1" />
                   <div className="flex-1">
                     <input
                       type="text"
@@ -180,14 +180,14 @@ export default function LocationsPage() {
                       className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900 font-medium"
                     />
                     {location.latitude && location.longitude && (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-bark-300 mt-1">
                         📍 {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
                       </p>
                     )}
                   </div>
                   <button
                     onClick={() => removeLocation(location.id)}
-                    className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                    className="p-1 text-bark-200 hover:text-red-600 transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -209,7 +209,7 @@ export default function LocationsPage() {
                     }
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-700"
                   />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <div className="flex justify-between text-xs text-bark-300 mt-1">
                     <span>25 ft</span>
                     <span>500 ft</span>
                   </div>
@@ -220,11 +220,11 @@ export default function LocationsPage() {
         )}
 
         {/* Info Box */}
-        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
           <h3 className="text-sm font-semibold text-blue-900 mb-1">
             💡 How it works
           </h3>
-          <p className="text-sm text-blue-700">
+          <p className="text-sm text-bark-400">
             When you enter one of your work zones, FlowState will send you a notification asking if
             you're ready to start a deep work session. You can adjust the detection radius for each
             location.
@@ -235,21 +235,21 @@ export default function LocationsPage() {
         <div className="flex justify-between">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-2 btn-ghost"
           >
             Back
           </button>
           <div className="flex gap-3">
             <button
               onClick={handleSkip}
-              className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="px-6 py-2 btn-ghost"
             >
               Skip
             </button>
             <button
               onClick={handleContinue}
               disabled={locations.length === 0}
-              className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 btn-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Continue {locations.length > 0 && `(${locations.length})`}
             </button>

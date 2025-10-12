@@ -83,28 +83,28 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-dawn-100 to-dawn-200 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full">
         {/* Main Flow Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-2xl p-8 mb-6"
+          className="card-elevated p-8 mb-6 animate-pulse-glow"
         >
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold mb-4">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sunset-100 to-gold-100 text-sunset-700 rounded-full text-sm font-semibold mb-4 shadow-warm-sm">
+              <div className="w-2 h-2 bg-sunset-500 rounded-full animate-pulse" />
               Flow Session Active
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-display-md text-bark-500 mb-2">
               {timeBlock?.title || 'Deep Work Session'}
             </h1>
             {timeBlock?.description && (
-              <p className="text-gray-600">{timeBlock.description}</p>
+              <p className="text-body text-bark-300">{timeBlock.description}</p>
             )}
             {timeBlock?.task && (
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-body-sm text-bark-200 mt-2">
                 Task: {timeBlock.task.title}
               </p>
             )}
@@ -117,27 +117,27 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
 
           {/* Session Info */}
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
               <div className="text-2xl mb-1">
                 {session.monochromeOn ? '🎨' : '🌈'}
               </div>
-              <div className="text-xs text-gray-600">
+              <div className="text-caption text-bark-300">
                 {session.monochromeOn ? 'Monochrome' : 'Color'}
               </div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
               <div className="text-2xl mb-1">
                 {session.appsBlocked ? '🔒' : '🔓'}
               </div>
-              <div className="text-xs text-gray-600">
+              <div className="text-caption text-bark-300">
                 {session.appsBlocked ? 'Apps Blocked' : 'Apps Open'}
               </div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
               <div className="text-2xl mb-1">
                 {session.musicPlayed ? '🎵' : '🔇'}
               </div>
-              <div className="text-xs text-gray-600">
+              <div className="text-caption text-bark-300">
                 {session.musicPlayed ? 'Music On' : 'Silent'}
               </div>
             </div>
@@ -169,43 +169,47 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-center text-gray-600 italic px-8"
+          className="text-center px-8"
         >
-          "The ability to concentrate intensely is a skill that must be trained."
-          <div className="text-sm text-gray-500 mt-1">— Cal Newport</div>
+          <blockquote className="border-l-4 border-gold-400 bg-gradient-to-br from-gold-100 to-dawn-200 px-6 py-4 rounded-r-lg shadow-warm-sm">
+            <p className="text-body text-bark-400 italic mb-2">
+              "The ability to concentrate intensely is a skill that must be trained."
+            </p>
+            <footer className="text-body-sm text-bark-300 font-medium">— Cal Newport</footer>
+          </blockquote>
         </motion.div>
       </div>
 
       {/* Break Dialog */}
       {showBreakDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-bark-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6"
+            className="card-elevated max-w-md w-full p-6 animate-bounce-in"
           >
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Take a Break?</h2>
+              <h2 className="text-h2 text-bark-500">Take a Break?</h2>
               <button
                 onClick={() => setShowBreakDialog(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-dawn-200 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-bark-300" />
               </button>
             </div>
-            <p className="text-gray-600 mb-6">
+            <p className="text-body text-bark-300 mb-6">
               Breaking flow now will pause your session. You can resume it later, but you'll need to complete your ritual again.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowBreakDialog(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="btn-secondary flex-1"
               >
                 Stay in Flow
               </button>
               <button
                 onClick={confirmBreak}
-                className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                className="btn-primary flex-1"
               >
                 Take Break
               </button>
@@ -216,44 +220,44 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
 
       {/* Complete Dialog */}
       {showCompleteDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-bark-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6"
+            className="card-elevated max-w-md w-full p-6 animate-bounce-in"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <h2 className="text-h2 text-bark-500 mb-4">
               How did it go?
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-body text-bark-300 mb-6">
               Your feedback helps us schedule better deep work sessions.
             </p>
             <div className="space-y-3">
               <button
                 onClick={() => confirmComplete('finished_early')}
-                className="w-full p-4 text-left border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-sunset-400 hover:bg-sunset-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
               >
-                <div className="font-semibold text-gray-900">✅ Finished Early</div>
-                <div className="text-sm text-gray-600">Completed the work ahead of schedule</div>
+                <div className="font-semibold text-bark-500">✅ Finished Early</div>
+                <div className="text-body-sm text-bark-300">Completed the work ahead of schedule</div>
               </button>
               <button
                 onClick={() => confirmComplete('on_time')}
-                className="w-full p-4 text-left border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-gold-400 hover:bg-gold-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
               >
-                <div className="font-semibold text-gray-900">🎯 Right on Time</div>
-                <div className="text-sm text-gray-600">Perfect duration for the task</div>
+                <div className="font-semibold text-bark-500">🎯 Right on Time</div>
+                <div className="text-body-sm text-bark-300">Perfect duration for the task</div>
               </button>
               <button
                 onClick={() => confirmComplete('needed_more')}
-                className="w-full p-4 text-left border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-sand-400 hover:bg-sand-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
               >
-                <div className="font-semibold text-gray-900">⏰ Needed More Time</div>
-                <div className="text-sm text-gray-600">Could have used additional time</div>
+                <div className="font-semibold text-bark-500">⏰ Needed More Time</div>
+                <div className="text-body-sm text-bark-300">Could have used additional time</div>
               </button>
             </div>
             <button
               onClick={() => setShowCompleteDialog(false)}
-              className="w-full mt-4 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="btn-ghost w-full mt-4"
             >
               Cancel
             </button>

@@ -11,8 +11,8 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: 'FlowState - Deep Work Companion',
-  description: "Cal Newport's Deep Work methodology as a daily operating system",
+  title: 'Daybreak - Flow State Productivity',
+  description: 'Capture the golden hour of productivity. Deep work made easy and rewarding.',
 }
 
 export default function RootLayout({

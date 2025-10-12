@@ -27,23 +27,23 @@ export default function IntegrationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated max-w-2xl w-full p-8 animate-slide-in-right">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 3 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Connect Your Tools</h1>
-          <p className="text-gray-600">
+          <div className="text-overline text-sunset-600 mb-2">STEP 3 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">Connect Your Tools 🔗</h1>
+          <p className="text-body text-bark-300">
             Link your calendar and email to automatically schedule deep work sessions
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800">
+        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-warm-lg flex items-start gap-3">
+          <Info className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
+          <div className="text-body-sm text-bark-500">
             <p className="font-semibold mb-1">Why connect?</p>
             <p>
-              FlowState can automatically find free time in your calendar and block it for deep work. 
+              Daybreak can automatically find free time in your calendar and block it for deep work. 
               We'll also help you decline low-value meetings that conflict with your focus time.
             </p>
           </div>
@@ -61,28 +61,28 @@ export default function IntegrationsPage() {
           <div className="space-y-3">
             <button
               onClick={() => setSelectedCalendar('google')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+              className={`w-full p-4 rounded-warm-lg border-2 transition-all duration-fast text-left hover-lift ${
                 selectedCalendar === 'google'
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
+                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-warm-sm border border-border-light">
                     <span className="text-xl">📅</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'google' ? 'text-primary-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'google' ? 'text-sunset-600' : 'text-bark-500'}`}>
                       Google Calendar
                     </h3>
-                    <p className="text-sm text-gray-500">Sync with Gmail and Google Workspace</p>
+                    <p className="text-body-sm text-bark-300">Sync with Gmail and Google Workspace</p>
                   </div>
                 </div>
                 {selectedCalendar === 'google' ? (
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                  <CheckCircle className="w-5 h-5 text-gold-500 animate-bounce-in" />
                 ) : (
-                  <Circle className="w-5 h-5 text-gray-300" />
+                  <Circle className="w-5 h-5 text-bark-200" />
                 )}
               </div>
             </button>
@@ -225,20 +225,20 @@ export default function IntegrationsPage() {
         <div className="flex justify-between items-center">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="btn-ghost"
           >
             Back
           </button>
           <div className="flex gap-3">
             <button
               onClick={handleSkip}
-              className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="btn-ghost"
             >
               Skip for now
             </button>
             <button
               onClick={handleContinue}
-              className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors flex items-center gap-2"
+              className="btn-primary flex items-center gap-2"
             >
               {selectedCalendar || selectedEmail ? 'Connect & Continue' : 'Continue'}
               <ArrowRight className="w-4 h-4" />
@@ -249,7 +249,7 @@ export default function IntegrationsPage() {
         {/* Note about actual connection */}
         {(selectedCalendar || selectedEmail) && (
           <div className="mt-4 text-center">
-            <p className="text-xs text-gray-500">
+            <p className="text-caption text-bark-300">
               Note: Actual integration will be set up after onboarding
             </p>
           </div>

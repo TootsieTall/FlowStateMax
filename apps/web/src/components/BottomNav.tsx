@@ -39,7 +39,7 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 safe-area-inset-bottom z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-border-light safe-area-inset-bottom z-40 shadow-warm-lg">
       <div className="max-w-lg mx-auto px-2">
         <div className="flex items-center justify-around h-16">
           {BOTTOM_NAV_CONFIG.map((item) => {
@@ -50,18 +50,18 @@ export default function BottomNav() {
               <Link
                 key={item.path}
                 href={item.path}
-                className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-fast relative ${
                   isActive
-                    ? 'text-indigo-600 dark:text-indigo-400'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                    ? 'text-sunset-500'
+                    : 'text-bark-200 hover:text-bark-400'
                 }`}
               >
-                <Icon className="w-6 h-6 mb-1" />
+                <Icon className={`w-6 h-6 mb-1 transition-transform duration-fast ${isActive ? 'scale-110' : 'hover:scale-105'}`} />
                 <span className={`text-xs font-medium ${isActive ? 'font-semibold' : ''}`}>
                   {item.label}
                 </span>
                 {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 dark:bg-indigo-400 rounded-t-full" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-sunset-500 to-gold-400 rounded-t-lg shadow-glow-amber" />
                 )}
               </Link>
             );

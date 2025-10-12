@@ -76,27 +76,27 @@ export default function BoredomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="card-elevated animate-slide-in-right max-w-3xl w-full p-8">
         <div className="mb-8">
-          <div className="text-sm text-primary-700 font-semibold mb-2">STEP 7 OF 8</div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-overline text-sunset-600 mb-2">STEP 7 OF 8</div>
+          <h1 className="text-display-md text-bark-500 mb-2">
             Train Your Boredom Resistance
           </h1>
-          <p className="text-gray-600">
+          <p className="text-body text-bark-300">
             How do you want to handle downtime and breaks?
           </p>
         </div>
 
         {/* Educational Banner */}
-        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
           <div className="flex items-start gap-3">
-            <Brain className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <Brain className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="text-sm font-semibold text-blue-900 mb-1">
                 Why Boredom Training Matters
               </h3>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-bark-400">
                 Cal Newport argues that constant entertainment during breaks weakens your ability to 
                 concentrate. Training yourself to embrace boredom strengthens your focus muscle and 
                 increases your capacity for deep work.
@@ -113,12 +113,12 @@ export default function BoredomPage() {
               onClick={() => setSelectedOption(option.id)}
               className={`w-full p-6 rounded-lg border-2 transition-all text-left ${
                 selectedOption === option.id
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
+                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
               }`}
             >
               <div className="flex items-start gap-4">
-                <div className={`mt-1 ${selectedOption === option.id ? 'text-primary-600' : 'text-gray-400'}`}>
+                <div className={`mt-1 ${selectedOption === option.id ? 'text-gold-500' : 'text-bark-200'}`}>
                   {selectedOption === option.id ? (
                     <CheckCircle className="w-6 h-6" />
                   ) : (
@@ -129,7 +129,7 @@ export default function BoredomPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className={`text-lg font-semibold ${
-                      selectedOption === option.id ? 'text-primary-700' : 'text-gray-900'
+                      selectedOption === option.id ? 'text-sunset-600' : 'text-gray-900'
                     }`}>
                       {option.title}
                     </h3>
@@ -149,7 +149,7 @@ export default function BoredomPage() {
                           selectedOption === option.id ? 'bg-primary-600' : 'bg-gray-400'
                         }`} />
                         <span className={`text-sm ${
-                          selectedOption === option.id ? 'text-primary-700' : 'text-gray-600'
+                          selectedOption === option.id ? 'text-sunset-600' : 'text-gray-600'
                         }`}>
                           {feature}
                         </span>
@@ -215,7 +215,7 @@ export default function BoredomPage() {
             <h3 className="text-sm font-semibold text-gray-900 mb-2">
               ⚡ What you'll get
             </h3>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-bark-500">
               Simple break timers with no suggestions. You're in full control of how you spend your 
               downtime between deep work sessions.
             </p>
@@ -226,21 +226,21 @@ export default function BoredomPage() {
         <div className="flex justify-between">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="px-6 py-2 btn-ghost"
           >
             Back
           </button>
           <div className="flex gap-3">
             <button
               onClick={handleSkip}
-              className="px-6 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="px-6 py-2 btn-ghost"
             >
               Skip
             </button>
             <button
               onClick={handleContinue}
               disabled={!selectedOption}
-              className="px-8 py-3 bg-primary-700 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 btn-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Continue
             </button>

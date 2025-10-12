@@ -49,10 +49,10 @@ export default function SettingsPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-dawn-100">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-bark-300">Loading...</p>
         </div>
       </div>
     );
@@ -114,18 +114,18 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-dawn-100">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white border-b border-border-light shadow-warm-sm">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3">
-            <SettingsIcon className="w-8 h-8 text-indigo-600" />
+            <SettingsIcon className="w-8 h-8 text-gradient-sunset" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-display-md text-bark-500">
                 Settings
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
-                Manage your account and preferences
+              <p className="text-body text-bark-300 mt-1">
+                Manage your account and preferences ⚙️
               </p>
             </div>
           </div>
@@ -136,44 +136,44 @@ export default function SettingsPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
           {settingsSections.map((section, idx) => (
-            <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-              <div className="px-6 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <div key={idx} className="card overflow-hidden">
+              <div className="px-6 py-3 border-b border-border-light bg-dawn-100">
+                <h2 className="text-overline text-bark-400">
                   {section.title}
                 </h2>
               </div>
               
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              <div className="divide-y divide-border-light">
                 {section.items.map((item, itemIdx) => (
                   <button
                     key={itemIdx}
                     onClick={item.onClick}
-                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left"
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-dawn-50 transition-all duration-fast text-left group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                        <item.icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <div className="w-10 h-10 bg-dawn-200 rounded-lg flex items-center justify-center group-hover:bg-sunset-100 transition-colors duration-fast">
+                        <item.icon className="w-5 h-5 text-bark-300 group-hover:text-sunset-500 transition-colors" />
                       </div>
                       <div>
-                        <div className="font-medium text-gray-900 dark:text-white">
+                        <div className="font-medium text-bark-500">
                           {item.label}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-body-sm text-bark-300">
                           {item.value}
                         </div>
                       </div>
                     </div>
                     
                     {item.toggle ? (
-                      <div className={`w-11 h-6 rounded-full transition-colors ${
-                        darkMode ? 'bg-indigo-600' : 'bg-gray-300'
+                      <div className={`w-11 h-6 rounded-full transition-colors duration-fast ${
+                        darkMode ? 'bg-sunset-500' : 'bg-sand-300'
                       }`}>
-                        <div className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform m-0.5 ${
+                        <div className={`w-5 h-5 bg-white rounded-full shadow-warm-sm transform transition-transform duration-fast m-0.5 ${
                           darkMode ? 'translate-x-5' : 'translate-x-0'
                         }`} />
                       </div>
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-gray-400" />
+                      <ChevronRight className="w-5 h-5 text-bark-200 group-hover:text-sunset-500 transition-colors" />
                     )}
                   </button>
                 ))}
@@ -184,21 +184,21 @@ export default function SettingsPage() {
           {/* Sign Out */}
           <button
             onClick={handleSignOut}
-            className="w-full bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800 px-6 py-4 flex items-center justify-between hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+            className="w-full card border-2 border-error-DEFAULT px-6 py-4 flex items-center justify-between hover:bg-error-light transition-all duration-fast group"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                <LogOut className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="w-10 h-10 bg-error-light rounded-lg flex items-center justify-center group-hover:shadow-warm-sm transition-all">
+                <LogOut className="w-5 h-5 text-error-strong group-hover:animate-icon-bounce" />
               </div>
-              <span className="font-medium text-red-600 dark:text-red-400">
+              <span className="font-medium text-error-strong">
                 Sign Out
               </span>
             </div>
           </button>
 
           {/* App Version */}
-          <div className="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
-            FlowState v1.0.0
+          <div className="text-center text-body-sm text-bark-200 py-4">
+            Daybreak v1.0.0 🌅
           </div>
         </div>
       </div>

@@ -124,28 +124,28 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen bg-dawn-100">
       {/* Navigation */}
-      <nav className="bg-background-card border-b border-gray-700">
+      <nav className="bg-white border-b border-border-light shadow-warm-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-teal-500">FlowState</h1>
+              <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
             </div>
             <div className="flex items-center space-x-8">
-              <a href={ROUTES.WEEK} className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.WEEK} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Week
               </a>
-              <a href={ROUTES.TODAY} className="text-teal-500 font-semibold border-b-2 border-teal-500 pb-1">
+              <a href={ROUTES.TODAY} className="text-sunset-500 font-semibold border-b-2 border-sunset-500 pb-1">
                 Today
               </a>
-              <a href={ROUTES.CAPTURE} className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.CAPTURE} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Capture
               </a>
-              <a href={ROUTES.EXPLORE} className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.EXPLORE} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Explore
               </a>
-              <a href={ROUTES.SETTINGS} className="text-gray-400 hover:text-teal-400 transition-colors">
+              <a href={ROUTES.SETTINGS} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -158,16 +158,16 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Daily Goals */}
         {dailyGoals.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <CheckCircle className="w-5 h-5 mr-2 text-primary" />
+          <div className="card-elevated p-6 mb-6">
+            <h2 className="text-h3 text-bark-500 mb-4 flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-gold-400" />
               Today's Goals
             </h2>
             <ul className="space-y-2">
               {dailyGoals.map((goal, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-primary font-bold mr-2">{index + 1}.</span>
-                  <span className="text-gray-700">{goal}</span>
+                  <span className="text-sunset-500 font-bold mr-2">{index + 1}.</span>
+                  <span className="text-body text-bark-400">{goal}</span>
                 </li>
               ))}
             </ul>
@@ -176,11 +176,11 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
 
         {/* Current Block */}
         {currentBlock ? (
-          <div className="bg-white rounded-lg shadow-md border-2 border-primary p-8 mb-6">
+          <div className="card-elevated border-2 border-sunset-400 p-8 mb-6 shadow-glow-amber">
             <div className="text-center">
-              <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">Current Block</p>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">{currentBlock.title}</h2>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-overline text-bark-200 mb-2">Current Block</p>
+              <h2 className="text-display-md text-bark-500 mb-2">{currentBlock.title}</h2>
+              <p className="text-body-lg text-bark-300 mb-6">
                 {format(new Date(currentBlock.startTime), 'h:mm a')} -{' '}
                 {format(new Date(currentBlock.endTime), 'h:mm a')}
               </p>
@@ -189,9 +189,9 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6 text-center">
-            <p className="text-gray-500">No active time block right now</p>
-            <p className="text-sm text-gray-400 mt-2">Your next block is coming up soon</p>
+          <div className="card p-8 mb-6 text-center">
+            <p className="text-body text-bark-300">No active time block right now</p>
+            <p className="text-body-sm text-bark-200 mt-2">Your next block is coming up soon</p>
           </div>
         )}
 
