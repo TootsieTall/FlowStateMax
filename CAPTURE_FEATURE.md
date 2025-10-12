@@ -576,3 +576,4 @@ Expected: Task with impact HIGH
 | `/api/ai/brainstorm` | POST | AI thinking partner |
 | `/api/ai/brainstorm` | GET | Get prompts |
 
+

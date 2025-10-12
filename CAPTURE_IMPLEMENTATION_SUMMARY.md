@@ -379,3 +379,4 @@ The Quick Capture feature is:
 
 *Built with focus and flow* 🎯✨
 
+
