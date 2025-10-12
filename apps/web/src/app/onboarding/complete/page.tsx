@@ -47,7 +47,7 @@ export default function OnboardingComplete() {
         />
       )}
 
-      <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
         <div className="card-elevated max-w-3xl w-full p-12 shadow-warm-2xl animate-bounce-in">
         {/* Success Icon */}
         <div className="flex justify-center mb-6">
@@ -68,54 +68,54 @@ export default function OnboardingComplete() {
 
         {/* Summary Cards */}
         <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-primary-700/40 rounded-lg p-4 text-center border border-gray-600">
-            <Target className="w-8 h-8 text-coral-400 mx-auto mb-2" />
-            <h3 className="font-semibold text-gray-100 mb-1">Focus Areas Set</h3>
-            <p className="text-sm text-gray-300">Your goals are defined</p>
+          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-sunset-200 shadow-warm-sm">
+            <Target className="w-8 h-8 text-sunset-500 mx-auto mb-2" />
+            <h3 className="font-semibold text-bark-500 mb-1">Focus Areas Set</h3>
+            <p className="text-sm text-bark-400">Your goals are defined</p>
           </div>
           
-          <div className="bg-purple-600/20 rounded-lg p-4 text-center border border-purple-500/30">
-            <Calendar className="w-8 h-8 text-purple-400 mx-auto mb-2" />
-            <h3 className="font-semibold text-gray-100 mb-1">Rituals Ready</h3>
-            <p className="text-sm text-gray-300">Your routines are configured</p>
+          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-sunset-200 shadow-warm-sm">
+            <Calendar className="w-8 h-8 text-sunset-500 mx-auto mb-2" />
+            <h3 className="font-semibold text-bark-500 mb-1">Rituals Ready</h3>
+            <p className="text-sm text-bark-400">Your routines are configured</p>
           </div>
           
-          <div className="bg-green-600/20 rounded-lg p-4 text-center border border-green-500/30">
-            <Sparkles className="w-8 h-8 text-green-400 mx-auto mb-2" />
-            <h3 className="font-semibold text-gray-100 mb-1">Recovery Planned</h3>
-            <p className="text-sm text-gray-300">Balance is key to success</p>
+          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-gold-200 shadow-warm-sm">
+            <Sparkles className="w-8 h-8 text-gold-500 mx-auto mb-2" />
+            <h3 className="font-semibold text-bark-500 mb-1">Recovery Planned</h3>
+            <p className="text-sm text-bark-400">Balance is key to success</p>
           </div>
         </div>
 
         {/* What's Next Section */}
-        <div className="bg-blue-600/10 border border-blue-500/30 rounded-lg p-6 mb-8">
-          <h2 className="text-lg font-bold text-blue-300 mb-3">What happens next?</h2>
-          <ul className="space-y-2 text-sm text-gray-200">
+        <div className="bg-white border-2 border-sunset-200 rounded-warm-lg p-6 mb-8 shadow-warm-sm">
+          <h2 className="text-h3 text-bark-500 mb-3">What happens next?</h2>
+          <ul className="space-y-3 text-body text-bark-400">
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-400" />
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
               <span>Schedule your first deep work blocks in your calendar</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-400" />
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
               <span>Install the browser extension to block distracting sites</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-400" />
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
               <span>Complete your pre-work ritual before starting flow sessions</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-400" />
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
               <span>Track your progress and celebrate your deep work wins</span>
             </li>
           </ul>
         </div>
 
         {/* Cal Newport Quote */}
-        <blockquote className="mb-8">
-          <p className="text-sm italic">
+        <blockquote className="mb-8 border-l-4 border-gold-400 pl-6 bg-white p-4 rounded-r-warm-lg shadow-warm-sm">
+          <p className="text-body italic text-bark-500">
             "Clarity about what matters provides clarity about what does not."
           </p>
-          <footer className="text-sm mt-2">— Cal Newport, Deep Work</footer>
+          <footer className="text-body-sm mt-2 text-bark-400">— Cal Newport, Deep Work</footer>
         </blockquote>
 
         {/* CTA Button */}
@@ -134,21 +134,21 @@ export default function OnboardingComplete() {
         </div>
 
         {/* Extension Reminder */}
-        <div className="mt-8 pt-6 border-t border-gray-700">
-          <div className="flex items-start gap-3 text-sm">
-            <div className="bg-yellow-600/20 rounded-lg p-2 border border-yellow-500/30">
+        <div className="mt-8 pt-6 border-t border-sunset-200">
+          <div className="flex items-start gap-3 bg-white p-4 rounded-warm-lg border border-sunset-200 shadow-warm-sm">
+            <div className="bg-gold-100 rounded-lg p-3 border border-gold-300">
               <span className="text-2xl">🔌</span>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-100 mb-1">
+              <h3 className="font-semibold text-bark-500 mb-1">
                 Don't forget the browser extension!
               </h3>
-              <p className="text-gray-300 mb-2">
-                Install the FlowState extension to automatically block distracting websites during your flow sessions.
+              <p className="text-body text-bark-400 mb-2">
+                Install the Daybreak extension to automatically block distracting websites during your flow sessions.
               </p>
               <button
                 onClick={() => window.open('/extension-install', '_blank')}
-                className="text-coral-400 hover:text-coral-300 font-medium underline"
+                className="text-sunset-600 hover:text-sunset-700 font-medium underline"
               >
                 Install Extension →
               </button>

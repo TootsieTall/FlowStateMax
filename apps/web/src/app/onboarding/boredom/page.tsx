@@ -76,7 +76,7 @@ export default function BoredomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
       <div className="card-elevated animate-slide-in-right max-w-3xl w-full p-8">
         <div className="mb-8">
           <div className="text-overline text-sunset-600 mb-2">STEP 7 OF 8</div>

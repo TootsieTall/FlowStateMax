@@ -51,7 +51,7 @@ export default function OnboardingStart() {
   // Show loading while checking auth
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center">
+      <div className="min-h-screen bg-dawn-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-body text-bark-300">Loading...</p>
@@ -66,7 +66,7 @@ export default function OnboardingStart() {
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
       <div className="card-elevated max-w-2xl w-full p-12 shadow-warm-2xl animate-bounce-in">
         <div className="text-center mb-8">
           <h1 className="text-display-lg text-gradient-sunset mb-4">

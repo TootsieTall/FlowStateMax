@@ -11,13 +11,13 @@ module.exports = {
       colors: {
         // DAYBREAK GOLDEN HOUR THEME
         
-        // Background System - Warm cream layers (Light → Dark for depth)
+        // Background System - Warm cream layers (Light → Dark for depth) - Toned down for comfort
         dawn: {
-          50: '#FFFBF5',   // Lightest - peak highlights
-          100: '#FFF9F0',  // Primary page background
-          200: '#FFF5E6',  // Secondary background / elevated cards
-          300: '#FFE4CC',  // Elevated elements / hover states
-          400: '#FFD4B3',  // Deeper elevation / active states
+          50: '#F8F6F3',   // Lightest - peak highlights (toned down)
+          100: '#F5F2ED',  // Primary page background (less bright)
+          200: '#F0EBE3',  // Secondary background / elevated cards
+          300: '#E8DFD4',  // Elevated elements / hover states
+          400: '#E0D4C5',  // Deeper elevation / active states
         },
         
         // Text System - Warm browns (Light → Dark)
@@ -29,25 +29,25 @@ module.exports = {
           500: '#2C1810',  // Primary text (deep warm brown)
         },
         
-        // Primary Accent - Energizing Sunset Orange
+        // Primary Accent - Energizing Sunset Orange (slightly muted)
         sunset: {
-          100: '#FFE5D9',  // Lightest tint / backgrounds
-          200: '#FFCAB0',  // Light background / subtle highlights
-          300: '#FFB087',  // Hover state
-          400: '#FF8C42',  // Active/Focus state (amber)
-          500: '#FF6B35',  // Primary action button
-          600: '#E55A28',  // Pressed state / dark hover
-          700: '#CC5500',  // Link/Info (burnt orange)
+          100: '#F5DED3',  // Lightest tint / backgrounds (toned down)
+          200: '#F0C9B0',  // Light background / subtle highlights
+          300: '#E5AB87',  // Hover state
+          400: '#E87D42',  // Active/Focus state (amber)
+          500: '#E66235',  // Primary action button (less intense)
+          600: '#CC5428',  // Pressed state / dark hover
+          700: '#B84D00',  // Link/Info (burnt orange)
         },
         
-        // Success/Completion - Rewarding Golden Yellow
+        // Success/Completion - Rewarding Golden Yellow (softer)
         gold: {
-          100: '#FFF4D6',  // Light background / subtle highlight
-          200: '#FFE8AD',  // Soft highlight
-          300: '#FFDB84',  // Hover state
-          400: '#FFB84D',  // Primary success / completion badge
-          500: '#FFA826',  // Deeper gold
-          600: '#E59400',  // Pressed state
+          100: '#F5EDD6',  // Light background / subtle highlight (less bright)
+          200: '#F0E0AD',  // Soft highlight
+          300: '#E8D384',  // Hover state
+          400: '#E5B04D',  // Primary success / completion badge (toned down)
+          500: '#D99F26',  // Deeper gold
+          600: '#CC8A00',  // Pressed state
         },
         
         // Calm/Secondary Actions - Sandy Gold

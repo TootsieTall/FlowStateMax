@@ -15,7 +15,7 @@ import { Sparkles, Heart, CheckCircle } from "lucide-react"
  */
 export default function ShadCNTestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gold-200 via-dawn-100 to-sunset-200 p-8">
+    <div className="min-h-screen bg-dawn-100 p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header */}
