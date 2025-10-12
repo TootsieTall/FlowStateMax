@@ -8,7 +8,7 @@ export default async function TodayPage() {
   const session = await getServerSession(authOptions)
   
   if (!session?.user) {
-    redirect('/onboarding')
+    redirect('/login')
   }
 
   // Fetch or create user data
@@ -30,14 +30,14 @@ export default async function TodayPage() {
     return null
   })
 
-  // If user doesn't exist in DB, create them
+  // If user doesn't exist in DB, create them (this should rarely happen in production)
   if (!user) {
     user = await prisma.user.create({
       data: {
         id: session.user.id,
-        email: session.user.email || 'demo@flowstate.app',
-        name: session.user.name || 'Demo User',
-        onboardingComplete: true,
+        email: session.user.email || `user-${session.user.id}@flowstate.app`,
+        name: session.user.name || 'User',
+        onboardingComplete: false, // Changed from true - they should go through onboarding
         goals: [],
         podcastGenres: [],
       },
@@ -48,6 +48,11 @@ export default async function TodayPage() {
       console.error('Error creating user:', error)
       return null
     })
+  }
+
+  // Check if user needs to complete onboarding
+  if (!user?.onboardingComplete) {
+    redirect('/onboarding')
   }
 
   // Fetch today's time blocks

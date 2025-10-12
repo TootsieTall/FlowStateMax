@@ -10,7 +10,7 @@ import { shouldPromptOAuthConnection } from '@/lib/guest-auth'
 export default function OnboardingComplete() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
   const [userName, setUserName] = useState('')
   const [isRedirecting, setIsRedirecting] = useState(false)
   const [showOAuthPrompt, setShowOAuthPrompt] = useState(false)
@@ -29,8 +29,36 @@ export default function OnboardingComplete() {
     }
   }, [session, searchParams])
 
-  const handleGetStarted = () => {
+  const handleGetStarted = async () => {
     setIsRedirecting(true)
+    
+    // Mark onboarding as complete in database
+    try {
+      const response = await fetch('/api/onboarding/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          goals: localStorage.getItem('flowstate_goals'),
+          recoveryActivities: localStorage.getItem('flowstate_recovery_activities'),
+          trackRecovery: localStorage.getItem('flowstate_track_recovery'),
+          hobbiesToTry: localStorage.getItem('flowstate_hobbies_to_try'),
+        }),
+      })
+
+      if (!response.ok) {
+        console.error('Failed to mark onboarding complete:', await response.text())
+      } else {
+        console.log('Onboarding marked as complete')
+        
+        // Update the session to reflect the new onboarding status
+        await updateSession()
+      }
+    } catch (error) {
+      console.error('Error marking onboarding complete:', error)
+    }
+
     // Redirect to main dashboard/today view
     setTimeout(() => {
       router.push('/today')

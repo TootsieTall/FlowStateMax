@@ -11,13 +11,15 @@ module.exports = {
       colors: {
         // DAYBREAK GOLDEN HOUR THEME
         
-        // Background System - Warm cream layers (Light → Dark for depth) - Toned down for comfort
+        // Background System - Color Layering with 0.1 lightness increments
+        // Lighter = elevated/important, Darker = deeper/background
         dawn: {
-          50: '#F8F6F3',   // Lightest - peak highlights (toned down)
-          100: '#F5F2ED',  // Primary page background (less bright)
-          200: '#F0EBE3',  // Secondary background / elevated cards
-          300: '#E8DFD4',  // Elevated elements / hover states
-          400: '#E0D4C5',  // Deeper elevation / active states
+          50: '#FCFAF8',   // Most elevated - L: 0.98 (peak highlights)
+          100: '#F5F2ED',  // Highly elevated - L: 0.93 (cards, modals)
+          200: '#EDE9E2',  // Elevated - L: 0.88 (secondary surfaces)
+          300: '#E6DFD7',  // Standard surface - L: 0.83 (hover states)
+          400: '#DED6CB',  // Lower surface - L: 0.78 (pressed states)
+          500: '#D6CDBF',  // Deep background - L: 0.73 (page background alternative)
         },
         
         // Text System - Warm browns (Light → Dark)
@@ -81,17 +83,37 @@ module.exports = {
         },
       },
       
-      // Shadow System with Warm Tints (Two-Layer: Light + Dark)
+      // Two-Layer Shadow System: Light from above (top) + Dark from below (bottom)
+      // Format: light shadow (top, subtle), dark shadow (bottom, depth)
       boxShadow: {
-        'warm-sm': '0 1px 3px rgba(255, 107, 53, 0.10), 0 1px 2px rgba(44, 24, 16, 0.06)',
-        'warm-md': '0 4px 6px rgba(255, 107, 53, 0.10), 0 2px 4px rgba(44, 24, 16, 0.06)',
-        'warm-lg': '0 10px 15px rgba(255, 107, 53, 0.10), 0 4px 6px rgba(44, 24, 16, 0.07)',
-        'warm-xl': '0 20px 25px rgba(255, 107, 53, 0.12), 0 8px 10px rgba(44, 24, 16, 0.08)',
-        'warm-2xl': '0 25px 50px rgba(255, 107, 53, 0.15), 0 12px 20px rgba(44, 24, 16, 0.10)',
-        'warm-inner': 'inset 0 2px 4px rgba(255, 255, 255, 0.4)',
-        'glow-amber': '0 0 20px rgba(255, 140, 66, 0.4)',
-        'glow-gold': '0 0 20px rgba(255, 184, 77, 0.5)',
-        'glow-sunset': '0 0 30px rgba(255, 107, 53, 0.5)',
+        // Subtle depth - for cards on page
+        'warm-sm': '0 1px 2px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(44, 24, 16, 0.08)',
+        
+        // Standard depth - for elevated cards
+        'warm-md': '0 2px 4px rgba(255, 255, 255, 0.15), 0 4px 8px rgba(44, 24, 16, 0.10)',
+        
+        // Prominent depth - for modals, hover states
+        'warm-lg': '0 4px 8px rgba(255, 255, 255, 0.12), 0 8px 16px rgba(44, 24, 16, 0.12)',
+        
+        // Maximum elevation - for floating elements
+        'warm-xl': '0 8px 16px rgba(255, 255, 255, 0.10), 0 16px 32px rgba(44, 24, 16, 0.15)',
+        
+        // Hero elements - dramatic elevation
+        'warm-2xl': '0 12px 24px rgba(255, 255, 255, 0.08), 0 24px 48px rgba(44, 24, 16, 0.18)',
+        
+        // Inset shadow - sunken effect (pushed in)
+        'warm-inset': 'inset 0 2px 4px rgba(44, 24, 16, 0.1)',
+        
+        // Inner highlight - shiny top edge effect
+        'warm-inner': 'inset 0 1px 2px rgba(255, 255, 255, 0.5)',
+        
+        // Combined shiny effect - gradient enhancement
+        'warm-shiny': '0 2px 4px rgba(255, 255, 255, 0.15), 0 4px 8px rgba(44, 24, 16, 0.10), inset 0 1px 1px rgba(255, 255, 255, 0.3)',
+        
+        // Glow effects for active states
+        'glow-amber': '0 0 0 1px rgba(232, 125, 66, 0.1), 0 0 20px rgba(232, 125, 66, 0.3), 0 4px 8px rgba(44, 24, 16, 0.1)',
+        'glow-gold': '0 0 0 1px rgba(229, 176, 77, 0.1), 0 0 20px rgba(229, 176, 77, 0.4), 0 4px 8px rgba(44, 24, 16, 0.1)',
+        'glow-sunset': '0 0 0 1px rgba(230, 98, 53, 0.15), 0 0 30px rgba(230, 98, 53, 0.4), 0 8px 16px rgba(44, 24, 16, 0.15)',
       },
       
       // Border Radius - Warm, rounded corners

@@ -70,10 +70,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from landing page
+  // Redirect authenticated users away from landing page (check onboarding status)
   if (isAuthenticated && pathname === '/') {
     const url = request.nextUrl.clone();
-    url.pathname = isGuest ? '/onboarding' : '/today';
+    // Check if user completed onboarding (stored in token if available)
+    const onboardingComplete = token?.onboardingComplete === true;
+    url.pathname = onboardingComplete ? '/today' : '/onboarding';
     return NextResponse.redirect(url);
   }
 
@@ -104,6 +106,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Check if user needs to complete onboarding before accessing protected routes
+  if (isAuthenticated && !isOnboardingRoute) {
+    const onboardingComplete = token?.onboardingComplete === true;
+    
+    // If onboarding is not complete and user is trying to access protected routes
+    if (!onboardingComplete && !isGuest) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/onboarding';
+      console.log('🚧 Redirecting to onboarding - not complete');
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Check if guest user is trying to access main app
   if (isGuest && !isOnboardingRoute) {
     // Redirect guest users back to onboarding or show them OAuth connection
@@ -120,10 +135,6 @@ export async function middleware(request: NextRequest) {
     
     return NextResponse.redirect(url);
   }
-
-  // Check onboarding status (you can extend this with database checks)
-  // For now, we'll allow all authenticated users to access all routes
-  // In production, you'd check user.onboardingComplete from database
 
   return NextResponse.next();
 }

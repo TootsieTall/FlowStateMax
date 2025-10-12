@@ -56,20 +56,23 @@ export default function WeekViewPage() {
   const nextWeek = () => setCurrentWeek(addDays(currentWeek, 7))
 
   return (
-    <div className="min-h-screen bg-dawn-100">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-border-light shadow-warm-sm">
+    <div className="min-h-screen layer-base">
+      {/* Navigation - Floating layer */}
+      <nav className="layer-floating sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
             </div>
-            <div className="flex items-center space-x-8">
-              <a href="/week" className="text-sunset-500 font-semibold border-b-2 border-sunset-500 pb-1">
+            <div className="flex items-center space-x-6 md:space-x-8">
+              <a href="/week" className="text-sunset-500 font-semibold">
                 Week
               </a>
               <a href="/today" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Today
+              </a>
+              <a href="/capture" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
+                Capture
               </a>
               <a href="/explore" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Explore
@@ -83,13 +86,13 @@ export default function WeekViewPage() {
         </div>
       </nav>
 
-      {/* Week View */}
+      {/* Week View - Responsive container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Week Navigation */}
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={previousWeek}
-            className="p-2 hover:bg-dawn-200 rounded-lg transition-all duration-fast text-bark-400 hover:text-sunset-500 hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
+            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-bark-400 hover:text-sunset-500 hover-lift"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -98,7 +101,7 @@ export default function WeekViewPage() {
           </h2>
           <button
             onClick={nextWeek}
-            className="p-2 hover:bg-dawn-200 rounded-lg transition-all duration-fast text-bark-400 hover:text-sunset-500 hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
+            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-bark-400 hover:text-sunset-500 hover-lift"
           >
             <ChevronRight className="w-6 h-6" />
           </button>

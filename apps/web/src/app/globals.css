@@ -102,22 +102,40 @@
      CARD SYSTEM
      ======================================== */
   
+  /* Color Layering: Lighter = elevated, Darker = base */
   .card {
-    @apply bg-white rounded-warm-lg shadow-warm-sm;
-    @apply border border-border-light;
+    @apply bg-dawn-100 rounded-warm-lg shadow-warm-sm;
+    @apply transition-all duration-normal;
   }
   
   .card-elevated {
     @apply rounded-warm-lg shadow-warm-md;
-    @apply border border-border-light;
-    background: linear-gradient(180deg, #FFF5E6 0%, #FFFFFF 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 6px rgba(255, 107, 53, 0.10), 0 2px 4px rgba(44, 24, 16, 0.06);
+    /* Two-layer shadow + gradient enhancement + inner highlight */
+    background: linear-gradient(180deg, #FCFAF8 0%, #F5F2ED 100%);
+    box-shadow: 
+      inset 0 1px 1px rgba(255, 255, 255, 0.3),
+      0 2px 4px rgba(255, 255, 255, 0.15), 
+      0 4px 8px rgba(44, 24, 16, 0.10);
+  }
+  
+  .card-elevated-high {
+    @apply bg-white rounded-warm-lg shadow-warm-lg;
+    @apply transition-all duration-normal;
   }
   
   .card-interactive {
-    @apply card transition-all duration-normal cursor-pointer;
-    @apply hover:shadow-warm-md hover:-translate-y-1;
+    @apply bg-dawn-100 rounded-warm-lg shadow-warm-sm transition-all duration-normal cursor-pointer;
+    @apply hover:shadow-warm-md hover:-translate-y-1 hover:bg-dawn-50;
     @apply active:translate-y-0 active:shadow-warm-sm;
+  }
+  
+  .card-shiny {
+    @apply rounded-warm-lg transition-all duration-normal;
+    background: linear-gradient(180deg, #FCFAF8 0%, #F5F2ED 100%);
+    box-shadow: 
+      inset 0 1px 2px rgba(255, 255, 255, 0.5),
+      0 2px 4px rgba(255, 255, 255, 0.15), 
+      0 4px 8px rgba(44, 24, 16, 0.10);
   }
   
   /* ========================================
@@ -126,11 +144,10 @@
   
   .input {
     @apply w-full px-4 py-2 rounded-warm;
-    @apply bg-white border-2 border-border-light;
+    @apply bg-white layer-inset;
     @apply text-bark-500 placeholder:text-bark-100;
-    @apply shadow-warm-sm;
     @apply transition-all duration-fast;
-    @apply focus:border-sunset-400 focus:ring-2 focus:ring-sunset-400/20 focus:outline-none;
+    @apply focus:shadow-glow-amber focus:outline-none;
   }
   
   .input:disabled {
@@ -346,9 +363,40 @@ blockquote footer {
     @apply hover:-translate-y-1 hover:shadow-warm-md;
   }
   
+  .hover-lift-high {
+    @apply transition-all duration-normal;
+    @apply hover:-translate-y-2 hover:shadow-warm-lg;
+  }
+  
   .hover-glow {
     @apply transition-all duration-normal;
     @apply hover:shadow-glow-amber;
+  }
+  
+  /* ========================================
+     DEPTH LAYERS - Visual Hierarchy
+     Stack lighter on darker for elevation
+     ======================================== */
+  
+  .layer-base {
+    @apply bg-dawn-200;
+  }
+  
+  .layer-elevated {
+    @apply bg-dawn-100 shadow-warm-sm;
+  }
+  
+  .layer-floating {
+    @apply bg-dawn-50 shadow-warm-md;
+  }
+  
+  .layer-modal {
+    @apply bg-white shadow-warm-xl;
+  }
+  
+  /* Sunken effect for inputs */
+  .layer-inset {
+    @apply bg-white shadow-warm-inset;
   }
 }
 

@@ -124,19 +124,19 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-dawn-100">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-border-light shadow-warm-sm">
+    <div className="min-h-screen layer-base">
+      {/* Navigation - Floating layer with depth */}
+      <nav className="layer-floating sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
             </div>
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-6 md:space-x-8">
               <a href={ROUTES.WEEK} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
                 Week
               </a>
-              <a href={ROUTES.TODAY} className="text-sunset-500 font-semibold border-b-2 border-sunset-500 pb-1">
+              <a href={ROUTES.TODAY} className="text-sunset-500 font-semibold">
                 Today
               </a>
               <a href={ROUTES.CAPTURE} className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
@@ -154,29 +154,29 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Daily Goals */}
+      {/* Main Content - Responsive container */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* Daily Goals - Elevated card */}
         {dailyGoals.length > 0 && (
-          <div className="card-elevated p-6 mb-6">
+          <div className="card-shiny p-6">
             <h2 className="text-h3 text-bark-500 mb-4 flex items-center">
               <CheckCircle className="w-5 h-5 mr-2 text-gold-400" />
               Today's Goals
             </h2>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {dailyGoals.map((goal, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-sunset-500 font-bold mr-2">{index + 1}.</span>
-                  <span className="text-body text-bark-400">{goal}</span>
+                  <span className="text-sunset-500 font-bold mr-3 text-lg">{index + 1}.</span>
+                  <span className="text-body text-bark-400 leading-relaxed">{goal}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
-        {/* Current Block */}
+        {/* Current Block - Hero elevation with glow */}
         {currentBlock ? (
-          <div className="card-elevated border-2 border-sunset-400 p-8 mb-6 shadow-glow-amber">
+          <div className="layer-modal p-8 rounded-warm-lg shadow-glow-sunset">
             <div className="text-center">
               <p className="text-overline text-bark-200 mb-2">Current Block</p>
               <h2 className="text-display-md text-bark-500 mb-2">{currentBlock.title}</h2>
@@ -189,34 +189,38 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
             </div>
           </div>
         ) : (
-          <div className="card p-8 mb-6 text-center">
+          <div className="layer-elevated p-8 rounded-warm-lg text-center">
             <p className="text-body text-bark-300">No active time block right now</p>
             <p className="text-body-sm text-bark-200 mt-2">Your next block is coming up soon</p>
           </div>
         )}
 
-        {/* Upcoming Blocks */}
+        {/* Upcoming Blocks - Stacked cards with proper spacing */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Coming Up</h3>
+          <h3 className="text-h3 text-bark-500">Coming Up</h3>
           {upcomingBlocks.length > 0 ? (
-            upcomingBlocks.map((block) => (
-              <MemoizedBlockCard
-                key={block.id}
-                title={block.title}
-                startTime={new Date(block.startTime)}
-                endTime={new Date(block.endTime)}
-                type={block.type}
-                color={block.color}
-              />
-            ))
+            <div className="space-y-3">
+              {upcomingBlocks.map((block) => (
+                <MemoizedBlockCard
+                  key={block.id}
+                  title={block.title}
+                  startTime={new Date(block.startTime)}
+                  endTime={new Date(block.endTime)}
+                  type={block.type}
+                  color={block.color}
+                />
+              ))}
+            </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">No upcoming blocks for today</p>
+            <div className="layer-elevated p-8 rounded-warm-lg text-center">
+              <p className="text-body text-bark-300">No upcoming blocks for today</p>
+            </div>
           )}
         </div>
 
-        {/* Quick Capture Button */}
+        {/* Quick Capture Button - Floating action */}
         <button
-          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 hover:shadow-xl group"
+          className="fixed bottom-8 right-8 bg-sunset-500 hover:bg-sunset-600 text-white rounded-full p-4 shadow-warm-lg hover:shadow-glow-sunset transition-all hover:scale-110 group z-40"
           onClick={toggleQuickCapture}
           title="Quick Capture (⌘K)"
         >
@@ -237,15 +241,15 @@ export function TodayView({ user, blocks, dailyGoals }: TodayViewProps) {
 
       {/* Session Checklist Modal - Lazy loaded with Suspense */}
       {showChecklist && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-bark-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="max-w-2xl w-full">
             <Suspense fallback={
-              <div className="bg-white rounded-xl p-8 text-center">
+              <div className="layer-modal rounded-warm-lg p-8 text-center">
                 <div className="animate-pulse space-y-4">
-                  <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+                  <div className="h-8 bg-dawn-200 rounded-warm w-3/4 mx-auto"></div>
+                  <div className="h-4 bg-dawn-200 rounded-warm w-1/2 mx-auto"></div>
                 </div>
-                <p className="mt-4 text-gray-500">Loading session setup...</p>
+                <p className="mt-4 text-bark-300">Loading session setup...</p>
               </div>
             }>
               <SessionChecklist

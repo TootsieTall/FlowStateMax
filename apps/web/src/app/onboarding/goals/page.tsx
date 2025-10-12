@@ -18,7 +18,12 @@ export default function GoalsPage() {
   const handleContinue = async () => {
     if (selectedGoals.length === 0) return
 
-    // Save goals (would call API here)
+    // Save goals to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('flowstate_goals', JSON.stringify(selectedGoals))
+    }
+    
+    console.log('Saved goals:', selectedGoals)
     router.push('/onboarding/integrations')
   }
 

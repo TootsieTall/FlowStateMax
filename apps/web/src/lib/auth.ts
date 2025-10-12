@@ -1,6 +1,7 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
+import { prisma } from './prisma'
 import { 
   isOAuthEnabled, 
   isGuestOnboardingAllowed, 
@@ -90,10 +91,14 @@ export const authOptions: NextAuthOptions = {
         if (token.isGuest) {
           (session.user as any).isGuest = true
         }
+        // Preserve onboarding status in session
+        if (typeof token.onboardingComplete !== 'undefined') {
+          (session.user as any).onboardingComplete = token.onboardingComplete
+        }
       }
       return session
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       if (user) {
         token.sub = user.id
         // Store guest flag in token
@@ -105,6 +110,28 @@ export const authOptions: NextAuthOptions = {
           token.provider = account.provider
         }
       }
+
+      // Fetch onboarding status from database if not in token or on update trigger
+      if (token.sub && (trigger === 'update' || typeof token.onboardingComplete === 'undefined')) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.sub as string },
+            select: { onboardingComplete: true }
+          })
+          
+          if (dbUser) {
+            token.onboardingComplete = dbUser.onboardingComplete
+          } else {
+            // User doesn't exist in DB yet (e.g., guest user)
+            token.onboardingComplete = false
+          }
+        } catch (error) {
+          console.error('Error fetching onboarding status:', error)
+          // Default to false if we can't fetch
+          token.onboardingComplete = false
+        }
+      }
+
       return token
     },
     async signIn({ user, account, profile }) {
