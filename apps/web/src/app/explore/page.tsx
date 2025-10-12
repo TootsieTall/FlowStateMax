@@ -29,7 +29,7 @@ export default function ExplorePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dawn-100">
+      <div className="min-h-screen flex items-center justify-center layer-base">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-body text-bark-300">Loading...</p>
