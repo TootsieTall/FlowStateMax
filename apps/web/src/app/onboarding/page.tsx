@@ -42,10 +42,23 @@ export default function OnboardingStart() {
     }
   }
 
-  const handleSkipAuth = () => {
+  const handleSkipAuth = async () => {
     // For guest mode, proceed to goals without authentication
     if (canAccessAsGuest) {
-      router.push('/onboarding/goals')
+      // Create guest session with credentials provider
+      setLoading(true)
+      const result = await signIn('credentials', {
+        name: 'Guest User',
+        redirect: false,
+      })
+      
+      if (result?.ok) {
+        router.push('/onboarding/goals')
+      } else {
+        setLoading(false)
+        console.error('Failed to create guest session')
+        alert('Failed to start guest session. Please try again.')
+      }
     }
   }
 

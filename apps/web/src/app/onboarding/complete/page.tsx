@@ -15,6 +15,7 @@ export default function OnboardingComplete() {
   const [userName, setUserName] = useState('')
   const [isRedirecting, setIsRedirecting] = useState(false)
   const [showOAuthPrompt, setShowOAuthPrompt] = useState(false)
+  const [showDevTools, setShowDevTools] = useState(false)
 
   useEffect(() => {
     // Get user name from session or default
@@ -28,6 +29,9 @@ export default function OnboardingComplete() {
     if (connectAccount === 'true' || shouldPromptOAuthConnection(session?.user)) {
       setShowOAuthPrompt(true)
     }
+
+    // Show dev tools in development mode
+    setShowDevTools(process.env.NEXT_PUBLIC_DEV_MODE === 'true')
   }, [session, searchParams])
 
   const handleGetStarted = async () => {
@@ -243,6 +247,22 @@ export default function OnboardingComplete() {
                 </div>
               </div>
             </div>
+
+            {/* Development Tools */}
+            {showDevTools && (
+              <div className="mt-4 p-4 bg-bg-surface border-2 border-accent-warm/50 rounded-lg">
+                <p className="text-xs text-text-tertiary mb-2 font-semibold">🛠️ Development Tools</p>
+                <p className="text-xs text-text-secondary mb-3">
+                  Skip authentication checks and go directly to the dashboard (dev mode only)
+                </p>
+                <button
+                  onClick={() => window.location.href = '/today?devBypass=true'}
+                  className="text-sm bg-accent-warm text-bg-primary px-4 py-2 rounded-lg hover:bg-accent-orange transition-colors font-medium"
+                >
+                  Skip to Dashboard →
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

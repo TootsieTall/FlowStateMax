@@ -29,6 +29,14 @@ function isOAuthEnabled(): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // DEV BYPASS: Allow access to all routes in dev mode with query param
+  // This is useful for testing and can be removed in production
+  if (process.env.NEXT_PUBLIC_DEV_MODE === 'true' && 
+      request.nextUrl.searchParams.get('devBypass') === 'true') {
+    console.log('🚧 DEV BYPASS: Allowing access to', pathname);
+    return NextResponse.next();
+  }
+
   // Allow API routes to pass through
   if (pathname.startsWith(API_ROUTES)) {
     return NextResponse.next();
