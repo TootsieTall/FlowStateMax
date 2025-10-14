@@ -331,6 +331,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
           disabled={isDisabled}
           className={variantClasses[variant]}
           title={getTooltip() || undefined}
+          data-start-flow-button
         >
           {getButtonContent()}
         </button>

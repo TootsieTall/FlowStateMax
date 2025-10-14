@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Sparkles, Circle, PlayCircle, Loader2, Timer, Zap } from 'lucide-react'
+import { Plus, Sparkles, Circle, PlayCircle, Loader2, Timer, Zap, Sun } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { StartFlowButton } from './StartFlowButton'
@@ -65,17 +65,20 @@ export function FloatingCaptureCTA() {
   }, [isHovering])
 
   const handleStartFlow = () => {
+    // Keep expanded state while flow is starting
     // The StartFlowButton will handle the multi-step flow
-    // We just need to trigger it programmatically
     const startButton = document.querySelector('[data-start-flow-button]') as HTMLButtonElement
     if (startButton) {
       startButton.click()
+      // Collapse after a delay to allow smooth transition
+      setTimeout(() => setIsExpanded(false), 300)
     }
   }
 
   const handleQuickCapture = () => {
     toggleQuickCapture()
-    setIsExpanded(false)
+    // Collapse after a delay to allow smooth transition
+    setTimeout(() => setIsExpanded(false), 300)
   }
 
   // Get contextual text based on user state
@@ -173,7 +176,12 @@ export function FloatingCaptureCTA() {
                 ) : hasActiveSession ? (
                   <PlayCircle className="w-6 h-6" />
                 ) : (
-                  <Plus className="w-6 h-6" />
+                  <div className="relative">
+                    <Sun className="w-7 h-7" />
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center">
+                      <Plus className="w-3 h-3 text-accent-orange" />
+                    </div>
+                  </div>
                 )}
 
                 {/* Pulsing ring */}
@@ -203,6 +211,7 @@ export function FloatingCaptureCTA() {
                 exit={{ opacity: 0, scale: 0.8, y: 20 }}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
                 className="absolute bottom-20 right-0 space-y-3"
+                onClick={(e) => e.stopPropagation()}
               >
                 {/* Start Golden Focus Option */}
                 <Card className="w-64 bg-gradient-to-r from-accent-gold to-accent-orange border-0 shadow-xl">
