@@ -160,46 +160,46 @@ export default function RitualPage() {
         </div>
 
         {/* Popular Suggestions */}
-        <div className="mb-8 p-4 bg-gray-50 rounded-lg">
+        <div className="mb-8 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-lg">
           <h3 className="text-sm font-semibold text-text-primary mb-3">
             💭 Popular ritual ideas
           </h3>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setNewItem('Put on headphones 🎧')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               <Music className="w-4 h-4 inline mr-1" />
               Put on headphones
             </button>
             <button
               onClick={() => setNewItem('Set phone to airplane mode ✈️')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               <Phone className="w-4 h-4 inline mr-1" />
               Airplane mode
             </button>
             <button
               onClick={() => setNewItem('Quick 5-min meditation 🧘')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               Quick meditation
             </button>
             <button
               onClick={() => setNewItem('Review daily goals 🎯')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               Review goals
             </button>
             <button
               onClick={() => setNewItem('Drink water 💧')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               Drink water
             </button>
             <button
               onClick={() => setNewItem('Open focus app/tool 💻')}
-              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
+              className="text-left text-sm text-text-secondary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-elevated"
             >
               Open focus app
             </button>

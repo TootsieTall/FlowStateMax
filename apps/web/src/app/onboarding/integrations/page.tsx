@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Calendar, Mail, CheckCircle, Circle, ArrowRight, Info } from 'lucide-react'
+import { Calendar, Mail, CheckCircle, Circle, ArrowRight, Info, X, GraduationCap } from 'lucide-react'
 
 type IntegrationType = 'google' | 'outlook' | 'apple' | null
 
@@ -11,6 +11,8 @@ export default function IntegrationsPage() {
   const router = useRouter()
   const [selectedCalendar, setSelectedCalendar] = useState<IntegrationType>(null)
   const [selectedEmail, setSelectedEmail] = useState<IntegrationType>(null)
+  const [canvasToken, setCanvasToken] = useState('')
+  const [showCanvasModal, setShowCanvasModal] = useState(false)
 
   const handleContinue = async () => {
     // Save integration preferences to localStorage
@@ -29,6 +31,99 @@ export default function IntegrationsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      {/* Canvas API Modal */}
+      {showCanvasModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowCanvasModal(false)}
+        >
+          {/* Backdrop with blur */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          
+          {/* Modal Content */}
+          <div 
+            className="relative bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong max-w-lg w-full p-6 animate-bounce-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowCanvasModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-accent-gold/10 rounded-full transition-colors"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5 text-text-tertiary hover:text-text-primary" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <GraduationCap className="w-6 h-6 text-accent-orange" />
+                <h2 className="text-h2 text-text-primary">How to Get Your Canvas API Token</h2>
+              </div>
+              <p className="text-body-sm text-text-tertiary">
+                Follow these steps to connect your Canvas account
+              </p>
+            </div>
+
+            {/* Instructions */}
+            <ol className="space-y-4 mb-6">
+              <li className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-accent-gold/20 text-accent-orange rounded-full flex items-center justify-center text-sm font-semibold">
+                  1
+                </span>
+                <div>
+                  <p className="text-body text-text-primary font-medium">Log into your Canvas dashboard</p>
+                  <p className="text-body-sm text-text-tertiary">Open your university's Canvas site and sign in</p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-accent-gold/20 text-accent-orange rounded-full flex items-center justify-center text-sm font-semibold">
+                  2
+                </span>
+                <div>
+                  <p className="text-body text-text-primary font-medium">Go to Account → Settings</p>
+                  <p className="text-body-sm text-text-tertiary">Click on your profile and navigate to Settings</p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-accent-gold/20 text-accent-orange rounded-full flex items-center justify-center text-sm font-semibold">
+                  3
+                </span>
+                <div>
+                  <p className="text-body text-text-primary font-medium">Scroll to "Approved Integrations" or "New Access Token"</p>
+                  <p className="text-body-sm text-text-tertiary">Look for the API integration section</p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-accent-gold/20 text-accent-orange rounded-full flex items-center justify-center text-sm font-semibold">
+                  4
+                </span>
+                <div>
+                  <p className="text-body text-text-primary font-medium">Generate a token — that's your "API key"</p>
+                  <p className="text-body-sm text-text-tertiary">Copy the token and paste it in the input field</p>
+                </div>
+              </li>
+            </ol>
+
+            {/* Info Banner */}
+            <div className="p-3 bg-accent-gold/10 border border-accent-gold/30 rounded-lg">
+              <p className="text-body-sm text-text-secondary">
+                <span className="font-semibold text-text-primary">Note:</span> Keep your API token secure. 
+                We'll use it to fetch your assignment deadlines and sync them to your calendar.
+              </p>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowCanvasModal(false)}
+              className="mt-6 w-full btn-primary"
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong max-w-2xl w-full p-8 animate-slide-in-right">
         <div className="mb-8">
           <div className="text-overline text-accent-orange mb-2">STEP 3 OF 8</div>
@@ -211,6 +306,36 @@ export default function IntegrationsPage() {
                 )}
               </div>
             </button>
+          </div>
+        </div>
+
+        {/* Canvas Integration */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <GraduationCap className="w-5 h-5 text-gray-700" />
+            <label className="block text-sm font-medium text-gray-700">
+              University Canvas (Optional)
+            </label>
+            <button
+              onClick={() => setShowCanvasModal(true)}
+              className="ml-1 p-1 hover:bg-accent-gold/10 rounded-full transition-colors"
+              aria-label="How to get Canvas API token"
+            >
+              <Info className="w-4 h-4 text-accent-orange" />
+            </button>
+          </div>
+          
+          <div className="p-4 rounded-warm border-2 border-border-default bg-bg-surface">
+            <p className="text-sm text-text-secondary mb-3">
+              Connect your Canvas account to sync assignment deadlines to your calendar
+            </p>
+            <input
+              type="text"
+              value={canvasToken}
+              onChange={(e) => setCanvasToken(e.target.value)}
+              placeholder="Paste your Canvas API token here"
+              className="input w-full"
+            />
           </div>
         </div>
 

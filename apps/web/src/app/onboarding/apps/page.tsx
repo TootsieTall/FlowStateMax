@@ -19,6 +19,7 @@ export default function AppsPage() {
     SUGGESTED_BLOCKED_APPS.map(app => ({ ...app, selected: false }))
   )
   const [customApp, setCustomApp] = useState('')
+  const [blockedUrls, setBlockedUrls] = useState('')
 
   const toggleApp = (identifier: string) => {
     setBlockedApps(prev =>
@@ -144,6 +145,23 @@ export default function AppsPage() {
               Add
             </button>
           </div>
+        </div>
+
+        {/* URL Blocking Input */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-text-primary mb-2">
+            Block Websites (Optional)
+          </label>
+          <input
+            type="text"
+            value={blockedUrls}
+            onChange={(e) => setBlockedUrls(e.target.value)}
+            placeholder="e.g., twitter.com, reddit.com, youtube.com"
+            className="input w-full"
+          />
+          <p className="text-xs text-text-tertiary mt-2">
+            Enter website URLs separated by commas to block during flow sessions
+          </p>
         </div>
 
         {/* Selected Apps List */}

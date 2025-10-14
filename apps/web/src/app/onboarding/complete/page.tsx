@@ -16,12 +16,60 @@ export default function OnboardingComplete() {
   const [isRedirecting, setIsRedirecting] = useState(false)
   const [showOAuthPrompt, setShowOAuthPrompt] = useState(false)
   const [showDevTools, setShowDevTools] = useState(false)
+  const [stats, setStats] = useState({ goals: 0, rituals: 0, apps: 0 })
 
   useEffect(() => {
     // Get user name from session or default
     if (typeof window !== 'undefined') {
       const storedName = localStorage.getItem('flowstate_user_name') || 'there'
       setUserName(storedName)
+      
+      // Calculate dynamic stats from localStorage
+      const goalsData = localStorage.getItem('flowstate_goals')
+      const ritualsData = localStorage.getItem('flowstate_ritual_items')
+      const appsData = localStorage.getItem('flowstate_blocked_apps')
+      
+      let goalsCount = 0
+      let ritualsCount = 0
+      let appsCount = 0
+      
+      // Count goals
+      if (goalsData) {
+        try {
+          const goals = JSON.parse(goalsData)
+          if (Array.isArray(goals)) {
+            goalsCount = goals.length
+          }
+        } catch (e) {
+          console.error('Failed to parse goals data', e)
+        }
+      }
+      
+      // Count rituals (only checked items)
+      if (ritualsData) {
+        try {
+          const rituals = JSON.parse(ritualsData)
+          if (Array.isArray(rituals)) {
+            ritualsCount = rituals.filter((r: any) => r.checked).length
+          }
+        } catch (e) {
+          console.error('Failed to parse rituals data', e)
+        }
+      }
+      
+      // Count blocked apps
+      if (appsData) {
+        try {
+          const apps = JSON.parse(appsData)
+          if (Array.isArray(apps)) {
+            appsCount = apps.length
+          }
+        } catch (e) {
+          console.error('Failed to parse apps data', e)
+        }
+      }
+      
+      setStats({ goals: goalsCount, rituals: ritualsCount, apps: appsCount })
     }
 
     // Check if we should show OAuth connection prompt
@@ -158,9 +206,9 @@ export default function OnboardingComplete() {
               className="grid grid-cols-3 gap-4 mb-8"
             >
               {[
-                { icon: Target, label: 'Goals Set', value: '3' },
-                { icon: Calendar, label: 'Rituals Ready', value: '6' },
-                { icon: Sparkles, label: 'Apps Blocked', value: '5' }
+                { icon: Target, label: 'Goals Set', value: stats.goals },
+                { icon: Calendar, label: 'Rituals Ready', value: stats.rituals },
+                { icon: Sparkles, label: 'Apps Blocked', value: stats.apps }
               ].map((item, i) => (
                 <motion.div
                   key={i}
