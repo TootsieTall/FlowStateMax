@@ -31,6 +31,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     pathname !== '/flow' && 
     pathname !== '/shutdown';
 
+  // Pages where floating CTA should appear (main app pages only)
+  const shouldShowFloatingCTA = status === 'authenticated' && 
+    !noShellPages && 
+    !pathname?.startsWith('/onboarding') && 
+    pathname !== '/flow' && 
+    pathname !== '/shutdown' &&
+    pathname !== '/settings';
+
   return (
     <>
       {/* Main Content */}
@@ -44,8 +52,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Quick Capture Modal (always available when authenticated) */}
       {status === 'authenticated' && <QuickCaptureWrapper />}
 
-      {/* Floating Capture CTA (always available when authenticated) */}
-      {status === 'authenticated' && <FloatingCaptureCTA />}
+      {/* Floating Capture CTA (main app pages only) */}
+      {shouldShowFloatingCTA && <FloatingCaptureCTA />}
     </>
   );
 }
