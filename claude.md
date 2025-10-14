@@ -1,37 +1,177 @@
-# FlowState Daybreak - Claude Development Guidelines
+# Daybreak - Claude Development Guidelines
 
 ## Project Overview
 
-**FlowState Daybreak** is an advanced productivity application implementing Cal Newport's Deep Work methodology as a complete daily operating system. It's designed to be more than just another note-taking or task management tool - it's a comprehensive productivity companion that guides users through their entire day from wake-up to shutdown.
+**Daybreak** (formerly FlowState) is a comprehensive productivity application implementing Cal Newport's Deep Work methodology as a complete daily operating system. Unlike competitors (One Sec, Opal, Forest), Daybreak guides users through their entire day—planning, execution, distraction blocking, and intentional recovery—in one seamless system.
 
-**🎨 IMPORTANT - Current Design System:** 
-This project uses a **Dark Sunrise Theme** - see `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` for the complete color palette, component guidelines, animation patterns, and implementation details. Always reference that document for UI/design decisions.
+**Core Philosophy:** Be a daily companion that eliminates decision fatigue, not another productivity dashboard to manage.
 
-The app combines:
-- Location-based flow triggers with geofencing
-- Smart app blocking with breathing interventions
-- Visual planning with drag-drop time blocking
-- AI-powered task management and deadline breakdown
-- Structured daily rituals (morning, pre-work, shutdown)
-- Active recovery planning and gym tracking
-- Boredom training with meditation and AI thinking partner
+**Target Users:** Knowledge workers, students, side hustlers—anyone struggling with digital distraction seeking structured productivity.
+
+**Positioning:** "Cal Newport's Deep Work book as a daily companion app"
+
+---
+
+## The 11 Deep Work Methods (Cal Newport Foundation)
+
+These methods form the philosophical foundation of every feature we build:
+
+1. **Selective Work Environment:** 5 "Flow Zones" with geofencing triggers + nearby study spot suggestions
+2. **Cast Iron Time Boxes:** Scheduled blocks never interrupted. "Wall strength" meter. Start 30-min, progress to hours
+3. **Smart Daily Planning:** Weekly planning (30-min Sunday/Monday) + daily adjustments (10-min evening) + morning review (3-min). Batch similar tasks. Schedule deep work early. Add buffer time. Reality Check tracks estimated vs actual
+4. **Pre-Work Rituals:** Customizable checklist (coffee, desk, music, DND). Auto-hides after 21 completions
+5. **Boredom Training:** Practice silence during idle gaps. Don't fill every moment. Builds focus muscle (Optional module)
+6. **Productive Multitasking:** Use low-brain activities (walking) to think deeply about ONE problem. Voice AI partner
+7. **Strategic Irresponsibility:** Morning: Set 1-3 major goals. Filter new commitments: "Aligns with goals?" Show time cost
+8. **Avoid "Any Benefit" Trap:** High Impact 🔥 vs Low Impact 📋 classification. Focus exclusively on highest ROI
+9. **End Day Properly:** 15-min shutdown ritual. Brain dump, plan tomorrow, set alarms. Locks work apps until morning
+10. **Active Relaxation:** Pick 3 activities/week instead of scrolling. Before social media: "Did you do recovery activity?"
+11. **Flow States = Fulfillment:** Research shows stretching brain capabilities on difficult+meaningful work creates life satisfaction
+
+**CRITICAL:** Every feature must map to one or more of these methods. If it doesn't, it doesn't belong in Daybreak.
+
+---
+
+## Design Principles (ALWAYS FOLLOW)
+
+1. **Minimal Friction:** 5-min setup, 1-min daily overhead, 10-min shutdown
+2. **One Primary Screen:** "Today View" is the hub—everything flows from there
+3. **Eliminate Choice Paralysis:** Guide users with clear next actions, not overwhelming options
+4. **Progressive Disclosure:** Advanced features hidden in "Explore" tab until needed
+5. **Metrics Hidden by Default:** Progress dashboard in Settings (optional). Monthly notification only. Focus on doing, not tracking
+6. **No Feature Bloat:** Every feature must serve core mission or get cut
+7. **Native Feel:** Deep OS-level integration—should feel built-in, not third-party
+8. **Realistic Approach:** Work with human behavior, not against it. Strategic reduction, not elimination
+9. **Respect User Time:** Max 15 min/day management overhead
+10. **Every feature accessible within 2 taps maximum**
+
+### Before Adding Any Feature - Ask These Questions:
+1. Does this help deep work?
+2. Integrates seamlessly into daily flow?
+3. Would Cal Newport approve?
+4. Add friction or remove it?
+5. Can users opt out?
+
+---
+
+## Core Features Summary
+
+### Environment Optimizer
+- **5 Flow Zones** with geofencing → push notification "Ready to enter flow?"
+- **Audio:** Ambient sounds (rain, cafe, white noise) + classical music
+- **Music Integration:** Spotify/Apple Music API
+- **App Blocking:** Choose apps (Instagram, TikTok, etc.) with Opal/One Sec style deep breath intervention (5-sec inhale/exhale, then "Still want to open?")
+- **Monochrome Mode:** Grayscale during flow sessions (reduces phone use 20-30%, makes apps visually boring)
+
+### Iron Time Box Schedule
+- Native calendar sync (Apple/Google), imports appointments
+- Color-coded blocks: Deep Work (dark blue), Meetings (grey), Breaks (green), Gym (orange)
+- Gamification: Streak counter, wall strength meter, monthly badges
+- Native notifications: 15-min before, when starts, gentle reminder if leaving
+
+### Smart Daily Planner
+- **Quick Capture:** Floating "+" button → voice/text/scan → Inbox
+- **Natural commands:** "Schedule tomorrow 9am," "Add to Friday"
+- **Week View:** Drag-drop calendar (Mon-Sun), pinch zoom day/week
+- **Reality Check:** After sessions "On time/Needed more/Finished early" → learns accuracy
+- **Time Saved Graph (Settings):** Estimated vs actual over weeks
+- **Deadline Breakdown:** AI suggests chunks ("Study for exam → 3×2hr sessions"), auto-schedules
+
+### Ritual Builder
+- Pop-up checklist before first flow: Make coffee, DND, clear desk, music, close email, breaths
+- Progress: "Completed 14/21 times"
+- Auto-hides after 21 consistent sessions (habit formed)
+
+### Boredom Training (Optional - Explore Tab)
+- **Meditation:** Binaural beats, timer (5/10/15/30min), "Comfort with Silence" score
+- **AI Thinking Partner:** Text or voice chat for brainstorming, perfect for walks, saves summaries
+- **Problem of the Day:** Daily strategic question
+- **Paper Scan:** Camera → AI extracts → saves to notes
+
+### Commitment Filter
+- Morning: "What are 1-3 major goals today?" (shows in Today View)
+- New requests: "Aligns with goals?" + time cost → Accept/Decline
+- Monthly review: "Said no to X commitments, protected Y hours"
+
+### ROI Task Analyzer
+- Simple toggle when creating tasks: High Impact 🔥 or Low Impact 📋
+- Visual separation in week view (high-impact bolded)
+- Pie chart (Settings): "68% of time on high-impact work"
+
+### Shutdown Ritual
+- Widget "End Day" button or in-app (appears 5pm+)
+- 5 steps: Brain dump → Tomorrow's top 3 → Review schedule → Set alarms → Shutdown Complete
+- Locks work apps until morning wake time
+- Journal: Scan handwritten or type directly
+
+### Active Recovery Planner
+- Weekly: "Pick 3 activities instead of scrolling"
+- Suggestions: Physical (gym, climbing), Social (trivia, board games), Creative (museums), Learning (podcasts)
+- Social media gate: "Did recovery activity?" before opening evening
+- Gym: Time blocks, tracker (Upper/Lower/Cardio), syncs Health apps
+- Tracking: "Active evenings 4/7" + monthly "Replaced X hours scrolling"
+
+### Podcast Suggestions
+- Onboarding: Pick 5 genres
+- Weekly curation: 3-5 episodes every Monday
+- Integration: Spotify/Apple Podcasts
+- Quick access: Explore tab → one-tap play
+
+---
+
+## Navigation Structure
+
+### Bottom Tab Bar (Always Accessible)
+1. **Week View:** Drag-drop planning interface
+2. **Today View ⭐ PRIMARY:** Current block, next 3 blocks, daily goals, "Start Flow" button
+3. **Explore:** Optional features (Boredom Training, Podcasts, Recovery)
+4. **Settings:** Config, metrics (opt-in), manage locations/apps/ritual
+
+### Quick Actions
+- **"+" Button:** Floating, quick capture from anywhere
+- **"Start Flow":** Today View main button
+- **"End Day":** Widget/button triggers shutdown
+
+### Automatic Triggers
+- Geofence: Location notification
+- Blocked app: Deep breath screen
+- 5pm: Shutdown reminder
+- Morning: Daily goals prompt
+
+---
+
+## Typical Day Flow (User Journey)
+
+**7am:** Wake (alarm from shutdown) → Check Today View (goals + blocks)  
+**7:30am:** Commute → Podcast suggestion  
+**9am:** Office geofence → "Ready to flow?" → Ritual checklist → Music/DND/Monochrome/Block ON  
+**11am:** Session complete → Feedback ("On time?") → Monochrome OFF  
+**12pm:** Lunch → Try Instagram → Deep breath → Go Back  
+**2pm:** Second flow session  
+**5:30pm:** Shutdown ritual (5 steps) → Work apps lock  
+**7pm:** Try Twitter → "Did recovery activity?" → Go to gym  
+**9pm:** Social media guilt-free (recovery done)
+
+**Total app time:** ~15 min | **Value:** 6+ hours focused work + intentional evening
+
+---
 
 ## Tech Stack
 
 ### Frontend (Web App)
 - **Framework:** Next.js 14 with App Router
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS
+- **Styling:** Tailwind CSS with Dark Sunrise Theme
 - **Animations:** Framer Motion
-- **UI Components:** Custom component library (@flowstate/ui)
+- **UI Components:** Hybrid approach - Utility classes (@flowstate/ui) + ShadCN for complex patterns
 - **State Management:** Zustand (global state) + React Query (server state)
 - **Forms:** React Hook Form with Zod validation
 - **Date Handling:** date-fns
 
-### Backend (Currently)
+### Backend
 - **API:** Next.js API Routes
 - **Database:** PostgreSQL with Prisma ORM
-- **Authentication:** NextAuth.js with Google OAuth
+- **Authentication:** NextAuth.js with Google OAuth + Guest mode
 - **Hosting:** Vercel (recommended)
 - **Database Hosting:** Supabase/Railway/Neon (PostgreSQL)
 
@@ -45,6 +185,7 @@ The app combines:
 - **Manifest:** V3
 - **Build:** Webpack + TypeScript
 - **Features:** App blocking, grayscale mode, breathing overlay
+- **Integration:** Syncs with web app via API
 
 ### Monorepo Structure
 - **Tool:** Turborepo with npm workspaces
@@ -52,6 +193,40 @@ The app combines:
   - `@flowstate/core` - Shared types, constants, validators
   - `@flowstate/ui` - Shared UI components
   - `@flowstate/server` - Server utilities (future)
+
+### Platform-Specific APIs (Future Native Apps)
+
+#### iOS
+- Calendar: EventKit
+- Music: MusicKit + Spotify SDK
+- Blocking: Screen Time API
+- Monochrome: `UIAccessibility.isGrayscaleEnabled`
+- Geofence: Core Location
+- Notifications: UserNotifications
+- Health: HealthKit
+
+#### Android
+- Calendar: Google Calendar API
+- Music: Spotify SDK
+- Blocking: Digital Wellbeing API/Accessibility Service
+- Monochrome: Digital Wellbeing grayscale
+- Geofence: Google Play Services Location
+- Notifications: Firebase
+- Health: Google Fit
+
+### AI Integration
+- **Task parsing:** NLP for voice/text commands
+- **Time estimation:** ML from user history
+- **Brainstorming:** GPT-4/Claude API for thinking partner
+- **Suggestions:** Recommendation engine for podcasts/activities
+
+### CRITICAL TECHNICAL RULES
+- **NEVER use localStorage/sessionStorage** in production code - Use React state (useState/useReducer) or database
+- **NEVER hardcode API keys** - Always use environment variables
+- **NEVER skip error handling** - Every API call needs try/catch
+- **ALWAYS validate user input** - Use Zod schemas
+
+---
 
 ## File Organization
 
@@ -61,56 +236,137 @@ FlowStateMax/
 │   ├── web/                      # Main Next.js application
 │   │   ├── src/
 │   │   │   ├── app/              # App Router pages & API routes
-│   │   │   │   ├── (auth)/       # Auth pages (login, register)
-│   │   │   │   ├── (main)/       # Main app pages (protected)
-│   │   │   │   ├── onboarding/   # Onboarding flow
+│   │   │   │   ├── (auth)/       # Auth pages (login, signup)
+│   │   │   │   ├── onboarding/   # Onboarding flow (9 steps)
+│   │   │   │   │   ├── page.tsx           # Welcome
+│   │   │   │   │   ├── goals/             # Set 3 main goals
+│   │   │   │   │   ├── locations/         # 5 Flow Zones
+│   │   │   │   │   ├── apps/              # Block apps
+│   │   │   │   │   ├── ritual/            # Pre-work ritual
+│   │   │   │   │   ├── integrations/      # Music, calendar
+│   │   │   │   │   ├── boredom/           # Boredom training intro
+│   │   │   │   │   ├── recovery/          # Active recovery
+│   │   │   │   │   └── complete/          # Onboarding done
+│   │   │   │   ├── today/        # ⭐ PRIMARY - Today View
+│   │   │   │   ├── week/         # Week View calendar
+│   │   │   │   ├── flow/         # Active flow session
+│   │   │   │   │   └── complete/ # Session complete
+│   │   │   │   ├── capture/      # Quick capture & inbox
+│   │   │   │   ├── explore/      # Optional features
+│   │   │   │   ├── shutdown/     # Shutdown ritual
+│   │   │   │   ├── settings/     # Settings & metrics
 │   │   │   │   └── api/          # API routes
+│   │   │   │       ├── ai/              # AI endpoints
+│   │   │   │       │   ├── brainstorm/      # Thinking partner
+│   │   │   │       │   ├── deadline-breakdown/
+│   │   │   │       │   └── parse-intent/    # NLP for capture
+│   │   │   │       ├── sessions/        # Flow session CRUD
+│   │   │   │       ├── blocks/          # Time blocks
+│   │   │   │       ├── goals/           # Daily goals
+│   │   │   │       ├── ritual/          # Ritual tracking
+│   │   │   │       └── extension/       # Extension sync
 │   │   │   ├── components/       # React components
-│   │   │   │   ├── layout/       # Layout components (Nav, Footer)
-│   │   │   │   ├── features/     # Feature-specific components
-│   │   │   │   └── ui/           # Base UI components
+│   │   │   │   ├── AppShell.tsx         # Main layout
+│   │   │   │   ├── BottomNav.tsx        # Navigation
+│   │   │   │   ├── TodayView.tsx        # Today screen
+│   │   │   │   ├── FlowSessionView.tsx  # Active flow
+│   │   │   │   ├── StartFlowButton.tsx  # CTA
+│   │   │   │   ├── QuickCapture.tsx     # Capture modal
+│   │   │   │   ├── RitualChecklist.tsx  # Pre-work ritual
+│   │   │   │   ├── SessionComplete.tsx  # Post-session
+│   │   │   │   ├── ui/                  # ShadCN components
+│   │   │   │   └── onboarding/          # Onboarding components
 │   │   │   ├── hooks/            # Custom React hooks
+│   │   │   │   ├── useTimeBlocks.ts
+│   │   │   │   └── useWorkLocations.ts
 │   │   │   ├── lib/              # Utilities
-│   │   │   │   ├── auth.ts       # NextAuth config
-│   │   │   │   ├── prisma.ts     # Prisma client
-│   │   │   │   └── ai/           # AI integrations
+│   │   │   │   ├── auth.ts              # NextAuth config
+│   │   │   │   ├── prisma.ts            # Prisma client
+│   │   │   │   ├── ai.ts                # AI integrations
+│   │   │   │   ├── flow-session.ts      # Session logic
+│   │   │   │   ├── navigation-guards.ts # Route protection
+│   │   │   │   ├── routes.ts            # Route constants
+│   │   │   │   └── utils.ts             # Helpers
 │   │   │   ├── store/            # Zustand stores
-│   │   │   │   ├── index.ts      # Main app store
-│   │   │   │   └── onboarding.ts # Onboarding store
-│   │   │   └── types/            # TypeScript type definitions
+│   │   │   │   ├── index.ts             # Main app store
+│   │   │   │   └── onboarding.ts        # Onboarding flow
+│   │   │   └── types/            # TypeScript types
 │   │   └── prisma/
 │   │       ├── schema.prisma     # Database schema
+│   │       ├── migrations/       # DB migrations
 │   │       └── seed.ts           # Database seeder
 │   └── extension/                # Chrome extension
 │       ├── src/
 │       │   ├── background/       # Service worker
+│       │   │   └── service_worker.ts
 │       │   ├── content/          # Content scripts
-│       │   └── popup/            # Extension popup
+│       │   │   ├── content_script.ts    # Main script
+│       │   │   ├── breath_overlay.ts    # Breath intervention
+│       │   │   └── grayscale_filter.ts  # Monochrome mode
+│       │   ├── shared/           # Shared utilities
+│       │   │   ├── api.ts               # Web app API client
+│       │   │   ├── storage.ts           # Chrome storage
+│       │   │   └── types.ts             # Extension types
+│       │   └── options/          # Extension options
+│       ├── public/               # Static assets
 │       └── manifest.json         # Extension manifest
 ├── packages/
 │   ├── core/                     # Shared business logic
-│   ├── ui/                       # Shared UI components
-│   └── server/                   # Server utilities
+│   │   └── src/
+│   │       ├── types.ts          # Shared types
+│   │       ├── constants.ts      # Constants
+│   │       └── validators/       # Zod schemas
+│   └── ui/                       # Shared UI components
+│       └── src/
+│           ├── Button.tsx
+│           ├── Timer.tsx
+│           ├── FlowTimer.tsx
+│           ├── BreathOverlay.tsx
+│           ├── BlockCard.tsx
+│           └── Modal.tsx
 └── docs/                         # Documentation
 ```
+
+---
 
 ## State Management
 
 ### Global State (Zustand)
 Located in `apps/web/src/store/`:
-- **Main Store (`index.ts`)**: Session state, user preferences, active flow session
-- **Onboarding Store (`onboarding.ts`)**: Multi-step onboarding flow state
-- **Pattern:** Slices for different features, combined into single store
+
+**Main Store (`index.ts`):**
+- Active flow session state
+- User preferences
+- UI state (modals, notifications)
+- Current location/geofence status
+
+**Onboarding Store (`onboarding.ts`):**
+- Multi-step onboarding flow progress
+- Collected data (goals, locations, apps, ritual)
+- Step validation
+
+**Pattern:** Slices for different features, combined into single store
+
+```typescript
+// Example store usage
+const { activeSession, startFlow, endFlow } = useStore()
+const { currentStep, setGoals, completeStep } = useOnboardingStore()
+```
 
 ### Server State (React Query)
-- **Queries:** Fetching user data, blocks, sessions
+- **Queries:** Fetching user data, time blocks, sessions, goals
 - **Mutations:** Creating/updating/deleting resources
 - **Cache:** Automatic caching with smart invalidation
+- **Optimistic Updates:** Immediate UI feedback
 
 ### Local State (React State)
 - Component-specific UI state
 - Form state (with React Hook Form)
 - Temporary interaction state
+
+**Rule:** Use the right state for the job. Don't put everything in global state.
+
+---
 
 ## Development Workflow Rules
 
@@ -136,46 +392,61 @@ Located in `apps/web/src/store/`:
 
 10. **AFTER EVERY MAJOR TASK COMPLETION, PUSH ALL CHANGES TO GIT** - This ensures work is saved and creates a clear checkpoint for progress. Always commit and push when a significant feature or fix is completed.
 
-## Design Principles
+---
 
-1. **Minimal Friction:** Every feature must be accessible within 2 taps
-2. **One Primary Screen:** Today View is the hub - everything flows from there
-3. **Progressive Disclosure:** Advanced features hidden until needed
-4. **Metrics Hidden by Default:** Focus on doing, not tracking
-5. **Native Feel:** Should feel like a built-in OS feature
-6. **Respect User Time:** Max 15 min/day management overhead
-
-## Design System Principles (Dark Sunrise Theme)
+## Design System: Dark Sunrise Theme
 
 ### Color Philosophy
 **Concept:** Pre-dawn darkness with sunrise breaking through - deep blacks with warm sunrise accents
 
-**Color Reference:**
-See `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` for complete color palette and usage guidelines.
+**Reference Document:** `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` contains complete specifications
 
-**Core Principles:**
-- Deep dark backgrounds (#0b0b0b - #252525) create professional canvas
-- Sunrise gold/orange accents (#FFC857, #FF8C42) provide energy and warmth
-- Warm text colors (#F5F2ED - #6B6560) ensure readability
-- Glows replace shadows on dark backgrounds
-- Consistent layering: darker = deeper, lighter = elevated
+### Core Color Palette
 
-### Glow System for Dark Backgrounds
-**Dark theme approach:** Use glows instead of shadows to create depth and emphasis
+```typescript
+// Backgrounds (Dark → Light)
+bg-primary           // #0b0b0b - Deep black base
+bg-secondary         // #141414 - Section backgrounds  
+bg-elevated          // #1e1e1e - Cards, panels
+bg-surface           // #252525 - Elevated surfaces
+
+// Text (Light → Dark on dark background)
+text-primary         // #F5F2ED - Primary text (cream white)
+text-secondary       // #B8B0A8 - Body text (warm gray)
+text-tertiary        // #6B6560 - Muted text (bark)
+
+// Accents (Sunrise breaking through)
+accent-gold          // #FFC857 - Primary CTAs, highlights
+accent-orange        // #FF8C42 - Interactive states, hover
+accent-warm          // #FFB84D - Subtle highlights
+
+// Semantic Colors
+color-deep-work      // Deep blue - Focus sessions
+color-meeting        // Grey - Meetings
+color-break          // Green - Breaks
+color-gym            // Orange - Physical activity
+
+// Borders & Effects
+border-default       // #2C2C2C - Standard borders
+focus-ring           // rgba(255, 184, 77, 0.3) - Focus states
+```
+
+### Glow System (Not Shadows!)
+
+Dark backgrounds need glows instead of shadows for depth:
 
 **Three glow levels:**
 1. **glow-subtle** - Minimal ambient glow (cards)
 2. **glow-medium** - Standard elevation (interactive elements)
 3. **glow-strong** - Prominent emphasis (active states, modals)
 
-**Sunrise glow concept:**
-- Warm golden glows (rgba(255, 184, 77, 0.1-0.4))
-- Orange interactive states (rgba(255, 140, 66, 0.2-0.5))
+**Sunrise glow colors:**
+- Warm golden glows: `rgba(255, 184, 77, 0.1-0.4)`
+- Orange interactive states: `rgba(255, 140, 66, 0.2-0.5)`
 - Combine with subtle black shadows for depth
 
-**See DARK_THEME_UI_TRANSFORMATION_BRIEF.md** for complete glow specifications and code examples.
-
 ### Depth Layer Utility Classes
+
 Use these semantic classes to create visual hierarchy:
 
 ```css
@@ -184,8 +455,6 @@ Use these semantic classes to create visual hierarchy:
 .layer-floating     /* bg-surface (#252525) + glow-medium */
 .layer-modal        /* bg-surface + glow-strong - Highest elevation */
 ```
-
-**Note:** See tailwind.config.js and globals.css for actual implementation.
 
 ### Responsive Layout Principles
 
@@ -209,13 +478,15 @@ Use these semantic classes to create visual hierarchy:
 </main>
 ```
 
-## UI Component Guidelines (Dark Sunrise Theme)
+---
+
+## UI Component Guidelines
 
 ### Design System Overview
-- **Theme:** Dark Sunrise - Pre-dawn darkness with warm sunrise accents breaking through
+- **Theme:** Dark Sunrise - Pre-dawn darkness with warm sunrise accents
 - **Approach:** Hybrid - Utility classes for simple components, ShadCN for complex interactions
 - **Philosophy:** Keep it simple unless complexity adds real value
-- **Full Specs:** See DARK_THEME_UI_TRANSFORMATION_BRIEF.md for complete implementation guide
+- **Full Specs:** See `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` for complete implementation guide
 
 ### When to Use Utility Classes (Preferred for Simple UI)
 
@@ -231,7 +502,7 @@ Use these semantic classes to create visual hierarchy:
 ```tsx
 <button className="btn-primary">Save Changes</button>
 <div className="card p-6">
-  <h3 className="text-h3 text-bark-500">Card Title</h3>
+  <h3 className="text-h3 text-text-primary">Card Title</h3>
   <input className="input" placeholder="Enter text..." />
 </div>
 ```
@@ -254,8 +525,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 </Dialog>
 ```
 
-**When to use:** Form modals, confirmations, detail views, settings panels
-
 #### 🎯 **Dropdown Menus** - For action menus
 ```tsx
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
@@ -268,8 +537,6 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
   </DropdownMenuContent>
 </DropdownMenu>
 ```
-
-**When to use:** Context menus, action buttons with multiple options, user profile menus
 
 #### 🎯 **Complex Selects** - If default `<select>` isn't enough
 ```tsx
@@ -286,8 +553,6 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 </Select>
 ```
 
-**When to use:** Need custom styling, search/filter, or better mobile UX than native `<select>`
-
 #### 🎯 **Tooltips** - For hover information
 ```tsx
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
@@ -297,8 +562,6 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip
   <TooltipContent>Helpful explanation</TooltipContent>
 </Tooltip>
 ```
-
-**When to use:** Icons need explanation, abbreviated text, help hints
 
 #### 🎯 **Popovers** - For contextual UI
 ```tsx
@@ -314,8 +577,6 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 </Popover>
 ```
 
-**When to use:** Color pickers, date pickers, filters, contextual forms
-
 #### 🎯 **Command Palette** - For search/commands (⌘K)
 ```tsx
 import { CommandDialog, CommandInput, CommandList, CommandItem } from "@/components/ui/command"
@@ -328,8 +589,6 @@ import { CommandDialog, CommandInput, CommandList, CommandItem } from "@/compone
   </CommandList>
 </CommandDialog>
 ```
-
-**When to use:** Quick actions, keyboard shortcuts, search functionality
 
 ### Decision Tree for UI Components
 
@@ -354,33 +613,6 @@ Need a UI component?
 └─ Otherwise → Use Tailwind utilities directly
 ```
 
-### Color Palette Reference (Dark Sunrise Theme)
-
-**Core Colors:**
-```tsx
-// Backgrounds (Dark → Light)
-bg-primary           // #0b0b0b - Deep black base
-bg-secondary         // #141414 - Section backgrounds
-bg-elevated          // #1e1e1e - Cards, panels
-bg-surface           // #252525 - Elevated surfaces
-
-// Text (Light → Dark on dark background)
-text-primary         // #F5F2ED - Primary text
-text-secondary       // #B8B0A8 - Body text
-text-tertiary        // #6B6560 - Muted text
-
-// Accents (Sunrise breaking through)
-accent-gold          // #FFC857 - Primary CTAs
-accent-orange        // #FF8C42 - Interactive states
-accent-warm          // #FFB84D - Subtle highlights
-
-// Borders & Effects
-border-default       // #2C2C2C - Standard borders
-focus-ring           // rgba(255, 184, 77, 0.3) - Focus states
-```
-
-**Complete Usage Guide:** See DARK_THEME_UI_TRANSFORMATION_BRIEF.md
-
 ### Component Class Reference
 
 **All component styles use dark theme:**
@@ -390,6 +622,7 @@ focus-ring           // rgba(255, 184, 77, 0.3) - Focus states
 .btn-primary         // Gold→Orange gradient, main actions
 .btn-secondary       // Outlined with glow, secondary actions
 .btn-ghost           // Transparent, tertiary actions
+.btn-success         // Green for completion states
 
 /* Cards - Dark with glows */
 .card                // Dark elevated card with subtle glow
@@ -407,37 +640,7 @@ focus-ring           // rgba(255, 184, 77, 0.3) - Focus states
 .pulse-glow          // Active session indicator
 ```
 
-**Full implementation:** See apps/web/src/app/globals.css and DARK_THEME_UI_TRANSFORMATION_BRIEF.md
-
-### Practical Examples by Feature
-
-**Note:** All examples below use the dark theme. See DARK_THEME_UI_TRANSFORMATION_BRIEF.md for complete dark-themed component examples with:
-- Exact Tailwind classes
-- Framer Motion animations
-- ShadCN integration
-- Lucide icon usage
-- Glow effects and focus states
-
-**Quick Reference:**
-- Use `bg-bg-elevated` for cards
-- Use `text-text-primary` for headings
-- Use `accent-gold` for CTAs
-- Use ShadCN for modals, dropdowns, tooltips
-- Add Framer Motion for smooth interactions
-
-### Additional ShadCN Components to Install (As Needed)
-
-When you need these, install from ShadCN:
-- `Switch` - Better toggles
-- `AlertDialog` - Better than window.confirm()
-- `Tabs` - Tabbed interfaces
-- `Accordion` - Collapsible sections
-- `Toast` - Notifications
-- `Checkbox` - Better checkboxes
-- `RadioGroup` - Radio button groups
-- `Slider` - Range inputs
-- `Progress` - Progress bars
-- `Avatar` - User avatars
+**Full implementation:** See `apps/web/src/app/globals.css` and `DARK_THEME_UI_TRANSFORMATION_BRIEF.md`
 
 ### Performance Guidelines
 
@@ -452,132 +655,255 @@ When you need these, install from ShadCN:
 All components (utility or ShadCN) must have:
 - ✅ Proper ARIA labels
 - ✅ Keyboard navigation
-- ✅ Focus indicators (sunset-400 ring)
-- ✅ Color contrast (WCAG AA)
+- ✅ Focus indicators (accent-gold ring)
+- ✅ Color contrast (WCAG AA minimum)
 - ✅ Screen reader support
 
 ShadCN components handle most of this automatically - another reason to use them for complex patterns.
+
+---
+
+## Competitive Differentiation
+
+### vs One Sec ($3 one-time)
+- **One Sec:** Only breathing intervention before apps
+- **Daybreak:** Breathing + blocking + monochrome + complete daily system
+
+### vs Opal ($10/month)
+- **Opal:** App blocking + focus timer + stats
+- **Daybreak:** Everything Opal has + planning + rituals + shutdown + AI + location triggers + monochrome
+
+### Unique to Daybreak (No Competitor Has)
+1. **Monochrome mode** - Makes phone boring during flow
+2. **Location-based triggers** - Auto prompts when entering zones
+3. **Pre-work ritual system** - Habit-building checklist
+4. **AI thinking partner** - Voice/text brainstorming
+5. **Shutdown ritual** - Locks work apps until morning
+6. **Complete planning** - Weekly calendar + AI deadline breakdown
+7. **Active recovery** - Gym + activity suggestions + conscious social media
+8. **Podcast curation** - Weekly listening for downtime
+9. **All-in-one system** - Complete daily OS, not just blocker/timer
+
+**Why this matters:** Users pay for 3-4 apps ($20-40/mo). We replace all of them.
+
+---
 
 ## Current Implementation Status
 
 ### ✅ Completed
 - Monorepo setup with Turborepo
 - Next.js 14 app with TypeScript
-- Prisma database schema
-- Authentication with NextAuth
-- All page structures (Today, Week, Explore, Settings, etc.)
-- Complete onboarding flow (9 steps)
-- Chrome extension (full implementation)
+- Prisma database schema with all models
+- Authentication with NextAuth (Google OAuth + Guest mode)
+- All main page structures (Today, Week, Explore, Settings, Flow, Capture, Shutdown)
+- Complete onboarding flow (9 steps: Welcome, Goals, Locations, Apps, Ritual, Integrations, Boredom, Recovery, Complete)
+- Chrome extension (app blocking, grayscale, breathing overlay)
+- API routes for sessions, blocks, goals, ritual, AI features
 - Database seeding
-- Navigation system with middleware
+- Navigation system with middleware and route guards
+- Dark Sunrise Theme foundation
 
 ### 🚧 In Progress - HIGH PRIORITY
-- **Dark Sunrise Theme Implementation** - Transform all UI to dark theme (see DARK_THEME_UI_TRANSFORMATION_BRIEF.md)
-- Fix onboarding completion infinite loop
-- Connect UI to backend APIs (forms don't save data)
-- Flow session lifecycle implementation
-- Week view time block creation/editing
+- **Connect UI to backend** - Forms don't persist data to database
+- **Flow session lifecycle** - Start/pause/resume/complete flow
+- **Week view interactions** - Create/edit/delete time blocks
+- **Onboarding completion bug** - Infinite loop on complete page
+- **Extension-web sync** - Real-time session status between platforms
 
-### 📋 Planned - Future Features
-- Real-time session sync between web and extension
+### 📋 Planned - Missing Features (See Screen Map Analysis)
+
+**Phase 3 - Flow Sessions:**
+- Location Trigger notification screen
+- Pre-Work Ritual Checklist modal (before starting flow)
+
+**Phase 4 - Planning:**
+- Inbox Management page (process captured items)
+- Deadline Breakdown UI (API exists, needs interface)
+- Daily Goals dedicated modal/screen
+- Commitment Filter feature (align-with-goals checker)
+
+**Phase 5 - Explore Tab:**
+- AI Thinking Partner page (API exists, needs UI)
+- Meditation/Boredom Training page (standalone in main app)
+- Podcasts curation page (weekly suggestions)
+- Active Recovery Planner page (evening activities)
+- Gym Tracker (workout logging, health sync)
+
+**Phase 6 - Future:**
+- Real-time session sync (WebSockets)
 - Music integration (Spotify/Apple Music)
-- Geofencing location triggers
-- Podcast curation system
-- Metrics/analytics dashboard
+- Geofencing location triggers (mobile only)
+- Metrics/analytics dashboard (Settings)
 - Native mobile apps (iOS/Android)
+
+---
 
 ## Common Tasks
 
 ### Adding a New Feature
-1. Check if it aligns with core philosophy
-2. Design API in `apps/web/src/app/api/`
-3. Add database schema in `prisma/schema.prisma`
-4. Create UI components in appropriate folder
-5. Add to store if needed
-6. Update types in `@flowstate/core`
+1. **Check alignment** - Does it map to one of the 11 Deep Work methods?
+2. **Design API** - Add route in `apps/web/src/app/api/`
+3. **Update schema** - Add models in `prisma/schema.prisma`, run migration
+4. **Create UI** - Components in appropriate feature folder
+5. **Add to store** - Only if global state needed
+6. **Update types** - Shared types in `@flowstate/core`
+7. **Test manually** - Follow user journey
+8. **Document** - Update this file if significant
 
 ### Working with Database
 ```bash
-# Generate Prisma client
+# Generate Prisma client (after schema changes)
 cd apps/web
 npx prisma generate
 
-# Push schema changes
+# Push schema changes (development)
 npx prisma db push
 
-# Open Prisma Studio
+# Create migration (production)
+npx prisma migrate dev --name feature_name
+
+# Open Prisma Studio (database GUI)
 npx prisma studio
 
-# Seed database
+# Seed database with test data
 npx prisma db seed
 ```
 
 ### Running Development
 ```bash
-# Install dependencies
+# Install dependencies (first time)
 npm install
 
-# Start all apps
+# Start all apps (web + extension)
 npm run dev
 
-# Start specific app
+# Start specific app only
 npm run dev --filter=web
+npm run dev --filter=extension
 
-# Build everything
+# Build everything for production
 npm run build
 
-# Lint
+# Run linter
 npm run lint
+
+# Type check
+npm run type-check
 ```
+
+### Chrome Extension Development
+```bash
+# Build extension
+cd apps/extension
+npm run build
+
+# Watch mode (rebuilds on change)
+npm run watch
+
+# Load in Chrome:
+# 1. Open chrome://extensions/
+# 2. Enable "Developer mode"
+# 3. Click "Load unpacked"
+# 4. Select apps/extension/dist/
+```
+
+---
 
 ## Key Files to Know
 
 ### Configuration & Design
 - **`DARK_THEME_UI_TRANSFORMATION_BRIEF.md`** - Complete UI design system and implementation guide
-- `apps/web/tailwind.config.js` - Tailwind theme configuration
-- `apps/web/src/app/globals.css` - Global styles and component classes
-- `apps/web/prisma/schema.prisma` - Database schema
+- **`claude.md`** - This file - source of truth for development
+- `apps/web/tailwind.config.js` - Tailwind theme configuration (Dark Sunrise colors)
+- `apps/web/src/app/globals.css` - Global styles, utility classes, component classes
+- `apps/web/prisma/schema.prisma` - Database schema (all models)
+- `turbo.json` - Turborepo configuration
+- `vercel.json` - Vercel deployment config
 
 ### Core Application Files
-- `apps/web/src/app/today/page.tsx` - Today View (main screen)
+- `apps/web/src/app/today/page.tsx` - **⭐ Today View (PRIMARY SCREEN)**
 - `apps/web/src/app/week/page.tsx` - Week View calendar
+- `apps/web/src/app/flow/page.tsx` - Active flow session
+- `apps/web/src/app/shutdown/page.tsx` - Shutdown ritual
 - `apps/web/src/middleware.ts` - Route protection and auth
 - `apps/web/src/lib/auth.ts` - NextAuth configuration
-- `apps/web/src/components/` - All UI components
+- `apps/web/src/lib/prisma.ts` - Prisma client singleton
+- `apps/web/src/lib/routes.ts` - Route constants (use these, not hardcoded strings)
+- `apps/web/src/components/TodayView.tsx` - Today View component
+- `apps/web/src/components/FlowSessionView.tsx` - Flow session UI
+- `apps/web/src/store/index.ts` - Main Zustand store
+
+### Chrome Extension Files
+- `apps/extension/src/background/service_worker.ts` - Background worker (manages blocking)
+- `apps/extension/src/content/content_script.ts` - Content script (injected on blocked sites)
+- `apps/extension/src/content/breath_overlay.ts` - Breathing intervention UI
+- `apps/extension/src/content/grayscale_filter.ts` - Monochrome mode implementation
+- `apps/extension/src/shared/api.ts` - Web app API client
+- `apps/extension/manifest.json` - Extension manifest (permissions, scripts)
+
+---
 
 ## Environment Variables
 
 Required in `apps/web/.env.local`:
-```
-DATABASE_URL=
-NEXTAUTH_URL=
-NEXTAUTH_SECRET=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-OPENAI_API_KEY= (optional)
+```bash
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/daybreak"
+
+# Auth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
+
+# Google OAuth (optional, for OAuth login)
+GOOGLE_CLIENT_ID="your-client-id"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+
+# AI Features (optional)
+OPENAI_API_KEY="sk-..." # For AI thinking partner, task parsing
+# OR
+ANTHROPIC_API_KEY="sk-..." # Alternative to OpenAI
 ```
 
-## Testing Approach
+To generate NEXTAUTH_SECRET:
+```bash
+openssl rand -base64 32
+```
 
-- Manual testing for UI/UX flows
-- API route testing with Postman/Insomnia
-- Database queries tested in Prisma Studio
-- Chrome extension tested in browser
+---
 
 ## Common Patterns
 
 ### API Routes
 ```typescript
-// Standard pattern for API routes
+// Standard pattern for protected API routes
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
 export async function GET(request: Request) {
+  // 1. Check authentication
   const session = await getServerSession(authOptions)
-  if (!session) {
+  if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   
-  // Your logic here
-  
-  return NextResponse.json({ data })
+  try {
+    // 2. Your logic here
+    const data = await prisma.someModel.findMany({
+      where: { userId: session.user.id }
+    })
+    
+    // 3. Return success
+    return NextResponse.json({ data })
+  } catch (error) {
+    // 4. Handle errors
+    console.error('API Error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
 }
 ```
 
@@ -586,30 +912,211 @@ export async function GET(request: Request) {
 // Always use Prisma client from lib
 import { prisma } from '@/lib/prisma'
 
+// Include relations when needed
 const user = await prisma.user.findUnique({
   where: { id: session.user.id },
-  include: { blocks: true }
+  include: {
+    blocks: true,
+    dailyGoals: true,
+    workLocations: true,
+  }
 })
+
+// Use transactions for multiple operations
+await prisma.$transaction([
+  prisma.flowSession.create({ data: sessionData }),
+  prisma.timeBlock.update({ where: { id }, data: { completed: true } }),
+])
 ```
 
 ### Component Structure
 ```typescript
 // Components should be simple and focused
-export function ComponentName({ prop1, prop2 }: Props) {
-  // Hooks at top
+'use client' // Only if using hooks/interactivity
+
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+
+interface ComponentProps {
+  prop1: string
+  prop2?: number
+}
+
+export function ComponentName({ prop1, prop2 = 0 }: ComponentProps) {
+  // 1. Hooks at top
   const [state, setState] = useState()
   
-  // Event handlers
-  const handleClick = () => {}
+  // 2. Event handlers
+  const handleClick = () => {
+    setState(prev => ...)
+  }
   
-  // Render
-  return <div>...</div>
+  // 3. Early returns for loading/error states
+  if (!prop1) return null
+  
+  // 4. Render
+  return (
+    <motion.div
+      className="card p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <h3 className="text-h3 text-text-primary">{prop1}</h3>
+      <button className="btn-primary" onClick={handleClick}>
+        Click me
+      </button>
+    </motion.div>
+  )
 }
 ```
 
-## Remember
+### Using Zustand Store
+```typescript
+// Reading state
+import { useStore } from '@/store'
 
-- **Simplicity is key** - Every change should be minimal
+function MyComponent() {
+  const activeSession = useStore(state => state.activeSession)
+  const startFlow = useStore(state => state.startFlow)
+  
+  // Use selectors to prevent unnecessary re-renders
+  return <div>{activeSession?.id}</div>
+}
+```
+
+### Form Handling with React Hook Form + Zod
+```typescript
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const schema = z.object({
+  title: z.string().min(1, 'Title required'),
+  duration: z.number().min(15).max(240),
+})
+
+type FormData = z.infer<typeof schema>
+
+export function MyForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema)
+  })
+  
+  const onSubmit = async (data: FormData) => {
+    const res = await fetch('/api/blocks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    // Handle response...
+  }
+  
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('title')} className="input" />
+      {errors.title && <span>{errors.title.message}</span>}
+      <button type="submit" className="btn-primary">Submit</button>
+    </form>
+  )
+}
+```
+
+---
+
+## Testing Approach
+
+### Manual Testing Checklist
+- [ ] User can complete onboarding flow
+- [ ] Today View shows current block and goals
+- [ ] Can start/pause/resume/complete flow session
+- [ ] Week View allows creating/editing time blocks
+- [ ] Quick Capture saves to inbox
+- [ ] Shutdown ritual locks work apps
+- [ ] Extension blocks apps with breathing screen
+- [ ] Extension syncs with web app session status
+- [ ] Monochrome mode activates during flow
+- [ ] Location triggers work (mobile only)
+
+### Tools
+- **API Testing:** Postman/Insomnia for API routes
+- **Database:** Prisma Studio for data inspection
+- **Extension:** Chrome DevTools, check background worker console
+- **UI/UX:** Manual flows through each user journey
+
+### Future (When Ready)
+- Unit tests with Vitest
+- Integration tests with Playwright
+- E2E tests for critical flows
+- Extension automated testing
+
+---
+
+## Design Review Checklist
+
+Before shipping any feature:
+- [ ] Explainable in one sentence
+- [ ] Accessible within 2 taps
+- [ ] Works on smallest screen size
+- [ ] No decision paralysis (clear next action)
+- [ ] Completable in <1 minute
+- [ ] Follows Dark Sunrise theme
+- [ ] Has proper error states
+- [ ] Includes loading states
+- [ ] Accessible (keyboard nav, screen reader)
+- [ ] Maps to one of the 11 Deep Work methods
+
+---
+
+## Legal & Platform Considerations
+
+### Intellectual Property
+- **Ideas/functionality can't be copyrighted** - Using similar mechanics (breathing, blocking) is legal
+- **Our implementation is original** - Unique combination of features
+- **Attribution:** Can say "inspired by Cal Newport's Deep Work" with proper credit
+
+### Platform Compliance
+- **Chrome Web Store:** Follow extension policies for blocking, permissions
+- **App Store (iOS):** Comply with Screen Time API guidelines
+- **Google Play (Android):** Accessibility Service requires justification
+- **Privacy:** GDPR/CCPA compliant - user data stays with user, deletable
+
+### Trademark
+- Check "Daybreak" availability in USPTO + app stores
+- Alternatives if needed: FlowMode, DeepFlow, FocusState
+
+---
+
+## Success Metrics (Future)
+
+**Engagement:**
+- 70%+ Daily Active Users
+- 2-3 flow sessions/day average
+- 80%+ shutdown ritual completion
+
+**Retention:**
+- Day 7: 60%
+- Day 30: 40%
+- Day 90: 25%
+
+**Impact:**
+- 4+ focus hours/day
+- 2+ hours saved/week (Reality Check data)
+- 8+ passive hours replaced/month (Active Recovery)
+
+---
+
+## Remember (Core Philosophy)
+
+- **Simplicity is key** - Every change should be minimal and focused
 - **Test as you go** - Don't accumulate untested changes
 - **Document decisions** - Add comments for non-obvious choices
 - **Follow the philosophy** - If it doesn't help deep work, it doesn't belong
+- **Today View is king** - Everything must make sense from there
+- **No productivity theater** - Features create real focus, not just feel productive
+- **Work with human nature** - Strategic reduction, not elimination
+- **Respect user's time** - Max 15 min/day app management
+- **Would Cal Newport approve?** - If no, reconsider
+
+---
+
+**This is the source of truth for all Daybreak decisions. When in doubt, refer to core philosophy: seamless daily companion that eliminates decision fatigue and guides users to deep work.**

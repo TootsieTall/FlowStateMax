@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Circle, Loader2, PlayCircle, Clock, AlertCircle } from 'lucide-react'
+import { Circle, Loader2, PlayCircle, AlertCircle } from 'lucide-react'
 import { RitualChecklist } from './RitualChecklist'
+import { LocationCheck } from './LocationCheck'
+import { DurationInput } from './DurationInput'
 
 // Utility function for merging class names
 function cn(...classes: (string | boolean | undefined)[]) {
@@ -33,13 +35,33 @@ interface ValidationResult {
   redirectTo?: string
 }
 
+interface UserData {
+  ritualCompletionCount: number
+  locationConfirmationCount: number
+}
+
+// Flow steps
+type FlowStep = 'location' | 'duration' | 'ritual' | 'starting'
+
 export function StartFlowButton({ variant = 'primary', className }: StartFlowButtonProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const [showRitualModal, setShowRitualModal] = useState(false)
+
+  // Multi-step flow state
+  const [currentStep, setCurrentStep] = useState<FlowStep | null>(null)
+  const [flowData, setFlowData] = useState<{
+    locationId?: string
+    locationConfirmed: boolean
+    duration?: number
+    ritualCompleted: boolean
+  }>({
+    locationConfirmed: false,
+    ritualCompleted: false,
+  })
+  
   const [validationError, setValidationError] = useState<string | null>(null)
 
-  // Fetch current session status with orchestrator info
+  // Fetch current session status
   const { data: sessionStatus, isLoading: isLoadingSession } = useQuery<SessionStatus>({
     queryKey: ['session-status'],
     queryFn: async () => {
@@ -47,8 +69,18 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
       if (!res.ok) throw new Error('Failed to fetch session')
       return res.json()
     },
-    refetchInterval: 5000, // Poll every 5 seconds
+    refetchInterval: 5000,
     staleTime: 4000,
+  })
+
+  // Fetch user data for ritual count
+  const { data: userData } = useQuery<UserData>({
+    queryKey: ['user-ritual-count'],
+    queryFn: async () => {
+      const res = await fetch('/api/user/ritual-count')
+      if (!res.ok) return { ritualCompletionCount: 0, locationConfirmationCount: 0 }
+      return res.json()
+    },
   })
 
   // Validate prerequisites
@@ -59,16 +91,22 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
       if (!res.ok) throw new Error('Failed to validate')
       return res.json()
     },
-    enabled: !sessionStatus?.hasActiveSession, // Only validate when no active session
+    enabled: !sessionStatus?.hasActiveSession,
   })
 
-  // Start flow session with orchestrator
+  // Start flow session
   const startFlow = useMutation({
-    mutationFn: async (timeBlockId?: string) => {
+    mutationFn: async () => {
       const res = await fetch('/api/sessions/flow/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ timeBlockId }),
+        body: JSON.stringify({
+          timeBlockId: sessionStatus?.timeBlockId,
+          duration: flowData.duration,
+          locationId: flowData.locationId,
+          locationConfirmed: flowData.locationConfirmed,
+          ritualCompleted: flowData.ritualCompleted,
+        }),
       })
 
       if (!res.ok) {
@@ -80,11 +118,24 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['session-status'] })
+      // Try to activate extension if installed
+      try {
+        if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
+          chrome.runtime.sendMessage({
+            type: 'FLOW_SESSION_START',
+            sessionId: data.sessionId,
+            duration: data.duration,
+          })
+        }
+      } catch (error) {
+        console.log('Extension not available:', error)
+      }
       router.push('/flow')
     },
     onError: (error: Error) => {
       setValidationError(error.message)
       setTimeout(() => setValidationError(null), 5000)
+      setCurrentStep(null)
     },
   })
 
@@ -106,13 +157,83 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
       return
     }
 
-    // Show ritual checklist
-    setShowRitualModal(true)
+    // Start multi-step flow
+    setCurrentStep('location')
   }
 
+  // Step 1: Location confirmed
+  const handleLocationConfirm = (locationId?: string) => {
+    setFlowData((prev) => ({
+      ...prev,
+      locationId,
+      locationConfirmed: true,
+    }))
+
+    // If no time block, ask for duration
+    if (!sessionStatus?.timeBlockId) {
+      setCurrentStep('duration')
+    } else {
+      // Otherwise, check if we need ritual
+      checkRitualNeeded()
+    }
+  }
+
+  // Location skipped
+  const handleLocationSkip = () => {
+    setFlowData((prev) => ({
+      ...prev,
+      locationConfirmed: false,
+    }))
+
+    if (!sessionStatus?.timeBlockId) {
+      setCurrentStep('duration')
+    } else {
+      checkRitualNeeded()
+    }
+  }
+
+  // Step 2: Duration set
+  const handleDurationSet = (minutes: number) => {
+    setFlowData((prev) => ({
+      ...prev,
+      duration: minutes,
+    }))
+    checkRitualNeeded()
+  }
+
+  // Check if ritual is needed (< 28 completions)
+  const checkRitualNeeded = () => {
+    const ritualCount = userData?.ritualCompletionCount || 0
+    if (ritualCount < 28) {
+      setCurrentStep('ritual')
+    } else {
+      // Skip ritual, start immediately
+      setFlowData((prev) => ({
+        ...prev,
+        ritualCompleted: false, // Already completed 28 times
+      }))
+      setCurrentStep('starting')
+      startFlow.mutate()
+    }
+  }
+
+  // Step 3: Ritual completed
   const handleBeginFlow = () => {
-    setShowRitualModal(false)
-    startFlow.mutate(sessionStatus?.timeBlockId)
+    setFlowData((prev) => ({
+      ...prev,
+      ritualCompleted: true,
+    }))
+    setCurrentStep('starting')
+    startFlow.mutate()
+  }
+
+  // Close all modals
+  const handleCloseAll = () => {
+    setCurrentStep(null)
+    setFlowData({
+      locationConfirmed: false,
+      ritualCompleted: false,
+    })
   }
 
   // Determine button state
@@ -168,21 +289,21 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
     validationError ? 'ring-2 ring-red-500' : ''
   )
 
-  // Variant-specific styling - Daybreak Theme
+  // Variant-specific styling
   const variantClasses = {
     primary: cn(
       'px-8 py-6 text-lg font-semibold rounded-2xl',
-      'bg-gradient-to-r from-sunset-500 to-gold-400',
-      'hover:from-sunset-600 hover:to-gold-500',
+      'bg-gradient-to-r from-accent-orange to-accent-gold',
+      'hover:from-accent-orange/90 hover:to-accent-gold/90',
       'text-white shadow-warm-lg hover:shadow-warm-xl',
       'flex items-center gap-3 justify-center min-w-[240px]',
       'transition-all duration-fast hover:-translate-y-0.5'
     ),
     floating: cn(
-      'fixed bottom-6 right-6 z-50',
+      'fixed bottom-6 right-6 z-40',
       'w-16 h-16 rounded-full',
-      'bg-gradient-to-br from-sunset-400 to-gold-400',
-      'hover:from-sunset-500 hover:to-gold-500',
+      'bg-gradient-to-br from-accent-orange to-accent-gold',
+      'hover:from-accent-orange/90 hover:to-accent-gold/90',
       'text-white shadow-warm-2xl hover:shadow-glow-sunset',
       'flex items-center justify-center',
       'transition-all duration-fast',
@@ -191,7 +312,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
     ),
     icon: cn(
       'w-10 h-10 rounded-lg',
-      'bg-sunset-500 hover:bg-sunset-600',
+      'bg-accent-orange hover:bg-accent-orange/90',
       'text-white shadow-warm-md hover:shadow-warm-lg',
       'flex items-center justify-center',
       'transition-all duration-fast'
@@ -214,10 +335,10 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
           {getButtonContent()}
         </button>
 
-        {/* Pulsing ring animation for primary variant - Daybreak glow */}
+        {/* Pulsing ring animation for primary variant */}
         {variant === 'primary' && !isLoading && (
           <motion.div
-            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sunset-400 to-gold-400"
+            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent-orange to-accent-gold"
             initial={{ scale: 1, opacity: 0.5 }}
             animate={{ scale: 1.05, opacity: 0 }}
             transition={{
@@ -232,7 +353,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
         <AnimatePresence>
           {validationError && variant === 'primary' && (
             <motion.div
-              className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-error-strong text-sm font-medium"
+              className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 text-red-500 text-sm font-medium"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -244,10 +365,25 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
         </AnimatePresence>
       </motion.div>
 
+      {/* Location Check Modal */}
+      <LocationCheck
+        isOpen={currentStep === 'location'}
+        onConfirm={handleLocationConfirm}
+        onSkip={handleLocationSkip}
+        onClose={handleCloseAll}
+      />
+
+      {/* Duration Input Modal */}
+      <DurationInput
+        isOpen={currentStep === 'duration'}
+        onSetDuration={handleDurationSet}
+        onCancel={handleCloseAll}
+      />
+
       {/* Ritual Checklist Modal */}
       <RitualChecklist
-        isOpen={showRitualModal}
-        onClose={() => setShowRitualModal(false)}
+        isOpen={currentStep === 'ritual'}
+        onClose={handleCloseAll}
         onBeginFlow={handleBeginFlow}
       />
     </>

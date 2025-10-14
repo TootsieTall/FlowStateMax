@@ -2,18 +2,31 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { Timer as TimerIcon, CheckCircle, Coffee, X } from 'lucide-react'
-import { Timer } from '@flowstate/ui'
-import { Button } from '@flowstate/ui'
+import { motion, AnimatePresence } from 'framer-motion'
+import { 
+  Timer as TimerIcon, 
+  CheckCircle, 
+  Coffee, 
+  X, 
+  Maximize2,
+  Minimize2,
+  Plus,
+  Clock
+} from 'lucide-react'
+import { DaybreakAnimation } from './DaybreakAnimation'
 
 interface FlowSessionViewProps {
   session: {
     id: string
     startTime: Date
+    endTime?: Date | null
+    originalDuration?: number | null
+    extendedDuration?: number
     monochromeOn: boolean
     appsBlocked: boolean
     musicPlayed: boolean
+    ritualCompleted: boolean
+    locationConfirmed: boolean
   }
   timeBlock?: {
     id: string
@@ -33,14 +46,55 @@ interface FlowSessionViewProps {
 
 export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewProps) {
   const router = useRouter()
+  const [isImmersiveMode, setIsImmersiveMode] = useState(true)
   const [showBreakDialog, setShowBreakDialog] = useState(false)
   const [showCompleteDialog, setShowCompleteDialog] = useState(false)
+  const [showExtendDialog, setShowExtendDialog] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(0)
+  const [newEndTime, setNewEndTime] = useState<Date | null>(null)
 
   // Calculate session end time
   const startTime = new Date(session.startTime)
-  const endTime = timeBlock 
+  const endTime = newEndTime || (timeBlock 
     ? new Date(timeBlock.endTime)
-    : new Date(startTime.getTime() + 60 * 60 * 1000)
+    : session.endTime 
+    ? new Date(session.endTime)
+    : new Date(startTime.getTime() + 60 * 60 * 1000)) // Default 1 hour
+
+  // Update time left every second
+  useEffect(() => {
+    const updateTimeLeft = () => {
+      const now = new Date()
+      const diff = endTime.getTime() - now.getTime()
+      const seconds = Math.max(0, Math.floor(diff / 1000))
+      setTimeLeft(seconds)
+
+      // Auto-show extend dialog when 5 minutes left
+      if (seconds === 300 && !showExtendDialog) {
+        setShowExtendDialog(true)
+      }
+
+      // Auto-complete when time runs out
+      if (seconds === 0) {
+        setTimeout(() => setShowCompleteDialog(true), 1000)
+      }
+    }
+
+    updateTimeLeft()
+    const interval = setInterval(updateTimeLeft, 1000)
+    return () => clearInterval(interval)
+  }, [endTime])
+
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const secs = seconds % 60
+
+    if (hours > 0) {
+      return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+    }
+    return `${minutes}:${String(secs).padStart(2, '0')}`
+  }
 
   const handleTakeBreak = async () => {
     setShowBreakDialog(true)
@@ -75,129 +129,286 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
       })
 
       if (response.ok) {
-        router.push('/today')
+        router.push('/flow/complete')
       }
     } catch (error) {
       console.error('Error completing session:', error)
     }
   }
 
+  const handleExtendSession = async (additionalMinutes: number) => {
+    try {
+      const response = await fetch('/api/sessions/flow/extend', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          sessionId: session.id, 
+          additionalMinutes 
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setNewEndTime(new Date(data.newEndTime))
+        setShowExtendDialog(false)
+      }
+    } catch (error) {
+      console.error('Error extending session:', error)
+    }
+  }
+
+  const EXTEND_PRESETS = [
+    { label: '+15 min', value: 15 },
+    { label: '+30 min', value: 30 },
+    { label: '+45 min', value: 45 },
+    { label: '+60 min', value: 60 },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dawn-100 to-dawn-200 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full">
-        {/* Main Flow Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="card-elevated p-8 mb-6 animate-pulse-glow"
-        >
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sunset-100 to-gold-100 text-sunset-700 rounded-full text-sm font-semibold mb-4 shadow-warm-sm">
-              <div className="w-2 h-2 bg-sunset-500 rounded-full animate-pulse" />
-              Flow Session Active
-            </div>
-            <h1 className="text-display-md text-bark-500 mb-2">
-              {timeBlock?.title || 'Deep Work Session'}
-            </h1>
-            {timeBlock?.description && (
-              <p className="text-body text-bark-300">{timeBlock.description}</p>
-            )}
-            {timeBlock?.task && (
-              <p className="text-body-sm text-bark-200 mt-2">
-                Task: {timeBlock.task.title}
-              </p>
-            )}
-          </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Daybreak Animation Background */}
+      <DaybreakAnimation 
+        startTime={startTime} 
+        endTime={endTime}
+        isPaused={false}
+      />
 
-          {/* Timer */}
-          <div className="flex justify-center mb-8">
-            <Timer startTime={startTime} endTime={endTime} />
-          </div>
+      {/* Immersive Mode Toggle */}
+      <button
+        onClick={() => setIsImmersiveMode(!isImmersiveMode)}
+        className="fixed top-4 right-4 z-50 p-3 bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-lg transition-all text-white"
+        title={isImmersiveMode ? 'Show Details' : 'Hide Details'}
+      >
+        {isImmersiveMode ? <Maximize2 className="w-5 h-5" /> : <Minimize2 className="w-5 h-5" />}
+      </button>
 
-          {/* Session Info */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
-              <div className="text-2xl mb-1">
-                {session.monochromeOn ? '🎨' : '🌈'}
-              </div>
-              <div className="text-caption text-bark-300">
-                {session.monochromeOn ? 'Monochrome' : 'Color'}
-              </div>
-            </div>
-            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
-              <div className="text-2xl mb-1">
-                {session.appsBlocked ? '🔒' : '🔓'}
-              </div>
-              <div className="text-caption text-bark-300">
-                {session.appsBlocked ? 'Apps Blocked' : 'Apps Open'}
-              </div>
-            </div>
-            <div className="text-center p-4 bg-dawn-100 rounded-warm-lg border border-border-light shadow-warm-sm">
-              <div className="text-2xl mb-1">
-                {session.musicPlayed ? '🎵' : '🔇'}
-              </div>
-              <div className="text-caption text-bark-300">
-                {session.musicPlayed ? 'Music On' : 'Silent'}
-              </div>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button
-              variant="secondary"
-              onClick={handleTakeBreak}
-              className="flex-1"
+      {/* Content Overlay */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <AnimatePresence mode="wait">
+          {isImmersiveMode ? (
+            /* Immersive Mode - Timer Only */
+            <motion.div
+              key="immersive"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="text-center"
             >
-              <Coffee className="w-4 h-4 mr-2" />
-              Take Break
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleComplete}
-              className="flex-1"
-            >
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Complete Session
-            </Button>
-          </div>
-        </motion.div>
+              {/* Large Timer */}
+              <motion.div
+                className="mb-8"
+                animate={{ scale: [1, 1.02, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="text-white text-9xl font-bold font-mono mb-4 drop-shadow-2xl">
+                  {formatTime(timeLeft)}
+                </div>
+                <p className="text-white/70 text-xl">
+                  {timeBlock?.title || 'Deep Work Session'}
+                </p>
+              </motion.div>
 
-        {/* Motivational Quote */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-center px-8"
-        >
-          <blockquote className="border-l-4 border-gold-400 bg-gradient-to-br from-gold-100 to-dawn-200 px-6 py-4 rounded-r-lg shadow-warm-sm">
-            <p className="text-body text-bark-400 italic mb-2">
-              "The ability to concentrate intensely is a skill that must be trained."
-            </p>
-            <footer className="text-body-sm text-bark-300 font-medium">— Cal Newport</footer>
-          </blockquote>
-        </motion.div>
+              {/* Minimal Controls */}
+              <div className="flex items-center justify-center gap-4">
+                {timeLeft < 300 && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    onClick={() => setShowExtendDialog(true)}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-lg transition-all flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Extend
+                  </motion.button>
+                )}
+                <button
+                  onClick={handleComplete}
+                  className="px-8 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white rounded-lg transition-all"
+                >
+                  Complete
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            /* Normal Mode - Full Details */
+            <motion.div
+              key="normal"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="max-w-2xl w-full"
+            >
+              {/* Main Flow Card */}
+              <div className="bg-black/40 backdrop-blur-xl p-8 rounded-2xl border border-white/20 shadow-2xl">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-full text-sm font-semibold mb-4">
+                    <div className="w-2 h-2 bg-accent-gold rounded-full animate-pulse" />
+                    Flow Session Active
+                  </div>
+                  <h1 className="text-display-md text-white mb-2">
+                    {timeBlock?.title || 'Deep Work Session'}
+                  </h1>
+                  {timeBlock?.description && (
+                    <p className="text-body text-white/70">{timeBlock.description}</p>
+                  )}
+                  {timeBlock?.task && (
+                    <p className="text-body-sm text-white/60 mt-2">
+                      Task: {timeBlock.task.title}
+                    </p>
+                  )}
+                </div>
+
+                {/* Timer */}
+                <div className="text-center mb-8">
+                  <div className="text-7xl font-bold font-mono text-white mb-2">
+                    {formatTime(timeLeft)}
+                  </div>
+                  <div className="text-white/60 text-sm">
+                    {session.originalDuration && session.extendedDuration > 0 && (
+                      <span>
+                        {session.originalDuration} min + {session.extendedDuration} min extended
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Session Info */}
+                <div className="grid grid-cols-3 gap-4 mb-8">
+                  <div className="text-center p-4 bg-white/10 rounded-lg border border-white/20">
+                    <div className="text-2xl mb-1">
+                      {session.monochromeOn ? '🎨' : '🌈'}
+                    </div>
+                    <div className="text-caption text-white/70">
+                      {session.monochromeOn ? 'Monochrome' : 'Color'}
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-white/10 rounded-lg border border-white/20">
+                    <div className="text-2xl mb-1">
+                      {session.appsBlocked ? '🔒' : '🔓'}
+                    </div>
+                    <div className="text-caption text-white/70">
+                      {session.appsBlocked ? 'Apps Blocked' : 'Apps Open'}
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-white/10 rounded-lg border border-white/20">
+                    <div className="text-2xl mb-1">
+                      {session.musicPlayed ? '🎵' : '🔇'}
+                    </div>
+                    <div className="text-caption text-white/70">
+                      {session.musicPlayed ? 'Music On' : 'Silent'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-4">
+                  {timeLeft < 300 && (
+                    <button
+                      onClick={() => setShowExtendDialog(true)}
+                      className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all flex items-center justify-center gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Extend Session
+                    </button>
+                  )}
+                  <button
+                    onClick={handleTakeBreak}
+                    className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all flex items-center justify-center gap-2"
+                  >
+                    <Coffee className="w-4 h-4" />
+                    Take Break
+                  </button>
+                  <button
+                    onClick={handleComplete}
+                    className="flex-1 px-4 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                    Complete
+                  </button>
+                </div>
+              </div>
+
+              {/* Cal Newport Quote */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mt-6 text-center"
+              >
+                <blockquote className="border-l-4 border-white/30 bg-black/20 backdrop-blur-md px-6 py-4 rounded-r-lg">
+                  <p className="text-body text-white/80 italic mb-2">
+                    "The ability to concentrate intensely is a skill that must be trained."
+                  </p>
+                  <footer className="text-body-sm text-white/60">— Cal Newport</footer>
+                </blockquote>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Break Dialog */}
-      {showBreakDialog && (
-        <div className="fixed inset-0 bg-bark-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      {/* Extend Session Dialog */}
+      {showExtendDialog && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="card-elevated max-w-md w-full p-6 animate-bounce-in"
+            className="bg-bg-elevated max-w-md w-full p-6 rounded-2xl border border-border-default shadow-2xl"
           >
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-h2 text-bark-500">Take a Break?</h2>
+              <h2 className="text-h2 text-text-primary">Extend Session?</h2>
               <button
-                onClick={() => setShowBreakDialog(false)}
-                className="p-1 hover:bg-dawn-200 rounded-lg transition-colors"
+                onClick={() => setShowExtendDialog(false)}
+                className="p-1 hover:bg-bg-surface rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-bark-300" />
+                <X className="w-5 h-5 text-text-tertiary" />
               </button>
             </div>
-            <p className="text-body text-bark-300 mb-6">
+            <p className="text-body text-text-secondary mb-6">
+              Add more time to your current flow session
+            </p>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {EXTEND_PRESETS.map((preset) => (
+                <button
+                  key={preset.value}
+                  onClick={() => handleExtendSession(preset.value)}
+                  className="p-4 border-2 border-border-default rounded-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all"
+                >
+                  <div className="text-h3 text-text-primary font-semibold">
+                    {preset.label}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowExtendDialog(false)}
+              className="btn-ghost w-full"
+            >
+              Cancel
+            </button>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Break Dialog */}
+      {showBreakDialog && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-bg-elevated max-w-md w-full p-6 rounded-2xl border border-border-default shadow-2xl"
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-h2 text-text-primary">Take a Break?</h2>
+              <button
+                onClick={() => setShowBreakDialog(false)}
+                className="p-1 hover:bg-bg-surface rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-text-tertiary" />
+              </button>
+            </div>
+            <p className="text-body text-text-secondary mb-6">
               Breaking flow now will pause your session. You can resume it later, but you'll need to complete your ritual again.
             </p>
             <div className="flex gap-3">
@@ -220,39 +431,50 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
 
       {/* Complete Dialog */}
       {showCompleteDialog && (
-        <div className="fixed inset-0 bg-bark-500/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="card-elevated max-w-md w-full p-6 animate-bounce-in"
+            className="bg-bg-elevated max-w-md w-full p-6 rounded-2xl border border-border-default shadow-2xl"
           >
-            <h2 className="text-h2 text-bark-500 mb-4">
+            <h2 className="text-h2 text-text-primary mb-4">
               How did it go?
             </h2>
-            <p className="text-body text-bark-300 mb-6">
+            {session.originalDuration && session.extendedDuration > 0 && (
+              <div className="mb-4 p-3 bg-accent-gold/10 border border-accent-gold/20 rounded-lg">
+                <p className="text-body-sm text-text-primary">
+                  Completed: <span className="font-semibold">{session.originalDuration} min</span>
+                  {' + '}
+                  <span className="font-semibold">{session.extendedDuration} min extended</span>
+                  {' = '}
+                  <span className="font-semibold">{session.originalDuration + session.extendedDuration} min total</span>
+                </p>
+              </div>
+            )}
+            <p className="text-body text-text-secondary mb-6">
               Your feedback helps us schedule better deep work sessions.
             </p>
             <div className="space-y-3">
               <button
                 onClick={() => confirmComplete('finished_early')}
-                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-sunset-400 hover:bg-sunset-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
+                className="w-full p-4 text-left border-2 border-border-default rounded-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all"
               >
-                <div className="font-semibold text-bark-500">✅ Finished Early</div>
-                <div className="text-body-sm text-bark-300">Completed the work ahead of schedule</div>
+                <div className="font-semibold text-text-primary">✅ Finished Early</div>
+                <div className="text-body-sm text-text-secondary">Completed the work ahead of schedule</div>
               </button>
               <button
                 onClick={() => confirmComplete('on_time')}
-                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-gold-400 hover:bg-gold-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
+                className="w-full p-4 text-left border-2 border-border-default rounded-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all"
               >
-                <div className="font-semibold text-bark-500">🎯 Right on Time</div>
-                <div className="text-body-sm text-bark-300">Perfect duration for the task</div>
+                <div className="font-semibold text-text-primary">🎯 Right on Time</div>
+                <div className="text-body-sm text-text-secondary">Perfect duration for the task</div>
               </button>
               <button
                 onClick={() => confirmComplete('needed_more')}
-                className="w-full p-4 text-left border-2 border-border-light rounded-warm-lg hover:border-sand-400 hover:bg-sand-50 transition-all hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md"
+                className="w-full p-4 text-left border-2 border-border-default rounded-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all"
               >
-                <div className="font-semibold text-bark-500">⏰ Needed More Time</div>
-                <div className="text-body-sm text-bark-300">Could have used additional time</div>
+                <div className="font-semibold text-text-primary">⏰ Needed More Time</div>
+                <div className="text-body-sm text-text-secondary">Could have used additional time</div>
               </button>
             </div>
             <button
@@ -267,4 +489,3 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
     </div>
   )
 }
-

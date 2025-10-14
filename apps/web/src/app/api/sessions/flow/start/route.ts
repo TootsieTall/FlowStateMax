@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { timeBlockId } = body
+    const { timeBlockId, duration, locationId, locationConfirmed, ritualCompleted } = body
 
     // Check for active session
     const activeSession = await prisma.flowSession.findFirst({
@@ -62,11 +62,22 @@ export async function POST(request: Request) {
 
     // Calculate session duration
     const now = new Date()
-    const endTime = timeBlock
-      ? new Date(timeBlock.endTime)
-      : new Date(now.getTime() + 60 * 60 * 1000) // Default 1 hour
+    let durationMinutes: number
+    let endTime: Date
 
-    const durationMinutes = Math.floor((endTime.getTime() - now.getTime()) / (1000 * 60))
+    if (timeBlock) {
+      // Use time block duration
+      endTime = new Date(timeBlock.endTime)
+      durationMinutes = Math.floor((endTime.getTime() - now.getTime()) / (1000 * 60))
+    } else if (duration) {
+      // Use custom duration from user input
+      durationMinutes = duration
+      endTime = new Date(now.getTime() + duration * 60 * 1000)
+    } else {
+      // Default 1 hour
+      durationMinutes = 60
+      endTime = new Date(now.getTime() + 60 * 60 * 1000)
+    }
 
     // Fetch user's blocked apps
     const blockedApps = await prisma.blockedApp.findMany({
@@ -81,17 +92,44 @@ export async function POST(request: Request) {
       },
     })
 
+    // Fetch user to check ritual/location counts
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        ritualCompletionCount: true,
+        locationConfirmationCount: true,
+      },
+    })
+
+    // Determine if we should increment counters (only if both ritual AND location confirmed)
+    const shouldIncrementCounters = ritualCompleted && locationConfirmed
+
     // Create flow session in database
     const flowSession = await prisma.flowSession.create({
       data: {
         userId: session.user.id,
         startTime: now,
+        duration: durationMinutes,
+        originalDuration: durationMinutes,
         monochromeOn: true,
         appsBlocked: blockedApps.length > 0,
         musicPlayed: false,
-        locationId: null,
+        locationId: locationId || null,
+        ritualCompleted: ritualCompleted || false,
+        locationConfirmed: locationConfirmed || false,
       },
     })
+
+    // Increment user's ritual and location counts if both completed
+    if (shouldIncrementCounters && user) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: {
+          ritualCompletionCount: Math.min(28, user.ritualCompletionCount + 1),
+          locationConfirmationCount: user.locationConfirmationCount + 1,
+        },
+      })
+    }
 
     // Create orchestrator configuration
     const orchestratorConfig: OrchestratorConfig = {
@@ -135,6 +173,8 @@ export async function POST(request: Request) {
       appsBlocked: flowSession.appsBlocked,
       timeBlockId: timeBlock?.id,
       adapters: orchestrator.getState().adapters,
+      showRitualNext: user ? user.ritualCompletionCount < 28 : true,
+      ritualCompletionCount: user?.ritualCompletionCount || 0,
     })
   } catch (error) {
     console.error('Error starting flow session:', error)

@@ -145,6 +145,10 @@ async function handleMessage(message: any, sender: chrome.runtime.MessageSender)
     case 'LOG_BLOCK_BREAK':
       return await logBlockBreak(message.appName, message.url, message.timestamp)
 
+    case 'FLOW_SESSION_START':
+      // Triggered from web app when user starts flow session
+      return await handleWebAppFlowStart(message.sessionId, message.duration)
+
     default:
       return { error: 'Unknown message type' }
   }
@@ -304,6 +308,63 @@ async function logBlockBreak(appName: string, url: string | undefined, timestamp
   } catch (error) {
     console.error('Error logging block break:', error)
     return { error: error.message }
+  }
+}
+
+/**
+ * Handle flow session start from web app
+ * Auto-activates extension blocking and monochrome
+ */
+async function handleWebAppFlowStart(sessionId: string, duration: number) {
+  try {
+    console.log('[Extension] Flow session started from web app:', sessionId)
+    
+    // Create session object
+    const now = new Date()
+    const endTime = new Date(now.getTime() + duration * 60 * 1000)
+    
+    const session = {
+      id: sessionId,
+      startTime: now.toISOString(),
+      endTime: endTime.toISOString(),
+      duration,
+    }
+    
+    // Store active session
+    await storage.set('activeSession', session)
+    
+    // Enable global grayscale (monochrome mode)
+    globalGrayscaleEnabled = true
+    grayscaleIntensity = 100
+    await applyGrayscaleToAllTabs(true, grayscaleIntensity)
+    
+    // Fetch and store blocked apps
+    try {
+      const auth = await storage.get('auth')
+      if (auth?.token) {
+        const blockedApps = await api.getBlockedApps()
+        await storage.set('blockedApps', blockedApps.apps)
+      }
+    } catch (error) {
+      console.error('[Extension] Error fetching blocked apps:', error)
+    }
+    
+    // Set alarm to check session periodically
+    chrome.alarms.create('session_check', { periodInMinutes: 1 })
+    
+    console.log('[Extension] Extension activated for flow session')
+    
+    return { 
+      success: true, 
+      message: 'Extension activated for flow session',
+      grayscaleEnabled: true,
+    }
+  } catch (error) {
+    console.error('[Extension] Error handling web app flow start:', error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
   }
 }
 

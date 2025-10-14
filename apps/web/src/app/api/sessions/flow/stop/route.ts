@@ -69,6 +69,9 @@ export async function POST(request: Request) {
       sessionId: flowSession.id,
       duration,
       endTime,
+      originalDuration: flowSession.originalDuration,
+      extendedDuration: flowSession.extendedDuration,
+      totalDuration: (flowSession.originalDuration || 0) + (flowSession.extendedDuration || 0),
     })
   } catch (error) {
     console.error('Error stopping flow session:', error)

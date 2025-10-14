@@ -7,7 +7,6 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -21,6 +20,10 @@ model User {
   // Onboarding
   onboardingComplete Boolean           @default(false)
   goals             String[]          // Array of focus areas
+  
+  // Flow Session Tracking (28-day ritual/location habit building)
+  ritualCompletionCount Int            @default(0)  // Count of completed rituals (max 28)
+  locationConfirmationCount Int        @default(0)  // Count of location confirmations
   
   // Settings
   flowLocations     FlowLocation[]
@@ -154,20 +157,29 @@ enum Impact {
 }
 
 model FlowSession {
-  id           String              @id @default(cuid())
-  userId       String
-  startTime    DateTime
-  endTime      DateTime?
-  duration     Int?                // minutes
-  locationId   String?
-  feedback     String?             // "on_time", "needed_more", "finished_early"
-  monochromeOn Boolean             @default(false)
-  appsBlocked  Boolean             @default(false)
-  musicPlayed  Boolean             @default(false)
-  createdAt    DateTime            @default(now())
+  id                String              @id @default(cuid())
+  userId            String
+  startTime         DateTime
+  endTime           DateTime?
+  duration          Int?                // minutes
+  locationId        String?
+  feedback          String?             // "on_time", "needed_more", "finished_early"
+  monochromeOn      Boolean             @default(false)
+  appsBlocked       Boolean             @default(false)
+  musicPlayed       Boolean             @default(false)
+  
+  // Pre-flow validation tracking
+  ritualCompleted   Boolean             @default(false)
+  locationConfirmed Boolean             @default(false)
+  
+  // Session extension tracking
+  originalDuration  Int?                // Original planned minutes
+  extendedDuration  Int                 @default(0) // Additional minutes added
+  
+  createdAt         DateTime            @default(now())
 
-  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  blockBreaks  SessionBlockBreak[]
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blockBreaks       SessionBlockBreak[]
 }
 
 model SessionBlockBreak {
