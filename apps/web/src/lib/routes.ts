@@ -206,14 +206,14 @@ export const NAV = {
  */
 export const BOTTOM_NAV_CONFIG = [
   {
-    path: ROUTES.WEEK,
-    label: 'Week',
-    icon: 'Calendar',
-  },
-  {
     path: ROUTES.TODAY,
     label: 'Today',
     icon: 'CheckCircle',
+  },
+  {
+    path: ROUTES.WEEK,
+    label: 'Week',
+    icon: 'Calendar',
   },
   {
     path: ROUTES.EXPLORE,
