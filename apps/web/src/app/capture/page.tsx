@@ -176,7 +176,7 @@ export default function CapturePage() {
     <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
       <QuickCapture />
       
-      <div className="max-w-6xl mx-auto px-4 py-8 pb-32">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -378,6 +378,9 @@ export default function CapturePage() {
             💡 Tip: Press <kbd className="px-2 py-1 bg-bg-secondary border border-border-default rounded text-xs text-text-secondary">⌘K</kbd> anywhere to quick capture
           </p>
         </div>
+
+        {/* Bottom Navigation Spacer */}
+        <div className="h-24" aria-hidden="true" />
       </div>
     </div>
   );
