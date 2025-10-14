@@ -267,7 +267,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                   <div className="text-white/60 text-sm">
                     {session.originalDuration && (session.extendedDuration ?? 0) > 0 && (
                       <span>
-                        {session.originalDuration} min + {session.extendedDuration} min extended
+                        {session.originalDuration} min + {session.extendedDuration ?? 0} min extended
                       </span>
                     )}
                   </div>
@@ -440,14 +440,14 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
             <h2 className="text-h2 text-text-primary mb-4">
               How did it go?
             </h2>
-            {session.originalDuration && session.extendedDuration > 0 && (
+            {session.originalDuration && (session.extendedDuration ?? 0) > 0 && (
               <div className="mb-4 p-3 bg-accent-gold/10 border border-accent-gold/20 rounded-lg">
                 <p className="text-body-sm text-text-primary">
                   Completed: <span className="font-semibold">{session.originalDuration} min</span>
                   {' + '}
-                  <span className="font-semibold">{session.extendedDuration} min extended</span>
+                  <span className="font-semibold">{session.extendedDuration ?? 0} min extended</span>
                   {' = '}
-                  <span className="font-semibold">{session.originalDuration + session.extendedDuration} min total</span>
+                  <span className="font-semibold">{(session.originalDuration ?? 0) + (session.extendedDuration ?? 0)} min total</span>
                 </p>
               </div>
             )}
