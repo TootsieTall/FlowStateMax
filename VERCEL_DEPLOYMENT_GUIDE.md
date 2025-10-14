@@ -130,6 +130,20 @@ After deployment:
 
 ## Troubleshooting
 
+### Issue: Build warnings about "DYNAMIC_SERVER_USAGE"
+**These are normal and not errors!**
+- API routes use `getServerSession()` which requires dynamic rendering
+- Warnings don't prevent deployment
+- Build will complete successfully despite warnings
+- ✅ Already fixed with `export const dynamic = 'force-dynamic'`
+
+### Issue: Pages "deopted into client-side rendering"
+**These are also normal!**
+- `/flow/complete` and `/onboarding/complete` use `useSearchParams()`
+- They're already client components (`'use client'`)
+- This is expected behavior, not an error
+- Your build will complete successfully
+
 ### Issue: "Unauthorized" errors
 - Check `DATABASE_URL` is set correctly
 - Verify Supabase connection pooling is enabled
