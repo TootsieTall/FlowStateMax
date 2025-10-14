@@ -53,30 +53,32 @@ export function LocationCheck({ isOpen, onConfirm, onSkip, onClose }: LocationCh
           setShowBenefits(true)
           return
         }
-      }
 
-      // Check if geolocation is available
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords
-            setCurrentLocation({ lat: latitude, lng: longitude })
-            
-            // Check if current location matches any flow locations
-            const matchedLocation = findMatchingLocation(latitude, longitude, locData.locations || [])
-            
-            if (matchedLocation) {
-              setSelectedLocationId(matchedLocation.id)
-              setStatus('detected')
-            } else {
+        // Check if geolocation is available
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords
+              setCurrentLocation({ lat: latitude, lng: longitude })
+              
+              // Check if current location matches any flow locations
+              const matchedLocation = findMatchingLocation(latitude, longitude, locData.locations)
+              
+              if (matchedLocation) {
+                setSelectedLocationId(matchedLocation.id)
+                setStatus('detected')
+              } else {
+                setStatus('manual')
+              }
+            },
+            (err) => {
+              console.error('Geolocation error:', err)
               setStatus('manual')
             }
-          },
-          (err) => {
-            console.error('Geolocation error:', err)
-            setStatus('manual')
-          }
-        )
+          )
+        } else {
+          setStatus('manual')
+        }
       } else {
         setStatus('manual')
       }
