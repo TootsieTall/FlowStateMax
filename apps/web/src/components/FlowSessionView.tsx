@@ -265,7 +265,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                     {formatTime(timeLeft)}
                   </div>
                   <div className="text-white/60 text-sm">
-                    {session.originalDuration && session.extendedDuration > 0 && (
+                    {session.originalDuration && (session.extendedDuration ?? 0) > 0 && (
                       <span>
                         {session.originalDuration} min + {session.extendedDuration} min extended
                       </span>
