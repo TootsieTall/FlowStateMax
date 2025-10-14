@@ -134,6 +134,8 @@ Located in `apps/web/src/store/`:
 
 9. **MAKE ALL FIXES AND CODE CHANGES AS SIMPLE AS HUMANLY POSSIBLE. THEY SHOULD ONLY IMPACT NECESSARY CODE RELEVANT TO THE TASK AND NOTHING ELSE. IT SHOULD IMPACT AS LITTLE CODE AS POSSIBLE. YOUR GOAL IS TO NOT INTRODUCE ANY BUGS. IT'S ALL ABOUT SIMPLICITY.**
 
+10. **AFTER EVERY MAJOR TASK COMPLETION, PUSH ALL CHANGES TO GIT** - This ensures work is saved and creates a clear checkpoint for progress. Always commit and push when a significant feature or fix is completed.
+
 ## Design Principles
 
 1. **Minimal Friction:** Every feature must be accessible within 2 taps
