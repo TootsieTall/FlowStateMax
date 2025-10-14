@@ -373,14 +373,11 @@ export default function CapturePage() {
         </div>
 
         {/* Keyboard Hint */}
-        <div className="mt-8 text-center">
+        <div className="mt-8 mb-32 text-center">
           <p className="text-body-sm text-text-tertiary">
             💡 Tip: Press <kbd className="px-2 py-1 bg-bg-secondary border border-border-default rounded text-xs text-text-secondary">⌘K</kbd> anywhere to quick capture
           </p>
         </div>
-
-        {/* Bottom Navigation Spacer */}
-        <div className="h-24" aria-hidden="true" />
       </div>
     </div>
   );

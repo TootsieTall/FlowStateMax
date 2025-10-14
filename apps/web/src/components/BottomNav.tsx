@@ -6,7 +6,7 @@ import { Calendar, CheckCircle, Compass, Settings } from 'lucide-react';
 import { ROUTES, BOTTOM_NAV_CONFIG } from '@/lib/routes';
 
 /**
- * Bottom Navigation Component
+ * Bottom Navigation Component - Floating Icons Style
  * 
  * Main navigation for the app with 4 tabs:
  * - Week: Planning view
@@ -39,33 +39,48 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-bg-surface border-t border-border-light safe-area-inset-bottom z-40 shadow-warm-lg">
-      <div className="max-w-lg mx-auto px-2">
-        <div className="flex items-center justify-around h-16">
-          {BOTTOM_NAV_CONFIG.map((item) => {
-            const Icon = iconMap[item.icon as keyof typeof iconMap];
-            const isActive = pathname === item.path;
+    <nav className="fixed bottom-6 left-0 right-0 z-50 pointer-events-none">
+      <div className="max-w-lg mx-auto px-6">
+        <div className="bg-bg-elevated/90 backdrop-blur-xl border border-accent-gold/20 rounded-2xl shadow-glow-strong p-3 pointer-events-auto">
+          <div className="flex items-center justify-around gap-2">
+            {BOTTOM_NAV_CONFIG.map((item) => {
+              const Icon = iconMap[item.icon as keyof typeof iconMap];
+              const isActive = pathname === item.path;
 
-            return (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`flex flex-col items-center justify-center flex-1 h-full transition-all duration-fast relative ${
-                  isActive
-                    ? 'text-sunset-500'
-                    : 'text-bark-200 hover:text-bark-400'
-                }`}
-              >
-                <Icon className={`w-6 h-6 mb-1 transition-transform duration-fast ${isActive ? 'scale-110' : 'hover:scale-105'}`} />
-                <span className={`text-xs font-medium ${isActive ? 'font-semibold' : ''}`}>
-                  {item.label}
-                </span>
-                {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-sunset-500 to-gold-400 rounded-t-lg shadow-glow-amber" />
-                )}
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`
+                    flex flex-col items-center justify-center gap-1 
+                    px-4 py-2.5 rounded-xl transition-all duration-200
+                    ${
+                      isActive
+                        ? 'bg-gradient-to-br from-accent-gold to-accent-orange shadow-glow-medium scale-105'
+                        : 'hover:bg-bg-surface hover:scale-105'
+                    }
+                  `}
+                >
+                  <Icon 
+                    className={`w-5 h-5 transition-all ${
+                      isActive 
+                        ? 'text-bg-primary' 
+                        : 'text-text-secondary'
+                    }`} 
+                  />
+                  <span 
+                    className={`text-xs font-medium whitespace-nowrap ${
+                      isActive 
+                        ? 'text-bg-primary font-semibold' 
+                        : 'text-text-tertiary'
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </nav>
