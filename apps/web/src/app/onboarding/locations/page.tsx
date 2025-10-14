@@ -91,12 +91,35 @@ export default function LocationsPage() {
   }
 
   const handleContinue = async () => {
-    // Save locations to localStorage for now (will use API when backend is ready)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('flowstate_work_locations', JSON.stringify(locations))
+    try {
+      // Save flow locations to database via API
+      const response = await fetch('/api/onboarding/locations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          locations: locations.map(loc => ({
+            name: loc.name,
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+            radius: loc.radius,
+          })),
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        console.error('Failed to save locations:', error)
+        alert('Failed to save locations. Please try again.')
+        return
+      }
+
+      const data = await response.json()
+      console.log(`✅ Saved ${data.count} flow locations`)
+      router.push('/onboarding/apps')
+    } catch (error) {
+      console.error('Error saving locations:', error)
+      alert('Failed to save locations. Please try again.')
     }
-    console.log('Saved locations:', locations)
-    router.push('/onboarding/apps')
   }
 
   const handleSkip = () => {

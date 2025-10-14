@@ -52,13 +52,30 @@ export default function RitualPage() {
   }
 
   const handleContinue = async () => {
-    // Save ritual to localStorage (will use API when backend is ready)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('flowstate_ritual_items', JSON.stringify(ritualItems))
+    try {
+      // Save ritual items to database via API
+      const response = await fetch('/api/onboarding/ritual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ritualItems: ritualItems.map(item => ({ text: item.text })),
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        console.error('Failed to save ritual:', error)
+        alert('Failed to save ritual items. Please try again.')
+        return
+      }
+
+      const data = await response.json()
+      console.log(`✅ Saved ${data.count} ritual items`)
+      router.push('/onboarding/boredom')
+    } catch (error) {
+      console.error('Error saving ritual:', error)
+      alert('Failed to save ritual items. Please try again.')
     }
-    
-    console.log('Saved ritual:', ritualItems)
-    router.push('/onboarding/boredom')
   }
 
   const handleSkip = () => {

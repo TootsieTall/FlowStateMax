@@ -45,14 +45,36 @@ export default function AppsPage() {
 
   const handleContinue = async () => {
     const selectedApps = blockedApps.filter(app => app.selected)
-    
-    // Save blocked apps to localStorage (will use API when backend is ready)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('flowstate_blocked_apps', JSON.stringify(selectedApps))
+
+    try {
+      // Save blocked apps to database via API
+      const response = await fetch('/api/onboarding/apps', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          blockedApps: selectedApps.map(app => ({
+            name: app.name,
+            identifier: app.identifier,
+            domain: app.domain,
+            category: app.category,
+          })),
+        }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        console.error('Failed to save blocked apps:', error)
+        alert('Failed to save blocked apps. Please try again.')
+        return
+      }
+
+      const data = await response.json()
+      console.log(`✅ Saved ${data.count} blocked apps`)
+      router.push('/onboarding/ritual')
+    } catch (error) {
+      console.error('Error saving blocked apps:', error)
+      alert('Failed to save blocked apps. Please try again.')
     }
-    
-    console.log('Saved blocked apps:', selectedApps)
-    router.push('/onboarding/ritual')
   }
 
   const handleSkip = () => {
