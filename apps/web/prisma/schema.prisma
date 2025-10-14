@@ -5,9 +5,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -42,6 +41,10 @@ model User {
   // Accounts
   accounts          Account[]
   sessions          Session[]
+
+  // Phase 7: Settings & Integrations
+  integrations              Integration[]
+  notificationPreferences   NotificationPreferences?
 }
 
 model Account {
@@ -215,8 +218,42 @@ model DailyGoal {
   goals     String[] // 1-3 major goals
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, date])
+}
+
+model Integration {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String   // "google_calendar", "gmail", "canvas", "spotify", "apple_music"
+  providerAccountId String?
+  accessToken       String?  @db.Text
+  refreshToken      String?  @db.Text
+  expiresAt         Int?
+  scope             String?
+  isActive          Boolean  @default(true)
+  metadata          Json?    // Store additional provider-specific data
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+model NotificationPreferences {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  locationAlerts        Boolean  @default(true)
+  sessionAlerts         Boolean  @default(true)
+  integrationSync       Boolean  @default(true)
+  dailyPrompts          Boolean  @default(true)
+  streakTracking        Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
