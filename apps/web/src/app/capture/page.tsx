@@ -173,10 +173,10 @@ export default function CapturePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
       <QuickCapture />
       
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 pb-32">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
