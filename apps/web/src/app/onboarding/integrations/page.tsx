@@ -318,10 +318,13 @@ export default function IntegrationsPage() {
             </label>
             <button
               onClick={() => setShowCanvasModal(true)}
-              className="ml-1 p-1 hover:bg-accent-gold/10 rounded-full transition-colors"
+              className="ml-2 flex items-center gap-1.5 px-2 py-1 hover:bg-accent-gold/10 rounded-lg transition-all group animate-pulse-subtle"
               aria-label="How to get Canvas API token"
             >
-              <Info className="w-4 h-4 text-accent-orange" />
+              <Info className="w-4 h-4 text-accent-orange group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-medium text-accent-orange group-hover:text-accent-warm">
+                How to get this?
+              </span>
             </button>
           </div>
           

@@ -87,6 +87,16 @@ module.exports = {
             boxShadow: '0 0 30px rgba(255, 184, 77, 0.5), 0 0 60px rgba(255, 184, 77, 0.25), 0 12px 24px rgba(0, 0, 0, 0.5)',
           },
         },
+        'pulse-subtle': {
+          '0%, 100%': { 
+            opacity: '1',
+            transform: 'scale(1)',
+          },
+          '50%': { 
+            opacity: '0.8',
+            transform: 'scale(1.02)',
+          },
+        },
         'bounce-in': {
           '0%': { transform: 'scale(0)', opacity: '0' },
           '50%': { transform: 'scale(1.15)' },
@@ -100,6 +110,7 @@ module.exports = {
       
       animation: {
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'pulse-subtle': 'pulse-subtle 2.5s ease-in-out infinite',
         'bounce-in': 'bounce-in 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'shimmer': 'shimmer 2s infinite linear',
       },
