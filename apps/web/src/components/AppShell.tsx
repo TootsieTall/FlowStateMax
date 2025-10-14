@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import BottomNav from './BottomNav';
 import QuickCaptureWrapper from './QuickCaptureWrapper';
+import { FloatingCaptureCTA } from './FloatingCaptureCTA';
 
 /**
  * App Shell Component
@@ -42,6 +43,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Quick Capture Modal (always available when authenticated) */}
       {status === 'authenticated' && <QuickCaptureWrapper />}
+
+      {/* Floating Capture CTA (always available when authenticated) */}
+      {status === 'authenticated' && <FloatingCaptureCTA />}
     </>
   );
 }

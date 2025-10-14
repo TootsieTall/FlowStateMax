@@ -4,8 +4,8 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 /**
- * GET /api/user/ritual-count
- * Get user's ritual and location completion counts
+ * GET /api/user/profile
+ * Get user profile data including ritual and location counts
  */
 export async function GET() {
   try {
@@ -20,6 +20,10 @@ export async function GET() {
       select: {
         ritualCompletionCount: true,
         locationConfirmationCount: true,
+        onboardingComplete: true,
+        name: true,
+        email: true,
+        createdAt: true,
       },
     })
 
@@ -27,12 +31,9 @@ export async function GET() {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    return NextResponse.json({
-      ritualCompletionCount: user.ritualCompletionCount,
-      locationConfirmationCount: user.locationConfirmationCount,
-    })
+    return NextResponse.json(user)
   } catch (error) {
-    console.error('Error fetching ritual count:', error)
+    console.error('Error fetching user profile:', error)
     return NextResponse.json(
       {
         error: 'Internal server error',

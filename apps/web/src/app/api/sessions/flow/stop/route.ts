@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { FlowSessionOrchestrator } from '@flowstate/core'
 
 /**
  * POST /api/sessions/flow/stop
- * Stop the active flow session and cleanup all adapters
+ * Stop the current flow session with feedback
  */
 export async function POST(request: Request) {
   try {
@@ -19,59 +18,61 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { sessionId, feedback } = body
 
-    // Get active session
-    const flowSession = await prisma.flowSession.findFirst({
-      where: {
-        id: sessionId,
-        userId: session.user.id,
-        endTime: null,
-      },
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: 'Session ID required' },
+        { status: 400 }
+      )
+    }
+
+    if (!feedback || !['on_time', 'needed_more', 'finished_early'].includes(feedback)) {
+      return NextResponse.json(
+        { error: 'Valid feedback required (on_time, needed_more, finished_early)' },
+        { status: 400 }
+      )
+    }
+
+    // Find the session
+    const flowSession = await prisma.flowSession.findUnique({
+      where: { id: sessionId },
     })
 
     if (!flowSession) {
-      return NextResponse.json({ error: 'No active session found' }, { status: 404 })
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 })
     }
 
-    try {
-      // Restore orchestrator from stored state
-      const orchestratorState = flowSession.feedback as any
-      if (orchestratorState && typeof orchestratorState === 'string') {
-        const orchestrator = await FlowSessionOrchestrator.deserialize(orchestratorState)
-        await orchestrator.stop()
-        console.log('[FlowSessionAPI] Orchestrator stopped gracefully')
-      } else {
-        console.warn('[FlowSessionAPI] No orchestrator state found, skipping cleanup')
-      }
-    } catch (error) {
-      console.error('[FlowSessionAPI] Error stopping orchestrator:', error)
-      // Continue with database update even if orchestrator cleanup fails
+    if (flowSession.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Update session end time and feedback
-    const endTime = new Date()
-    const duration = Math.floor(
-      (endTime.getTime() - flowSession.startTime.getTime()) / (1000 * 60)
-    )
+    if (flowSession.endTime) {
+      return NextResponse.json(
+        { error: 'Session already completed' },
+        { status: 400 }
+      )
+    }
 
+    // Calculate actual duration
+    const now = new Date()
+    const startTime = new Date(flowSession.startTime)
+    const actualDuration = Math.floor((now.getTime() - startTime.getTime()) / (1000 * 60))
+
+    // Stop the session
     await prisma.flowSession.update({
-      where: { id: flowSession.id },
+      where: { id: sessionId },
       data: {
-        endTime,
-        duration,
-        feedback: feedback || null,
+        endTime: now,
+        duration: actualDuration,
+        feedback,
       },
     })
-
-    console.log('[FlowSessionAPI] Session stopped:', flowSession.id)
 
     return NextResponse.json({
       success: true,
       sessionId: flowSession.id,
-      duration,
-      endTime,
-      originalDuration: flowSession.originalDuration,
-      extendedDuration: flowSession.extendedDuration,
-      totalDuration: (flowSession.originalDuration || 0) + (flowSession.extendedDuration || 0),
+      completedAt: now.toISOString(),
+      actualDuration,
+      feedback,
     })
   } catch (error) {
     console.error('Error stopping flow session:', error)

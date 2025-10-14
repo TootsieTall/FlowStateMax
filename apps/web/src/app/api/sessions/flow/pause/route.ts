@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { FlowSessionOrchestrator } from '@flowstate/core'
 
 /**
  * POST /api/sessions/flow/pause
- * Pause the active flow session
+ * Pause the current flow session
  */
 export async function POST(request: Request) {
   try {
@@ -19,45 +18,46 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { sessionId } = body
 
-    // Get active session
-    const flowSession = await prisma.flowSession.findFirst({
-      where: {
-        id: sessionId,
-        userId: session.user.id,
-        endTime: null,
-      },
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: 'Session ID required' },
+        { status: 400 }
+      )
+    }
+
+    // Find the session
+    const flowSession = await prisma.flowSession.findUnique({
+      where: { id: sessionId },
     })
 
     if (!flowSession) {
-      return NextResponse.json({ error: 'No active session found' }, { status: 404 })
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 })
     }
 
-    try {
-      // Restore and pause orchestrator
-      const orchestratorState = flowSession.feedback as any
-      if (orchestratorState && typeof orchestratorState === 'string') {
-        const orchestrator = await FlowSessionOrchestrator.deserialize(orchestratorState)
-        await orchestrator.pause()
-
-        // Update stored state
-        await prisma.flowSession.update({
-          where: { id: flowSession.id },
-          data: {
-            feedback: orchestrator.serialize() as any,
-          },
-        })
-
-        console.log('[FlowSessionAPI] Session paused:', flowSession.id)
-      }
-    } catch (error) {
-      console.error('[FlowSessionAPI] Error pausing orchestrator:', error)
-      throw error
+    if (flowSession.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    if (flowSession.endTime) {
+      return NextResponse.json(
+        { error: 'Session already completed' },
+        { status: 400 }
+      )
+    }
+
+    // Pause the session by setting endTime to now
+    const now = new Date()
+    await prisma.flowSession.update({
+      where: { id: sessionId },
+      data: {
+        endTime: now,
+      },
+    })
 
     return NextResponse.json({
       success: true,
       sessionId: flowSession.id,
-      status: 'paused',
+      pausedAt: now.toISOString(),
     })
   } catch (error) {
     console.error('Error pausing flow session:', error)

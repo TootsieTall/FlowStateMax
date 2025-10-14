@@ -3,103 +3,89 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-// Force dynamic rendering (suppress build warnings)
-export const dynamic = 'force-dynamic'
-
-export async function GET(request: Request) {
+/**
+ * GET /api/sessions/validate
+ * Validate prerequisites for starting a flow session
+ */
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
+
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const errors: string[] = []
-    let redirectTo: string | undefined
+    // Check for active session
+    const activeSession = await prisma.flowSession.findFirst({
+      where: {
+        userId: session.user.id,
+        endTime: null,
+      },
+    })
 
-    // 1. Check for Flow Zone locations
-    const locationCount = await prisma.flowLocation.count({
+    if (activeSession) {
+      return NextResponse.json({
+        isValid: false,
+        errors: ['Active session already exists'],
+        redirectTo: '/flow',
+      })
+    }
+
+    // Check onboarding completion
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        onboardingComplete: true,
+        ritualCompletionCount: true,
+        locationConfirmationCount: true,
+      },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    const errors: string[] = []
+
+    if (!user.onboardingComplete) {
+      errors.push('Please complete onboarding first')
+    }
+
+    // Check if user has any flow locations
+    const flowLocations = await prisma.flowLocation.count({
       where: {
         userId: session.user.id,
         enabled: true,
       },
     })
 
-    if (locationCount === 0) {
-      errors.push('No Flow Zone locations configured')
-      redirectTo = '/onboarding/locations'
+    if (flowLocations === 0) {
+      errors.push('Please add at least one flow location')
     }
 
-    // 2. Check for blocked apps
-    if (!redirectTo) {
-      const blockedAppCount = await prisma.blockedApp.count({
-        where: {
-          userId: session.user.id,
-          enabled: true,
-        },
-      })
+    // Check if user has any ritual items
+    const ritualItems = await prisma.ritualItem.count({
+      where: {
+        userId: session.user.id,
+      },
+    })
 
-      if (blockedAppCount === 0) {
-        errors.push('No blocked apps configured')
-        redirectTo = '/onboarding/blocked-apps'
-      }
-    }
-
-    // 3. Check for ritual setup
-    if (!redirectTo) {
-      const ritualItemCount = await prisma.ritualItem.count({
-        where: {
-          userId: session.user.id,
-        },
-      })
-
-      if (ritualItemCount === 0) {
-        errors.push('Ritual not configured')
-        redirectTo = '/onboarding/ritual'
-      }
-    }
-
-    // 4. Check for current deep work time block
-    if (!redirectTo) {
-      const now = new Date()
-      const currentTimeBlock = await prisma.timeBlock.findFirst({
-        where: {
-          userId: session.user.id,
-          startTime: { lte: now },
-          endTime: { gte: now },
-          type: 'DEEP_WORK',
-        },
-      })
-
-      if (!currentTimeBlock) {
-        errors.push('No active Deep Work time block scheduled')
-        // Don't redirect, show modal to create one
-      }
-    }
-
-    // 5. Check for active session
-    if (!redirectTo) {
-      const activeSession = await prisma.flowSession.findFirst({
-        where: {
-          userId: session.user.id,
-          endTime: null,
-        },
-      })
-
-      if (activeSession) {
-        errors.push('Flow session already in progress')
-        // This is handled differently - show Resume instead
-      }
+    if (ritualItems === 0) {
+      errors.push('Please set up your pre-flow ritual')
     }
 
     return NextResponse.json({
       isValid: errors.length === 0,
       errors,
-      redirectTo,
+      redirectTo: errors.length > 0 ? '/onboarding' : undefined,
     })
   } catch (error) {
-    console.error('Error validating flow prerequisites:', error)
+    console.error('Error validating session prerequisites:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     )
   }

@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { FlowSessionOrchestrator } from '@flowstate/core'
 
 /**
  * GET /api/sessions/flow/status
- * Get detailed status of the active flow session including adapter states
+ * Get current flow session status
  */
 export async function GET() {
   try {
@@ -16,18 +15,23 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get active session
-    const flowSession = await prisma.flowSession.findFirst({
+    // Find active session
+    const activeSession = await prisma.flowSession.findFirst({
       where: {
         userId: session.user.id,
         endTime: null,
       },
-      orderBy: {
-        startTime: 'desc',
+      include: {
+        user: {
+          select: {
+            ritualCompletionCount: true,
+            locationConfirmationCount: true,
+          },
+        },
       },
     })
 
-    if (!flowSession) {
+    if (!activeSession) {
       return NextResponse.json({
         hasActiveSession: false,
       })
@@ -35,45 +39,42 @@ export async function GET() {
 
     // Calculate remaining time
     const now = new Date()
-    const startTime = new Date(flowSession.startTime)
-    const duration = flowSession.duration || 60 // Default 60 minutes
-    const endTime = new Date(startTime.getTime() + duration * 60 * 1000)
-    const remainingMinutes = Math.max(
-      0,
-      Math.ceil((endTime.getTime() - now.getTime()) / (60 * 1000))
-    )
+    const startTime = new Date(activeSession.startTime)
+    const totalDuration = (activeSession.originalDuration || activeSession.duration || 60) + (activeSession.extendedDuration || 0)
+    const endTime = new Date(startTime.getTime() + totalDuration * 60 * 1000)
+    const remainingMs = endTime.getTime() - now.getTime()
+    const remainingMinutes = Math.max(0, Math.floor(remainingMs / (1000 * 60)))
 
-    // Try to restore orchestrator state for detailed adapter info
-    let adapterStates = null
-    let orchestratorStatus = 'unknown'
-
-    try {
-      const orchestratorState = flowSession.feedback as any
-      if (orchestratorState && typeof orchestratorState === 'string') {
-        const orchestrator = await FlowSessionOrchestrator.deserialize(orchestratorState)
-        const state = orchestrator.getState()
-        adapterStates = state.adapters
-        orchestratorStatus = state.status
-      }
-    } catch (error) {
-      console.error('[FlowSessionAPI] Error restoring orchestrator state:', error)
+    // Find associated time block
+    let timeBlock = null
+    if (activeSession.duration) {
+      // Look for time block that matches this session
+      timeBlock = await prisma.timeBlock.findFirst({
+        where: {
+          userId: session.user.id,
+          startTime: { lte: startTime },
+          endTime: { gte: endTime },
+        },
+      })
     }
 
     return NextResponse.json({
       hasActiveSession: true,
-      sessionId: flowSession.id,
-      startTime: flowSession.startTime,
-      endTime: endTime,
+      sessionId: activeSession.id,
+      startTime: activeSession.startTime,
+      endTime: endTime.toISOString(),
       remainingMinutes,
-      monochromeOn: flowSession.monochromeOn,
-      appsBlocked: flowSession.appsBlocked,
-      musicPlayed: flowSession.musicPlayed,
-      locationId: flowSession.locationId,
-      orchestratorStatus,
-      adapters: adapterStates,
+      timeBlockId: timeBlock?.id,
+      originalDuration: activeSession.originalDuration,
+      extendedDuration: activeSession.extendedDuration,
+      ritualCompleted: activeSession.ritualCompleted,
+      locationConfirmed: activeSession.locationConfirmed,
+      monochromeOn: activeSession.monochromeOn,
+      appsBlocked: activeSession.appsBlocked,
+      musicPlayed: activeSession.musicPlayed,
     })
   } catch (error) {
-    console.error('Error getting flow session status:', error)
+    console.error('Error fetching session status:', error)
     return NextResponse.json(
       {
         error: 'Internal server error',
