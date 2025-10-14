@@ -47,37 +47,24 @@ export async function GET() {
 
     const errors: string[] = []
 
+    // Only validate critical prerequisites
+    // Location and ritual are handled by their respective components
     if (!user.onboardingComplete) {
       errors.push('Please complete onboarding first')
+      return NextResponse.json({
+        isValid: false,
+        errors,
+        redirectTo: '/onboarding',
+      })
     }
 
-    // Check if user has any flow locations
-    const flowLocations = await prisma.flowLocation.count({
-      where: {
-        userId: session.user.id,
-        enabled: true,
-      },
-    })
-
-    if (flowLocations === 0) {
-      errors.push('Please add at least one flow location')
-    }
-
-    // Check if user has any ritual items
-    const ritualItems = await prisma.ritualItem.count({
-      where: {
-        userId: session.user.id,
-      },
-    })
-
-    if (ritualItems === 0) {
-      errors.push('Please set up your pre-flow ritual')
-    }
+    // Flow locations are OPTIONAL - LocationCheck component handles this
+    // Ritual items are OPTIONAL - RitualChecklist component handles this
+    // The multi-step flow is designed to be self-configuring
 
     return NextResponse.json({
-      isValid: errors.length === 0,
-      errors,
-      redirectTo: errors.length > 0 ? '/onboarding' : undefined,
+      isValid: true,
+      errors: [],
     })
   } catch (error) {
     console.error('Error validating session prerequisites:', error)
