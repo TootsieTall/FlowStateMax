@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Brain, Clock, Coffee, Smartphone, CheckCircle, Circle } from 'lucide-react'
 
@@ -76,27 +77,27 @@ export default function BoredomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-      <div className="card-elevated animate-slide-in-right max-w-3xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-slide-in-right max-w-3xl w-full p-8">
         <div className="mb-8">
-          <div className="text-overline text-sunset-600 mb-2">STEP 7 OF 8</div>
-          <h1 className="text-display-md text-bark-500 mb-2">
+          <div className="text-overline text-accent-orange mb-2">STEP 7 OF 8</div>
+          <h1 className="text-display-md text-text-primary mb-2">
             Train Your Boredom Resistance
           </h1>
-          <p className="text-body text-bark-300">
+          <p className="text-body text-text-tertiary">
             How do you want to handle downtime and breaks?
           </p>
         </div>
 
         {/* Educational Banner */}
-        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
+        <div className="mb-8 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-lg">
           <div className="flex items-start gap-3">
-            <Brain className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
+            <Brain className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-sm font-semibold text-blue-900 mb-1">
+              <h3 className="text-sm font-semibold text-text-primary mb-1">
                 Why Boredom Training Matters
               </h3>
-              <p className="text-sm text-bark-400">
+              <p className="text-sm text-text-secondary">
                 Cal Newport argues that constant entertainment during breaks weakens your ability to 
                 concentrate. Training yourself to embrace boredom strengthens your focus muscle and 
                 increases your capacity for deep work.
@@ -113,12 +114,12 @@ export default function BoredomPage() {
               onClick={() => setSelectedOption(option.id)}
               className={`w-full p-6 rounded-lg border-2 transition-all text-left ${
                 selectedOption === option.id
-                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
-                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                  ? 'border-accent-gold bg-accent-gold/10 shadow-glow-medium'
+                  : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
               }`}
             >
               <div className="flex items-start gap-4">
-                <div className={`mt-1 ${selectedOption === option.id ? 'text-gold-500' : 'text-bark-200'}`}>
+                <div className={`mt-1 ${selectedOption === option.id ? 'text-accent-gold' : 'text-text-tertiary'}`}>
                   {selectedOption === option.id ? (
                     <CheckCircle className="w-6 h-6" />
                   ) : (
@@ -129,27 +130,27 @@ export default function BoredomPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className={`text-lg font-semibold ${
-                      selectedOption === option.id ? 'text-sunset-600' : 'text-gray-900'
+                      selectedOption === option.id ? 'text-accent-orange' : 'text-text-primary'
                     }`}>
                       {option.title}
                     </h3>
                     {option.recommended && (
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                      <span className="px-2 py-1 bg-accent-gold/20 text-accent-gold text-xs font-semibold rounded-full">
                         Recommended
                       </span>
                     )}
                   </div>
-                  
-                  <p className="text-gray-600 mb-4">{option.description}</p>
+
+                  <p className="text-text-secondary mb-4">{option.description}</p>
                   
                   <div className="space-y-2">
                     {option.features.map((feature, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <div className={`w-1.5 h-1.5 rounded-full ${
-                          selectedOption === option.id ? 'bg-sunset-500' : 'bg-bark-200'
+                          selectedOption === option.id ? 'bg-accent-gold' : 'bg-text-tertiary'
                         }`} />
                         <span className={`text-sm ${
-                          selectedOption === option.id ? 'text-sunset-600' : 'text-gray-600'
+                          selectedOption === option.id ? 'text-text-primary' : 'text-text-secondary'
                         }`}>
                           {feature}
                         </span>
@@ -174,36 +175,36 @@ export default function BoredomPage() {
 
         {/* What Happens Next */}
         {selectedOption === 'embrace' && (
-          <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <h3 className="text-sm font-semibold text-green-900 mb-2">
+          <div className="mb-8 p-4 bg-accent-gold/10 border border-accent-gold/30 rounded-lg">
+            <h3 className="text-sm font-semibold text-text-primary mb-2">
               🎯 What you'll get
             </h3>
-            <p className="text-sm text-green-700">
-              During breaks, you'll be guided through mindfulness exercises and meditation sessions. 
+            <p className="text-sm text-text-secondary">
+              During breaks, you'll be guided through mindfulness exercises and meditation sessions.
               No podcasts, no social media, just pure mental rest to recharge your focus capacity.
             </p>
           </div>
         )}
 
         {selectedOption === 'brainstorm' && (
-          <div className="mb-8 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-            <h3 className="text-sm font-semibold text-purple-900 mb-2">
+          <div className="mb-8 p-4 bg-accent-orange/10 border border-accent-orange/30 rounded-lg">
+            <h3 className="text-sm font-semibold text-text-primary mb-2">
               💡 What you'll get
             </h3>
-            <p className="text-sm text-purple-700">
-              Break time becomes creative time. You'll get prompts for voice memos, brain dumps, 
-              and idea capture. Perfect for synthesizing learnings or solving problems in the background 
+            <p className="text-sm text-text-secondary">
+              Break time becomes creative time. You'll get prompts for voice memos, brain dumps,
+              and idea capture. Perfect for synthesizing learnings or solving problems in the background
               while your mind wanders constructively.
             </p>
           </div>
         )}
 
         {selectedOption === 'productive' && (
-          <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <h3 className="text-sm font-semibold text-amber-900 mb-2">
+          <div className="mb-8 p-4 bg-accent-warm/10 border border-accent-warm/30 rounded-lg">
+            <h3 className="text-sm font-semibold text-text-primary mb-2">
               🎧 What you'll get
             </h3>
-            <p className="text-sm text-amber-700">
+            <p className="text-sm text-text-secondary">
               We'll suggest curated podcasts and articles during breaks. While this keeps you productive, 
               it may reduce your boredom resistance over time.
             </p>
@@ -211,12 +212,12 @@ export default function BoredomPage() {
         )}
 
         {selectedOption === 'minimal' && (
-          <div className="mb-8 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">
+          <div className="mb-8 p-4 bg-bg-surface border border-border-default rounded-lg">
+            <h3 className="text-sm font-semibold text-text-primary mb-2">
               ⚡ What you'll get
             </h3>
-            <p className="text-sm text-bark-500">
-              Simple break timers with no suggestions. You're in full control of how you spend your 
+            <p className="text-sm text-text-secondary">
+              Simple break timers with no suggestions. You're in full control of how you spend your
               downtime between deep work sessions.
             </p>
           </div>

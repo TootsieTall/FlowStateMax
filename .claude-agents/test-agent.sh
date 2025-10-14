@@ -27,3 +27,4 @@ echo "  claude --settings .claude-agents/settings.json '@backend-architect desig
 echo "  claude --settings .claude-agents/settings.json '@ui-designer create a dashboard'"
 echo "  claude --settings .claude-agents/settings.json '@trend-researcher what is trending on TikTok?'"
 
+

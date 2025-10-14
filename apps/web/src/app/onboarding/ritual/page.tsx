@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { DEFAULT_RITUAL } from '@flowstate/core'
 import { CheckCircle, Circle, Plus, X, Coffee, Music, Phone, Mail } from 'lucide-react'
@@ -65,24 +66,24 @@ export default function RitualPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-      <div className="card-elevated animate-slide-in-right max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-slide-in-right max-w-2xl w-full p-8">
         <div className="mb-8">
-          <div className="text-overline text-sunset-600 mb-2">STEP 6 OF 8</div>
-          <h1 className="text-display-md text-bark-500 mb-2">
+          <div className="text-overline text-accent-orange mb-2">STEP 6 OF 8</div>
+          <h1 className="text-display-md text-text-primary mb-2">
             Create Your Flow Ritual
           </h1>
-          <p className="text-body text-bark-300">
+          <p className="text-body text-text-tertiary">
             Build a consistent pre-work routine to signal your brain it's time for deep focus
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
-          <h3 className="text-sm font-semibold text-blue-900 mb-1">
+        <div className="mb-6 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-lg">
+          <h3 className="text-sm font-semibold text-text-primary mb-1">
             💡 Why Rituals Matter
           </h3>
-          <p className="text-sm text-bark-400">
+          <p className="text-sm text-text-secondary">
             A consistent ritual trains your brain to enter focus mode faster. Like athletes warming up, 
             your ritual prepares your mind for peak performance.
           </p>
@@ -90,7 +91,7 @@ export default function RitualPage() {
 
         {/* Ritual Checklist */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-300 mb-3">
+          <label className="block text-sm font-medium text-text-tertiary mb-3">
             Your pre-work checklist
           </label>
           <div className="space-y-2">
@@ -101,19 +102,19 @@ export default function RitualPage() {
                 type="button"
                 className={`w-full p-4 rounded-lg border-2 transition-all text-left cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                   item.checked
-                    ? 'border-green-500 bg-green-50'
+                    ? 'border-accent-gold bg-accent-gold/10'
                     : 'border-gray-300 hover:border-coral-500 hover:bg-gray-50'
                 }`}
               >
                 <div className="flex items-center gap-3 pointer-events-none">
                   <div className="flex-shrink-0">
                     {item.checked ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <CheckCircle className="w-5 h-5 text-accent-gold" />
                     ) : (
-                      <Circle className="w-5 h-5 text-bark-200" />
+                      <Circle className="w-5 h-5 text-text-tertiary" />
                     )}
                   </div>
-                  <span className={`flex-1 ${item.checked ? 'text-green-700 font-medium' : 'text-bark-500'}`}>
+                  <span className={`flex-1 ${item.checked ? 'text-text-primary font-medium' : 'text-text-primary'}`}>
                     {item.text}
                   </span>
                   {!item.isDefault && (
@@ -123,7 +124,7 @@ export default function RitualPage() {
                         removeItem(item.id)
                       }}
                       type="button"
-                      className="flex-shrink-0 text-bark-200 hover:text-red-600 transition-colors pointer-events-auto"
+                      className="flex-shrink-0 text-text-tertiary hover:text-accent-orange transition-colors pointer-events-auto"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -136,7 +137,7 @@ export default function RitualPage() {
 
         {/* Add Custom Item */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-bark-500 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             Add a custom step
           </label>
           <div className="flex gap-2">
@@ -160,45 +161,45 @@ export default function RitualPage() {
 
         {/* Popular Suggestions */}
         <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">
+          <h3 className="text-sm font-semibold text-text-primary mb-3">
             💭 Popular ritual ideas
           </h3>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => setNewItem('Put on headphones 🎧')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               <Music className="w-4 h-4 inline mr-1" />
               Put on headphones
             </button>
             <button
               onClick={() => setNewItem('Set phone to airplane mode ✈️')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               <Phone className="w-4 h-4 inline mr-1" />
               Airplane mode
             </button>
             <button
               onClick={() => setNewItem('Quick 5-min meditation 🧘')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               Quick meditation
             </button>
             <button
               onClick={() => setNewItem('Review daily goals 🎯')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               Review goals
             </button>
             <button
               onClick={() => setNewItem('Drink water 💧')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               Drink water
             </button>
             <button
               onClick={() => setNewItem('Open focus app/tool 💻')}
-              className="text-left text-sm text-bark-500 hover:text-sunset-600 transition-colors p-2 rounded hover:bg-white"
+              className="text-left text-sm text-text-primary hover:text-accent-orange transition-colors p-2 rounded hover:bg-bg-surface"
             >
               Open focus app
             </button>

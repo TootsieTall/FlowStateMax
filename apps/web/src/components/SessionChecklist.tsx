@@ -136,17 +136,17 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="max-w-2xl mx-auto p-6 bg-bg-surface rounded-xl shadow-lg">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Start Deep Work Session</h2>
-        <p className="text-gray-600">Let's set you up for maximum focus</p>
+        <h2 className="text-2xl font-bold text-text-primary mb-2">Start Deep Work Session</h2>
+        <p className="text-text-secondary">Let's set you up for maximum focus</p>
       </div>
 
       {/* Location Section */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-text-secondary">
             <MapPin className="w-4 h-4 inline mr-1" />
             Location
           </label>
@@ -212,7 +212,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
 
       {/* Pre-Session Checklist */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">
+        <label className="block text-sm font-medium text-text-secondary mb-3">
           Pre-session checklist
         </label>
         <div className="space-y-2">
@@ -224,7 +224,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
               className={`w-full p-4 rounded-lg border-2 transition-all text-left cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                 item.checked
                   ? 'border-green-500 bg-green-50'
-                  : 'border-gray-300 hover:border-coral-500 hover:bg-gray-50'
+                  : 'border-border-default hover:border-coral-500 hover:bg-gray-50'
               }`}
             >
               <div className="flex items-start gap-3 pointer-events-none">
@@ -233,7 +233,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className={`font-medium ${item.checked ? 'text-green-700' : 'text-gray-700'}`}>
+                    <span className={`font-medium ${item.checked ? 'text-green-700' : 'text-text-secondary'}`}>
                       {item.label}
                     </span>
                     {item.required && (
@@ -241,7 +241,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
                     )}
                   </div>
                   {item.description && (
-                    <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                    <p className="text-xs text-text-tertiary mt-1">{item.description}</p>
                   )}
                 </div>
               </div>
@@ -252,7 +252,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
 
       {/* Duration */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-text-secondary mb-2">
           <Clock className="w-4 h-4 inline mr-1" />
           Duration: {duration} minutes
         </label>
@@ -265,7 +265,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
           onChange={(e) => setDuration(parseInt(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-700"
         />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs text-text-tertiary mt-1">
           <span>15 min</span>
           <span>4 hours</span>
         </div>
@@ -273,7 +273,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
 
       {/* Goal */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-text-secondary mb-2">
           <Target className="w-4 h-4 inline mr-1" />
           What will you work on? (optional)
         </label>
@@ -291,7 +291,7 @@ function SessionChecklist({ onComplete, onSkip }: SessionChecklistProps) {
         {onSkip && (
           <button
             onClick={onSkip}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+            className="flex-1 px-6 py-3 border border-border-default text-text-secondary rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             Skip
           </button>

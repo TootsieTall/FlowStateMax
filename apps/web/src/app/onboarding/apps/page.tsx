@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { SUGGESTED_BLOCKED_APPS } from '@flowstate/core'
 import { CheckCircle, Circle, Smartphone, AlertCircle } from 'lucide-react'
@@ -60,26 +61,26 @@ export default function AppsPage() {
   const selectedCount = blockedApps.filter(app => app.selected).length
 
   return (
-    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-      <div className="card-elevated animate-slide-in-right max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-slide-in-right max-w-2xl w-full p-8">
         <div className="mb-8">
-          <div className="text-overline text-sunset-600 mb-2">STEP 5 OF 8</div>
-          <h1 className="text-display-md text-bark-500 mb-2">
+          <div className="text-overline text-accent-orange mb-2">STEP 5 OF 8</div>
+          <h1 className="text-display-md text-text-primary mb-2">
             Which apps distract you?
           </h1>
-          <p className="text-body text-bark-300">
+          <p className="text-body text-text-tertiary">
             Select apps to block during deep work sessions. You'll see a breathing exercise before opening them.
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-lg flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-blue-900 mb-1">
+            <h3 className="text-sm font-semibold text-text-primary mb-1">
               How App Blocking Works
             </h3>
-            <p className="text-sm text-bark-400">
+            <p className="text-sm text-text-secondary">
               When you try to open a blocked app during a deep work session, you'll be prompted with a 
               10-second breathing exercise. This pause helps you decide if it's truly necessary or just a distraction.
             </p>
@@ -88,7 +89,7 @@ export default function AppsPage() {
 
         {/* Suggested Apps */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-bark-500 mb-3">
+          <label className="block text-sm font-medium text-text-primary mb-3">
             <Smartphone className="w-4 h-4 inline mr-1" />
             Common distractions
           </label>
@@ -104,17 +105,17 @@ export default function AppsPage() {
                   onClick={() => toggleApp(app.identifier)}
                   className={`p-4 rounded-lg border-2 transition-all text-left flex items-center justify-between ${
                     app.selected
-                      ? 'border-red-500 bg-red-50'
-                      : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                      ? 'border-accent-orange bg-accent-orange/10'
+                      : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
                   }`}
                 >
-                  <span className={`font-medium ${app.selected ? 'text-red-700' : 'text-bark-500'}`}>
+                  <span className={`font-medium ${app.selected ? 'text-accent-orange' : 'text-text-primary'}`}>
                     {app.name}
                   </span>
                   {app.selected ? (
-                    <CheckCircle className="w-5 h-5 text-red-600" />
+                    <CheckCircle className="w-5 h-5 text-accent-orange" />
                   ) : (
-                    <Circle className="w-5 h-5 text-gray-300" />
+                    <Circle className="w-5 h-5 text-text-tertiary" />
                   )}
                 </button>
               )
@@ -124,7 +125,7 @@ export default function AppsPage() {
 
         {/* Custom App Input */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-bark-500 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             Add another app
           </label>
           <div className="flex gap-2">
@@ -148,7 +149,7 @@ export default function AppsPage() {
         {/* Selected Apps List */}
         {blockedApps.filter(app => app.selected && !SUGGESTED_BLOCKED_APPS.some(s => s.identifier === app.identifier)).length > 0 && (
           <div className="mb-6">
-            <label className="block text-sm font-medium text-bark-500 mb-2">
+            <label className="block text-sm font-medium text-text-primary mb-2">
               Custom blocked apps
             </label>
             <div className="space-y-2">
@@ -157,14 +158,14 @@ export default function AppsPage() {
                 .map((app) => (
                   <div
                     key={app.identifier}
-                    className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between"
+                    className="p-3 bg-accent-orange/10 border border-accent-orange/30 rounded-lg flex items-center justify-between"
                   >
-                    <span className="text-sm font-medium text-red-700">{app.name}</span>
+                    <span className="text-sm font-medium text-accent-orange">{app.name}</span>
                     <button
                       onClick={() => {
                         setBlockedApps(prev => prev.filter(a => a.identifier !== app.identifier))
                       }}
-                      className="text-red-600 hover:text-red-800 text-sm"
+                      className="text-accent-orange hover:text-accent-orange text-sm"
                     >
                       Remove
                     </button>
@@ -175,11 +176,11 @@ export default function AppsPage() {
         )}
 
         {/* Browser Extension Notice */}
-        <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <h3 className="text-sm font-semibold text-amber-900 mb-1">
+        <div className="mb-8 p-4 bg-accent-warm/10 border border-accent-warm/30 rounded-lg">
+          <h3 className="text-sm font-semibold text-text-primary mb-1">
             📱 Mobile & Desktop Support
           </h3>
-          <p className="text-sm text-amber-700">
+          <p className="text-sm text-text-secondary">
             App blocking works through our browser extension and mobile app. Install the extension after onboarding 
             to enable these features on your computer. Mobile support coming soon!
           </p>
@@ -195,7 +196,7 @@ export default function AppsPage() {
           </button>
           <div className="flex items-center gap-4">
             {selectedCount > 0 && (
-              <span className="text-sm text-body text-bark-300">
+              <span className="text-sm text-body text-text-tertiary">
                 {selectedCount} app{selectedCount !== 1 ? 's' : ''} selected
               </span>
             )}

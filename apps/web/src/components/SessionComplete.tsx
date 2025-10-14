@@ -82,9 +82,9 @@ export function SessionComplete({
               onClick={() => setSelectedFeedback('on_time')}
               className={`w-full p-4 rounded-warm-lg border-2 transition-all text-left hover:-translate-y-0.5 shadow-warm-sm hover:shadow-warm-md ${
                 selectedFeedback === 'on_time'
-                  ? 'border-gold-500 bg-gold-100'
+                  ? 'border-gold-500 bg-accent-gold/10'
                   : defaultFeedback === 'on_time'
-                  ? 'border-gold-300 bg-gold-50 opacity-60'
+                  ? 'border-gold-300 bg-accent-gold/5 opacity-60'
                   : 'border-border-light hover:border-gold-300'
               }`}
             >

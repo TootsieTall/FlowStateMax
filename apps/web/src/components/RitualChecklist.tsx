@@ -73,7 +73,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
         onClick={onClose}
       >
         <motion.div
-          className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden"
+          className="relative w-full max-w-md bg-bg-surface dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
@@ -90,7 +90,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
           {/* Header */}
           <div className="p-6 border-b dark:border-gray-700">
             <h2 className="text-2xl font-bold mb-2">Pre-Flow Ritual</h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-text-secondary dark:text-gray-400">
               Complete your ritual to enter deep focus
             </p>
 
@@ -108,7 +108,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
           {/* Ritual items */}
           <div className="p-6 max-h-[400px] overflow-y-auto">
             {isLoading ? (
-              <div className="text-center py-8 text-gray-500">Loading ritual...</div>
+              <div className="text-center py-8 text-text-tertiary">Loading ritual...</div>
             ) : ritualItems.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-center py-6">
@@ -118,7 +118,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
                 </div>
                 <button 
                   onClick={() => window.location.href = '/onboarding/ritual'}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-4 py-2 text-text-secondary hover:text-text-primary hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   Set up ritual
                 </button>
@@ -137,7 +137,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
                         'hover:scale-[1.02] active:scale-[0.98]',
                         isChecked
                           ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'
+                          : 'border-border-default dark:border-gray-700 hover:border-blue-300'
                       )}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -150,7 +150,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
                             'w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all',
                             isChecked
                               ? 'bg-green-500 border-green-500'
-                              : 'border-gray-300 dark:border-gray-600'
+                              : 'border-border-default dark:border-gray-600'
                           )}
                         >
                           <AnimatePresence>
@@ -170,7 +170,7 @@ export function RitualChecklist({ isOpen, onClose, onBeginFlow }: RitualChecklis
                         <span
                           className={cn(
                             'flex-1',
-                            isChecked && 'line-through text-gray-500'
+                            isChecked && 'line-through text-text-tertiary'
                           )}
                         >
                           {item.text}

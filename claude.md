@@ -1,8 +1,11 @@
-# FlowState - Claude Development Guidelines
+# FlowState Daybreak - Claude Development Guidelines
 
 ## Project Overview
 
-**FlowState** is an advanced productivity application implementing Cal Newport's Deep Work methodology as a complete daily operating system. It's designed to be more than just another note-taking or task management tool - it's a comprehensive productivity companion that guides users through their entire day from wake-up to shutdown.
+**FlowState Daybreak** is an advanced productivity application implementing Cal Newport's Deep Work methodology as a complete daily operating system. It's designed to be more than just another note-taking or task management tool - it's a comprehensive productivity companion that guides users through their entire day from wake-up to shutdown.
+
+**🎨 IMPORTANT - Current Design System:** 
+This project uses a **Dark Sunrise Theme** - see `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` for the complete color palette, component guidelines, animation patterns, and implementation details. Always reference that document for UI/design decisions.
 
 The app combines:
 - Location-based flow triggers with geofencing
@@ -140,67 +143,47 @@ Located in `apps/web/src/store/`:
 5. **Native Feel:** Should feel like a built-in OS feature
 6. **Respect User Time:** Max 15 min/day management overhead
 
-## Design System Principles (Daybreak Golden Hour Theme)
+## Design System Principles (Dark Sunrise Theme)
 
-### Color Layering for Depth
-**Foundation:** Create 3-4 shades of your base color by increasing lightness by 0.1 increments
+### Color Philosophy
+**Concept:** Pre-dawn darkness with sunrise breaking through - deep blacks with warm sunrise accents
 
-**Hierarchy Principle:**
-- **Lighter = elevated/important** (dawn-50 = most elevated)
-- **Darker = deeper/background** (dawn-200 = base layer)
+**Color Reference:**
+See `DARK_THEME_UI_TRANSFORMATION_BRIEF.md` for complete color palette and usage guidelines.
 
-**Layering Effect:**
-- Stack lighter shades on darker ones to create visual elevation
-- **No borders needed:** Color contrast alone separates elements with proper layering
+**Core Principles:**
+- Deep dark backgrounds (#0b0b0b - #252525) create professional canvas
+- Sunrise gold/orange accents (#FFC857, #FF8C42) provide energy and warmth
+- Warm text colors (#F5F2ED - #6B6560) ensure readability
+- Glows replace shadows on dark backgrounds
+- Consistent layering: darker = deeper, lighter = elevated
 
-**Example Color Scale:**
-```css
-dawn: {
-  50: '#FCFAF8',   // L: 0.98 - Most elevated (modals, peak highlights)
-  100: '#F5F2ED',  // L: 0.93 - Highly elevated (cards, surfaces)
-  200: '#EDE9E2',  // L: 0.88 - Elevated (hover states)
-  300: '#E6DFD7',  // L: 0.83 - Standard surface
-  400: '#DED6CB',  // L: 0.78 - Lower surface (pressed states)
-  500: '#D6CDBF',  // L: 0.73 - Deep background
-}
-```
+### Glow System for Dark Backgrounds
+**Dark theme approach:** Use glows instead of shadows to create depth and emphasis
 
-### Two-Layer Shadow System
-**Realism through dual shadows:** Combine light (top) + dark (bottom) shadows instead of one generic shadow
+**Three glow levels:**
+1. **glow-subtle** - Minimal ambient glow (cards)
+2. **glow-medium** - Standard elevation (interactive elements)
+3. **glow-strong** - Prominent emphasis (active states, modals)
 
-**Three depth levels:**
-1. **warm-sm** - Subtle (cards on page)
-2. **warm-md** - Standard (elevated cards, hover states)
-3. **warm-lg/xl** - Prominent (modals, floating elements)
+**Sunrise glow concept:**
+- Warm golden glows (rgba(255, 184, 77, 0.1-0.4))
+- Orange interactive states (rgba(255, 140, 66, 0.2-0.5))
+- Combine with subtle black shadows for depth
 
-**Light from above concept:**
-- Light shadow on top (rgba(255, 255, 255, 0.15))
-- Dark shadow on bottom (rgba(44, 24, 16, 0.10))
-
-**Gradient enhancement:**
-```css
-/* Linear gradient + inner shadow = shiny, elevated effect */
-background: linear-gradient(180deg, #FCFAF8 0%, #F5F2ED 100%);
-box-shadow: 
-  inset 0 1px 1px rgba(255, 255, 255, 0.3),  /* Inner highlight */
-  0 2px 4px rgba(255, 255, 255, 0.15),        /* Top light */
-  0 4px 8px rgba(44, 24, 16, 0.10);           /* Bottom dark */
-```
-
-**Inset vs Outset:**
-- **Inset shadows:** Push in (sunken effect) - use for inputs
-- **Outset shadows:** Lift up (raised effect) - use for cards/buttons
+**See DARK_THEME_UI_TRANSFORMATION_BRIEF.md** for complete glow specifications and code examples.
 
 ### Depth Layer Utility Classes
 Use these semantic classes to create visual hierarchy:
 
 ```css
-.layer-base         /* bg-dawn-200 - Deepest background */
-.layer-elevated     /* bg-dawn-100 + shadow-warm-sm */
-.layer-floating     /* bg-dawn-50 + shadow-warm-md */
-.layer-modal        /* bg-white + shadow-warm-xl - Highest elevation */
-.layer-inset        /* bg-white + shadow-warm-inset - Sunken (inputs) */
+.layer-base         /* bg-primary (#0b0b0b) - Deepest background */
+.layer-elevated     /* bg-elevated (#1e1e1e) + glow-subtle */
+.layer-floating     /* bg-surface (#252525) + glow-medium */
+.layer-modal        /* bg-surface + glow-strong - Highest elevation */
 ```
+
+**Note:** See tailwind.config.js and globals.css for actual implementation.
 
 ### Responsive Layout Principles
 
@@ -224,12 +207,13 @@ Use these semantic classes to create visual hierarchy:
 </main>
 ```
 
-## UI Component Guidelines (Daybreak Theme)
+## UI Component Guidelines (Dark Sunrise Theme)
 
 ### Design System Overview
-- **Theme:** Daybreak - Golden hour aesthetic with warm creams, sunset oranges, and golden yellows
+- **Theme:** Dark Sunrise - Pre-dawn darkness with warm sunrise accents breaking through
 - **Approach:** Hybrid - Utility classes for simple components, ShadCN for complex interactions
 - **Philosophy:** Keep it simple unless complexity adds real value
+- **Full Specs:** See DARK_THEME_UI_TRANSFORMATION_BRIEF.md for complete implementation guide
 
 ### When to Use Utility Classes (Preferred for Simple UI)
 
@@ -368,120 +352,76 @@ Need a UI component?
 └─ Otherwise → Use Tailwind utilities directly
 ```
 
-### Color Palette Reference (Daybreak Theme)
+### Color Palette Reference (Dark Sunrise Theme)
 
+**Core Colors:**
 ```tsx
-// Backgrounds
-bg-dawn-100          // Primary page background (warm cream)
-bg-dawn-200          // Secondary/elevated surfaces
-bg-white             // Cards and forms
+// Backgrounds (Dark → Light)
+bg-primary           // #0b0b0b - Deep black base
+bg-secondary         // #141414 - Section backgrounds
+bg-elevated          // #1e1e1e - Cards, panels
+bg-surface           // #252525 - Elevated surfaces
 
-// Text
-text-bark-500        // Primary text (deep warm brown)
-text-bark-400        // Secondary text
-text-bark-300        // Muted text
-text-bark-200        // Tertiary/disabled text
+// Text (Light → Dark on dark background)
+text-primary         // #F5F2ED - Primary text
+text-secondary       // #B8B0A8 - Body text
+text-tertiary        // #6B6560 - Muted text
 
-// Accents
-text-sunset-500      // Primary actions (sunset orange)
-text-gold-400        // Success/completion (golden)
-text-sand-400        // Calm actions (sandy)
+// Accents (Sunrise breaking through)
+accent-gold          // #FFC857 - Primary CTAs
+accent-orange        // #FF8C42 - Interactive states
+accent-warm          // #FFB84D - Subtle highlights
 
-// Borders
-border-border-light  // Subtle borders
-border-border        // Standard borders
-
-// Shadows
-shadow-warm-sm       // Subtle cards
-shadow-warm-md       // Standard elevation
-shadow-warm-lg       // Prominent cards
-shadow-glow-gold     // Success states
-shadow-glow-sunset   // Active/focus states
+// Borders & Effects
+border-default       // #2C2C2C - Standard borders
+focus-ring           // rgba(255, 184, 77, 0.3) - Focus states
 ```
+
+**Complete Usage Guide:** See DARK_THEME_UI_TRANSFORMATION_BRIEF.md
 
 ### Component Class Reference
 
+**All component styles use dark theme:**
+
 ```css
-/* Buttons */
-.btn-primary         // Sunset gradient, main actions
-.btn-secondary       // White with border, secondary actions
+/* Buttons - Sunrise gradient CTAs */
+.btn-primary         // Gold→Orange gradient, main actions
+.btn-secondary       // Outlined with glow, secondary actions
 .btn-ghost           // Transparent, tertiary actions
-.btn-success         // Golden, completion states
 
-/* Cards */
-.card                // Standard white card
-.card-elevated       // More prominent shadow
-.card-interactive    // Hover lift effect
+/* Cards - Dark with glows */
+.card                // Dark elevated card with subtle glow
+.card-elevated       // Prominent glow and border
+.card-interactive    // Hover glow and lift effect
 
-/* Forms */
-.input               // Text inputs with warm focus rings
+/* Forms - Dark with golden focus */
+.input               // Dark input with sunrise focus glow
 .textarea            // Multi-line text input
-.select              // Basic select (use ShadCN for complex)
 
 /* Effects */
 .hover-lift          // Translate up on hover
-.text-gradient-sunset // Gradient text for headings
-.text-gradient-gold  // Golden gradient text
+.glow-focus          // Focus ring with golden glow
 .animate-bounce-in   // Entrance animation
-.animate-icon-bounce // Icon hover effect
-.completion-shine    // Success animation
+.pulse-glow          // Active session indicator
 ```
+
+**Full implementation:** See apps/web/src/app/globals.css and DARK_THEME_UI_TRANSFORMATION_BRIEF.md
 
 ### Practical Examples by Feature
 
-#### Creating a Time Block
-```tsx
-// Simple card with utility classes
-<div className="card-interactive group">
-  <div className="flex items-center justify-between">
-    <h3 className="text-h4 text-bark-500">Deep Work</h3>
-    
-    {/* Action menu - use ShadCN */}
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <MoreVertical className="w-4 h-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </div>
-</div>
-```
+**Note:** All examples below use the dark theme. See DARK_THEME_UI_TRANSFORMATION_BRIEF.md for complete dark-themed component examples with:
+- Exact Tailwind classes
+- Framer Motion animations
+- ShadCN integration
+- Lucide icon usage
+- Glow effects and focus states
 
-#### Settings Panel
-```tsx
-// Toggle setting - use Switch
-<div className="card p-6">
-  <div className="flex items-center justify-between">
-    <div>
-      <h4 className="text-body font-medium text-bark-500">Dark Mode</h4>
-      <p className="text-body-sm text-bark-300">Toggle dark theme</p>
-    </div>
-    <Switch checked={darkMode} onCheckedChange={setDarkMode} />
-  </div>
-</div>
-```
-
-#### Form with Validation
-```tsx
-// Simple inputs, Dialog for modal
-<Dialog open={open} onOpenChange={setOpen}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Create Time Block</DialogTitle>
-    </DialogHeader>
-    
-    {/* Use utility classes for form */}
-    <div className="space-y-4">
-      <input className="input" placeholder="Block title..." />
-      <textarea className="textarea" placeholder="Description..." />
-      <button className="btn-primary w-full">Create Block</button>
-    </div>
-  </DialogContent>
-</Dialog>
-```
+**Quick Reference:**
+- Use `bg-bg-elevated` for cards
+- Use `text-text-primary` for headings
+- Use `accent-gold` for CTAs
+- Use ShadCN for modals, dropdowns, tooltips
+- Add Framer Motion for smooth interactions
 
 ### Additional ShadCN Components to Install (As Needed)
 
@@ -523,27 +463,26 @@ ShadCN components handle most of this automatically - another reason to use them
 - Next.js 14 app with TypeScript
 - Prisma database schema
 - Authentication with NextAuth
-- Today View dashboard
-- Week View calendar
-- Basic UI components
+- All page structures (Today, Week, Explore, Settings, etc.)
+- Complete onboarding flow (9 steps)
 - Chrome extension (full implementation)
 - Database seeding
+- Navigation system with middleware
 
-### 🚧 In Progress
-- Complete onboarding flow
-- Settings pages
-- Explore tab features
-- Shutdown ritual
-- Quick capture with AI
-- Mobile responsiveness
+### 🚧 In Progress - HIGH PRIORITY
+- **Dark Sunrise Theme Implementation** - Transform all UI to dark theme (see DARK_THEME_UI_TRANSFORMATION_BRIEF.md)
+- Fix onboarding completion infinite loop
+- Connect UI to backend APIs (forms don't save data)
+- Flow session lifecycle implementation
+- Week view time block creation/editing
 
-### 📋 Planned
-- Real-time session sync
-- Music integration (Spotify/Apple)
-- Geofencing triggers
-- Podcast curation
-- Metrics dashboard
-- Mobile apps
+### 📋 Planned - Future Features
+- Real-time session sync between web and extension
+- Music integration (Spotify/Apple Music)
+- Geofencing location triggers
+- Podcast curation system
+- Metrics/analytics dashboard
+- Native mobile apps (iOS/Android)
 
 ## Common Tasks
 
@@ -591,11 +530,17 @@ npm run lint
 
 ## Key Files to Know
 
-- `apps/web/src/app/(main)/today/page.tsx` - Today View (main screen)
-- `apps/web/src/app/(main)/week/page.tsx` - Week View calendar
-- `apps/web/src/store/index.ts` - Main app state
+### Configuration & Design
+- **`DARK_THEME_UI_TRANSFORMATION_BRIEF.md`** - Complete UI design system and implementation guide
+- `apps/web/tailwind.config.js` - Tailwind theme configuration
+- `apps/web/src/app/globals.css` - Global styles and component classes
 - `apps/web/prisma/schema.prisma` - Database schema
-- `apps/web/src/lib/auth.ts` - Authentication config
+
+### Core Application Files
+- `apps/web/src/app/today/page.tsx` - Today View (main screen)
+- `apps/web/src/app/week/page.tsx` - Week View calendar
+- `apps/web/src/middleware.ts` - Route protection and auth
+- `apps/web/src/lib/auth.ts` - NextAuth configuration
 - `apps/web/src/components/` - All UI components
 
 ## Environment Variables

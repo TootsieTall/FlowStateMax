@@ -51,12 +51,12 @@ export default function ConnectAccountPrompt({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+      <div className="bg-bg-surface dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
         {/* Dismiss button */}
         {showDismiss && (
           <button
             onClick={handleDismiss}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="absolute top-4 right-4 text-gray-400 hover:text-text-secondary dark:hover:text-gray-300 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,12 +70,12 @@ export default function ConnectAccountPrompt({
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-2">
+        <h2 className="text-2xl font-bold text-text-primary dark:text-white text-center mb-2">
           Connect Your Account
         </h2>
 
         {/* Description */}
-        <p className="text-gray-600 dark:text-gray-400 text-center mb-6">
+        <p className="text-text-secondary dark:text-gray-400 text-center mb-6">
           You're currently using FlowState as a guest. Connect your Google account to:
         </p>
 
@@ -84,8 +84,8 @@ export default function ConnectAccountPrompt({
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Sync Across Devices</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="font-medium text-text-primary dark:text-white">Sync Across Devices</p>
+              <p className="text-sm text-text-secondary dark:text-gray-400">
                 Access your data from anywhere
               </p>
             </div>
@@ -94,8 +94,8 @@ export default function ConnectAccountPrompt({
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Backup Your Progress</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="font-medium text-text-primary dark:text-white">Backup Your Progress</p>
+              <p className="text-sm text-text-secondary dark:text-gray-400">
                 Never lose your flow sessions and goals
               </p>
             </div>
@@ -104,8 +104,8 @@ export default function ConnectAccountPrompt({
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Enhanced Features</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="font-medium text-text-primary dark:text-white">Enhanced Features</p>
+              <p className="text-sm text-text-secondary dark:text-gray-400">
                 Unlock calendar integration and more
               </p>
             </div>
@@ -136,7 +136,7 @@ export default function ConnectAccountPrompt({
           {showDismiss && (
             <button
               onClick={handleDismiss}
-              className="w-full px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 font-medium transition-colors"
+              className="w-full px-6 py-3 text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-gray-200 font-medium transition-colors"
             >
               Maybe Later
             </button>
@@ -184,14 +184,14 @@ export function ConnectAccountBanner({ onDismiss }: { onDismiss?: () => void }) 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowModal(true)}
-              className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition-colors"
+              className="px-4 py-2 bg-bg-surface text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition-colors"
             >
               Connect
             </button>
             {onDismiss && (
               <button
                 onClick={onDismiss}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                className="p-2 hover:bg-bg-surface/10 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

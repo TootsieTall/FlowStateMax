@@ -154,12 +154,12 @@ export default function QuickCapture() {
 
       {/* Modal */}
       <div className="fixed top-[20vh] left-1/2 -translate-x-1/2 w-full max-w-2xl z-50 animate-in slide-in-from-top-4 duration-300">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-bg-surface dark:bg-gray-900 rounded-2xl shadow-2xl border border-border-default dark:border-gray-700 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-border-default dark:border-gray-700">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-indigo-500" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-text-primary dark:text-white">
                 Quick Capture
               </h2>
             </div>
@@ -167,7 +167,7 @@ export default function QuickCapture() {
               onClick={toggleQuickCapture}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-text-tertiary" />
             </button>
           </div>
 
@@ -178,7 +178,7 @@ export default function QuickCapture() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type anything... (e.g., 'Finish project proposal by Friday', 'Call Mom tomorrow at 2pm', 'Research competitors')"
-              className="w-full min-h-[120px] p-4 text-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none outline-none transition-all"
+              className="w-full min-h-[120px] p-4 text-lg bg-gray-50 dark:bg-gray-800 border border-border-default dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none outline-none transition-all"
               disabled={isProcessing}
             />
 
@@ -243,7 +243,7 @@ export default function QuickCapture() {
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
                   parsedIntent?.type === 'task'
                     ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 ring-2 ring-indigo-500'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'bg-gray-100 dark:bg-gray-800 text-text-secondary dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
                 <ListTodo className="w-4 h-4" />
@@ -256,7 +256,7 @@ export default function QuickCapture() {
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
                   parsedIntent?.type === 'note'
                     ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 ring-2 ring-indigo-500'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'bg-gray-100 dark:bg-gray-800 text-text-secondary dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
                 <StickyNote className="w-4 h-4" />
@@ -269,7 +269,7 @@ export default function QuickCapture() {
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
                   parsedIntent?.type === 'schedule'
                     ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 ring-2 ring-indigo-500'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'bg-gray-100 dark:bg-gray-800 text-text-secondary dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
                 <Calendar className="w-4 h-4" />
@@ -298,8 +298,8 @@ export default function QuickCapture() {
           </form>
 
           {/* Footer hint */}
-          <div className="px-6 pb-4 pt-2 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+          <div className="px-6 pb-4 pt-2 border-t border-border-default dark:border-gray-700">
+            <p className="text-xs text-text-tertiary dark:text-gray-400 text-center">
               Press <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">⌘K</kbd> to quickly capture anything
             </p>
           </div>

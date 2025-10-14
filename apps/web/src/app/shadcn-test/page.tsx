@@ -125,18 +125,18 @@ export default function ShadCNTestPage() {
         </Card>
 
         {/* Comparison: Old vs New */}
-        <Card className="p-6 bg-gradient-to-r from-gold-100 to-sunset-100 border-gold-300">
+        <Card className="p-6 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border-gold-300">
           <h2 className="text-h2 text-bark-500 mb-4">✅ Installation Complete!</h2>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-gold-500 mt-0.5" />
+              <CheckCircle className="w-5 h-5 text-accent-gold mt-0.5" />
               <div>
                 <p className="text-body font-medium text-bark-500">ShadCN components installed</p>
                 <p className="text-body-sm text-bark-300">All components use Daybreak theme colors</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-gold-500 mt-0.5" />
+              <CheckCircle className="w-5 h-5 text-accent-gold mt-0.5" />
               <div>
                 <p className="text-body font-medium text-bark-500">Your old utility classes still work</p>
                 <p className="text-body-sm text-bark-300">No breaking changes to existing pages</p>

@@ -6,3 +6,4 @@ if [[ "$PWD" == *"FlowStateMax"* ]]; then
     alias claude='claude --settings ~/.local/FlowStateMax/.claude-agents/settings.json'
 fi
 
+

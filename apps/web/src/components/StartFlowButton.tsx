@@ -137,7 +137,7 @@ export function StartFlowButton({ variant = 'primary', className }: StartFlowBut
           <PlayCircle className="w-4 h-4" />
           {variant !== 'icon' && <span>Resume Flow</span>}
           {variant !== 'icon' && sessionStatus.remainingMinutes && (
-            <span className="ml-2 px-2 py-0.5 bg-white/20 rounded-full text-xs">
+            <span className="ml-2 px-2 py-0.5 bg-bg-surface/20 rounded-full text-xs">
               {sessionStatus.remainingMinutes}m
             </span>
           )}

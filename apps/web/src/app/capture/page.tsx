@@ -163,17 +163,17 @@ export default function CapturePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dawn-100">
+      <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-bark-300">Loading your captures...</p>
+          <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-text-tertiary">Loading your captures...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-dawn-100">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
       <QuickCapture />
       
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -181,10 +181,10 @@ export default function CapturePage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h1 className="text-display-md text-bark-500 mb-2">
+              <h1 className="text-display-md text-text-primary mb-2">
                 Quick Capture
               </h1>
-              <p className="text-body text-bark-300">
+              <p className="text-body text-text-tertiary">
                 Capture thoughts, tasks, and ideas instantly ✨
               </p>
             </div>
@@ -200,31 +200,31 @@ export default function CapturePage() {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 mt-6">
             <div className="card p-4 hover-lift">
-              <div className="text-h2 text-bark-500">{stats.total}</div>
-              <div className="text-caption text-bark-200">Total Items</div>
+              <div className="text-h2 text-text-primary">{stats.total}</div>
+              <div className="text-caption text-text-tertiary">Total Items</div>
             </div>
             <div className="card p-4 hover-lift">
               <div className="text-h2 text-gradient-sunset">{stats.active}</div>
-              <div className="text-caption text-bark-200">Active</div>
+              <div className="text-caption text-text-tertiary">Active</div>
             </div>
             <div className="card p-4 hover-lift">
               <div className="text-h2 text-gradient-gold">{stats.completed}</div>
-              <div className="text-caption text-bark-200">Completed</div>
+              <div className="text-caption text-text-tertiary">Completed</div>
             </div>
             <div className="card p-4 hover-lift">
-              <div className="text-h2 text-sunset-600">{stats.highImpact}</div>
-              <div className="text-caption text-bark-200">High Impact</div>
+              <div className="text-h2 text-accent-orange">{stats.highImpact}</div>
+              <div className="text-caption text-text-tertiary">High Impact</div>
             </div>
           </div>
         </div>
 
         {/* Filters and Search */}
-        <div className="card-elevated p-4 mb-6">
+        <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
             {/* Search */}
             <div className="flex-1 min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-bark-200" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
                 <input
                   type="text"
                   value={searchTerm}
@@ -237,7 +237,7 @@ export default function CapturePage() {
 
             {/* Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-bark-300" />
+              <Filter className="w-5 h-5 text-text-tertiary" />
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as any)}
@@ -251,7 +251,7 @@ export default function CapturePage() {
 
             {/* Sort */}
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-5 h-5 text-bark-300" />
+              <ArrowUpDown className="w-5 h-5 text-text-tertiary" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
@@ -268,15 +268,15 @@ export default function CapturePage() {
         {/* Items List */}
         <div className="space-y-3">
           {filteredItems.length === 0 ? (
-            <div className="text-center py-16 card-elevated animate-bounce-in">
+            <div className="text-center py-16 bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-bounce-in">
               <div className="relative inline-block mb-4">
-                <div className="absolute inset-0 bg-gold-200 rounded-full blur-xl opacity-50 animate-pulse"></div>
-                <Sparkles className="w-16 h-16 text-gold-400 relative animate-pulse" />
+                <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                <Sparkles className="w-16 h-16 text-accent-gold relative animate-pulse" />
               </div>
-              <h3 className="text-h2 text-transparent bg-clip-text bg-gradient-to-r from-sunset-500 to-gold-500 mb-2">
+              <h3 className="text-h2 text-transparent bg-clip-text bg-gradient-to-r from-accent-gold to-accent-orange mb-2">
                 Your canvas awaits
               </h3>
-              <p className="text-body text-bark-300 mb-6">
+              <p className="text-body text-text-tertiary mb-6">
                 Start capturing your brilliant thoughts and tasks ✨
               </p>
               <button
@@ -304,9 +304,9 @@ export default function CapturePage() {
                     className="mt-1 flex-shrink-0 group"
                   >
                     {item.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-gold-500 completion-shine" />
+                      <CheckCircle2 className="w-6 h-6 text-accent-gold completion-shine" />
                     ) : (
-                      <Circle className="w-6 h-6 text-bark-200 hover:text-sunset-500 transition-colors group-hover:animate-icon-bounce" />
+                      <Circle className="w-6 h-6 text-text-tertiary hover:text-accent-gold transition-colors group-hover:animate-icon-bounce" />
                     )}
                   </button>
 
@@ -315,15 +315,15 @@ export default function CapturePage() {
                     <div className="flex items-start justify-between gap-4 mb-2">
                       <h3 className={`text-h4 ${
                         item.completed
-                          ? 'text-bark-200 line-through'
-                          : 'text-bark-500'
+                          ? 'text-text-tertiary line-through'
+                          : 'text-text-primary'
                       }`}>
                         {item.title}
                       </h3>
 
                       {/* Impact Badge */}
                       {item.impact === 'HIGH' && !item.completed && (
-                        <span className="flex items-center gap-1 px-2 py-1 bg-sunset-100 text-sunset-700 text-xs font-medium rounded-lg flex-shrink-0">
+                        <span className="flex items-center gap-1 px-2 py-1 bg-accent-orange/10 text-accent-orange text-xs font-medium rounded-lg flex-shrink-0">
                           <Flag className="w-3 h-3" />
                           High Impact
                         </span>
@@ -331,13 +331,13 @@ export default function CapturePage() {
                     </div>
 
                     {item.description && (
-                      <p className="text-body-sm text-bark-300 mb-3 line-clamp-2">
+                      <p className="text-body-sm text-text-tertiary mb-3 line-clamp-2">
                         {item.description}
                       </p>
                     )}
 
                     {/* Meta Info */}
-                    <div className="flex items-center gap-4 text-caption text-bark-200">
+                    <div className="flex items-center gap-4 text-caption text-text-tertiary">
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span>{new Date(item.createdAt).toLocaleDateString()}</span>
@@ -362,7 +362,7 @@ export default function CapturePage() {
                   {/* Delete Button */}
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="p-2 text-bark-200 hover:text-error-strong hover:bg-error-light rounded-lg transition-all duration-fast flex-shrink-0 group"
+                    className="p-2 text-text-tertiary hover:text-error-strong hover:bg-error-light rounded-lg transition-all duration-fast flex-shrink-0 group"
                   >
                     <Trash2 className="w-5 h-5 group-hover:animate-icon-bounce" />
                   </button>
@@ -374,8 +374,8 @@ export default function CapturePage() {
 
         {/* Keyboard Hint */}
         <div className="mt-8 text-center">
-          <p className="text-body-sm text-bark-300">
-            💡 Tip: Press <kbd className="px-2 py-1 bg-dawn-200 border border-border-DEFAULT rounded text-xs text-bark-400">⌘K</kbd> anywhere to quick capture
+          <p className="text-body-sm text-text-tertiary">
+            💡 Tip: Press <kbd className="px-2 py-1 bg-bg-secondary border border-border-default rounded text-xs text-text-secondary">⌘K</kbd> anywhere to quick capture
           </p>
         </div>
       </div>

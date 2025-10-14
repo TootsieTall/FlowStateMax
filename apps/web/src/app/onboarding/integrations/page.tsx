@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Calendar, Mail, CheckCircle, Circle, ArrowRight, Info } from 'lucide-react'
 
@@ -27,20 +28,20 @@ export default function IntegrationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-      <div className="card-elevated max-w-2xl w-full p-8 animate-slide-in-right">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong max-w-2xl w-full p-8 animate-slide-in-right">
         <div className="mb-8">
-          <div className="text-overline text-sunset-600 mb-2">STEP 3 OF 8</div>
-          <h1 className="text-display-md text-bark-500 mb-2">Connect Your Tools 🔗</h1>
-          <p className="text-body text-bark-300">
+          <div className="text-overline text-accent-orange mb-2">STEP 3 OF 8</div>
+          <h1 className="text-display-md text-text-primary mb-2">Connect Your Tools 🔗</h1>
+          <p className="text-body text-text-tertiary">
             Link your calendar and email to automatically schedule deep work sessions
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-warm-lg flex items-start gap-3">
-          <Info className="w-5 h-5 text-sunset-600 flex-shrink-0 mt-0.5" />
-          <div className="text-body-sm text-bark-500">
+        <div className="mb-8 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-warm-lg flex items-start gap-3">
+          <Info className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+          <div className="text-body-sm text-text-primary">
             <p className="font-semibold mb-1">Why connect?</p>
             <p>
               Daybreak can automatically find free time in your calendar and block it for deep work. 
@@ -63,26 +64,26 @@ export default function IntegrationsPage() {
               onClick={() => setSelectedCalendar('google')}
               className={`w-full p-4 rounded-warm-lg border-2 transition-all duration-fast text-left hover-lift ${
                 selectedCalendar === 'google'
-                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
-                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                  ? 'border-accent-gold bg-gradient-to-br from-sunset-50 to-gold-50 shadow-glow-medium'
+                  : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-warm-sm border border-border-light">
+                  <div className="w-10 h-10 bg-bg-surface rounded-lg flex items-center justify-center shadow-glow-subtle border border-border-default">
                     <span className="text-xl">📅</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'google' ? 'text-sunset-600' : 'text-bark-500'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'google' ? 'text-accent-orange' : 'text-text-primary'}`}>
                       Google Calendar
                     </h3>
-                    <p className="text-body-sm text-bark-300">Sync with Gmail and Google Workspace</p>
+                    <p className="text-body-sm text-text-tertiary">Sync with Gmail and Google Workspace</p>
                   </div>
                 </div>
                 {selectedCalendar === 'google' ? (
-                  <CheckCircle className="w-5 h-5 text-gold-500 animate-bounce-in" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold animate-bounce-in" />
                 ) : (
-                  <Circle className="w-5 h-5 text-bark-200" />
+                  <Circle className="w-5 h-5 text-text-tertiary" />
                 )}
               </div>
             </button>
@@ -91,26 +92,26 @@ export default function IntegrationsPage() {
               onClick={() => setSelectedCalendar('outlook')}
               className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedCalendar === 'outlook'
-                  ? 'border-sunset-400 bg-sunset-50'
-                  : 'border-border hover:border-sunset-200'
+                  ? 'border-accent-gold bg-accent-gold/5'
+                  : 'border-border-default hover:border-accent-gold/20'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <div className="w-10 h-10 bg-bg-surface rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
                     <span className="text-xl">📧</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'outlook' ? 'text-sunset-600' : 'text-bark-500'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'outlook' ? 'text-accent-orange' : 'text-text-primary'}`}>
                       Outlook Calendar
                     </h3>
                     <p className="text-sm text-gray-500">Sync with Microsoft 365 and Outlook</p>
                   </div>
                 </div>
                 {selectedCalendar === 'outlook' ? (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 ) : (
-                  <Circle className="w-5 h-5 text-bark-200" />
+                  <Circle className="w-5 h-5 text-text-tertiary" />
                 )}
               </div>
             </button>
@@ -119,26 +120,26 @@ export default function IntegrationsPage() {
               onClick={() => setSelectedCalendar('apple')}
               className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedCalendar === 'apple'
-                  ? 'border-sunset-400 bg-sunset-50'
-                  : 'border-border hover:border-sunset-200'
+                  ? 'border-accent-gold bg-accent-gold/5'
+                  : 'border-border-default hover:border-accent-gold/20'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <div className="w-10 h-10 bg-bg-surface rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
                     <span className="text-xl">🍎</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedCalendar === 'apple' ? 'text-sunset-600' : 'text-bark-500'}`}>
+                    <h3 className={`font-semibold ${selectedCalendar === 'apple' ? 'text-accent-orange' : 'text-text-primary'}`}>
                       Apple Calendar
                     </h3>
                     <p className="text-sm text-gray-500">Sync with iCloud Calendar</p>
                   </div>
                 </div>
                 {selectedCalendar === 'apple' ? (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 ) : (
-                  <Circle className="w-5 h-5 text-bark-200" />
+                  <Circle className="w-5 h-5 text-text-tertiary" />
                 )}
               </div>
             </button>
@@ -159,26 +160,26 @@ export default function IntegrationsPage() {
               onClick={() => setSelectedEmail('google')}
               className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedEmail === 'google'
-                  ? 'border-sunset-400 bg-sunset-50'
-                  : 'border-border hover:border-sunset-200'
+                  ? 'border-accent-gold bg-accent-gold/5'
+                  : 'border-border-default hover:border-accent-gold/20'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <div className="w-10 h-10 bg-bg-surface rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
                     <span className="text-xl">✉️</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedEmail === 'google' ? 'text-sunset-600' : 'text-bark-500'}`}>
+                    <h3 className={`font-semibold ${selectedEmail === 'google' ? 'text-accent-orange' : 'text-text-primary'}`}>
                       Gmail / Google Workspace
                     </h3>
                     <p className="text-sm text-gray-500">Connect your Gmail account</p>
                   </div>
                 </div>
                 {selectedEmail === 'google' ? (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 ) : (
-                  <Circle className="w-5 h-5 text-bark-200" />
+                  <Circle className="w-5 h-5 text-text-tertiary" />
                 )}
               </div>
             </button>
@@ -187,26 +188,26 @@ export default function IntegrationsPage() {
               onClick={() => setSelectedEmail('outlook')}
               className={`w-full p-4 rounded-warm border-2 transition-all text-left ${
                 selectedEmail === 'outlook'
-                  ? 'border-sunset-400 bg-sunset-50'
-                  : 'border-border hover:border-sunset-200'
+                  ? 'border-accent-gold bg-accent-gold/5'
+                  : 'border-border-default hover:border-accent-gold/20'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <div className="w-10 h-10 bg-bg-surface rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
                     <span className="text-xl">📨</span>
                   </div>
                   <div>
-                    <h3 className={`font-semibold ${selectedEmail === 'outlook' ? 'text-sunset-600' : 'text-bark-500'}`}>
+                    <h3 className={`font-semibold ${selectedEmail === 'outlook' ? 'text-accent-orange' : 'text-text-primary'}`}>
                       Outlook / Microsoft 365
                     </h3>
                     <p className="text-sm text-gray-500">Connect your Outlook account</p>
                   </div>
                 </div>
                 {selectedEmail === 'outlook' ? (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 ) : (
-                  <Circle className="w-5 h-5 text-bark-200" />
+                  <Circle className="w-5 h-5 text-text-tertiary" />
                 )}
               </div>
             </button>
@@ -249,7 +250,7 @@ export default function IntegrationsPage() {
         {/* Note about actual connection */}
         {(selectedCalendar || selectedEmail) && (
           <div className="mt-4 text-center">
-            <p className="text-caption text-bark-300">
+            <p className="text-caption text-text-tertiary">
               Note: Actual integration will be set up after onboarding
             </p>
           </div>

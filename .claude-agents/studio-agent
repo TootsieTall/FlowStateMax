@@ -12,3 +12,4 @@ fi
 # Run claude with agents settings
 claude --settings "$SETTINGS_FILE" "$@"
 
+

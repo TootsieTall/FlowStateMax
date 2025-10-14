@@ -118,7 +118,7 @@ export default function ShutdownPage() {
         </div>
 
         {/* Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl">
+        <div className="bg-bg-surface dark:bg-gray-800 rounded-2xl p-8 shadow-2xl">
           {step === 1 && (
             <div>
               <div className="flex items-center gap-3 mb-6">
@@ -139,7 +139,7 @@ export default function ShutdownPage() {
                 value={brainDump}
                 onChange={(e) => setBrainDump(e.target.value)}
                 placeholder="Write anything that's on your mind... incomplete tasks, ideas, concerns, etc."
-                className="w-full h-48 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                className="w-full h-48 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none bg-bg-surface dark:bg-gray-900 text-gray-900 dark:text-white"
               />
 
               <button
@@ -170,7 +170,7 @@ export default function ShutdownPage() {
               <div className="space-y-4">
                 {tomorrowTasks.map((task, idx) => (
                   <div key={idx}>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-text-tertiary mb-2">
                       Priority {idx + 1}
                     </label>
                     <input
@@ -178,7 +178,7 @@ export default function ShutdownPage() {
                       value={task}
                       onChange={(e) => handleTaskChange(idx, e.target.value)}
                       placeholder={`Task ${idx + 1}`}
-                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                      className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-bg-surface dark:bg-gray-900 text-gray-900 dark:text-white"
                     />
                   </div>
                 ))}
@@ -187,7 +187,7 @@ export default function ShutdownPage() {
               <div className="flex gap-4 mt-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 px-6 py-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl transition-colors"
+                  className="flex-1 px-6 py-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-text-tertiary font-semibold rounded-xl transition-colors"
                 >
                   ← Back
                 </button>
@@ -218,7 +218,7 @@ export default function ShutdownPage() {
               </div>
 
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 mb-6">
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                <p className="text-gray-700 dark:text-text-tertiary mb-4">
                   <strong>Recommended:</strong>
                 </p>
                 <ul className="space-y-2 text-gray-600 dark:text-gray-400">
@@ -241,7 +241,7 @@ export default function ShutdownPage() {
                   }}
                   className="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
                 />
-                <span className="text-gray-700 dark:text-gray-300 font-medium">
+                <span className="text-gray-700 dark:text-text-tertiary font-medium">
                   I confirm my alarms are set for tomorrow
                 </span>
               </label>
@@ -249,7 +249,7 @@ export default function ShutdownPage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => setStep(2)}
-                  className="flex-1 px-6 py-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl transition-colors"
+                  className="flex-1 px-6 py-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-text-tertiary font-semibold rounded-xl transition-colors"
                 >
                   ← Back
                 </button>

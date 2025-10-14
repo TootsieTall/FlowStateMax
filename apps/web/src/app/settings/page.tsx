@@ -49,10 +49,10 @@ export default function SettingsPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center layer-base">
+      <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-bark-300">Loading...</p>
+          <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-text-tertiary">Loading...</p>
         </div>
       </div>
     );
@@ -114,17 +114,17 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-dawn-100">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
       {/* Header */}
-      <div className="bg-white border-b border-border-light shadow-warm-sm">
+      <div className="bg-bg-surface border-b border-border-default shadow-warm-sm">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3">
             <SettingsIcon className="w-8 h-8 text-gradient-sunset" />
             <div>
-              <h1 className="text-display-md text-bark-500">
+              <h1 className="text-display-md text-text-primary">
                 Settings
               </h1>
-              <p className="text-body text-bark-300 mt-1">
+              <p className="text-body text-text-tertiary mt-1">
                 Manage your account and preferences ⚙️
               </p>
             </div>
@@ -137,8 +137,8 @@ export default function SettingsPage() {
         <div className="space-y-6">
           {settingsSections.map((section, idx) => (
             <div key={idx} className="card overflow-hidden">
-              <div className="px-6 py-3 border-b border-border-light bg-dawn-100">
-                <h2 className="text-overline text-bark-400">
+              <div className="px-6 py-3 border-b border-border-default bg-bg-primary">
+                <h2 className="text-overline text-text-secondary">
                   {section.title}
                 </h2>
               </div>
@@ -148,17 +148,17 @@ export default function SettingsPage() {
                   <button
                     key={itemIdx}
                     onClick={item.onClick}
-                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-dawn-50 transition-all duration-fast text-left group"
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-bg-elevated transition-all duration-fast text-left group"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-dawn-200 rounded-lg flex items-center justify-center group-hover:bg-sunset-100 transition-colors duration-fast">
-                        <item.icon className="w-5 h-5 text-bark-300 group-hover:text-sunset-500 transition-colors" />
+                      <div className="w-10 h-10 bg-bg-secondary rounded-lg flex items-center justify-center group-hover:bg-accent-orange/10 transition-colors duration-fast">
+                        <item.icon className="w-5 h-5 text-text-tertiary group-hover:text-accent-gold transition-colors" />
                       </div>
                       <div>
-                        <div className="font-medium text-bark-500">
+                        <div className="font-medium text-text-primary">
                           {item.label}
                         </div>
-                        <div className="text-body-sm text-bark-300">
+                        <div className="text-body-sm text-text-tertiary">
                           {item.value}
                         </div>
                       </div>
@@ -166,14 +166,14 @@ export default function SettingsPage() {
                     
                     {item.toggle ? (
                       <div className={`w-11 h-6 rounded-full transition-colors duration-fast ${
-                        darkMode ? 'bg-sunset-500' : 'bg-sand-300'
+                        darkMode ? 'bg-accent-gold/50' : 'bg-sand-300'
                       }`}>
-                        <div className={`w-5 h-5 bg-white rounded-full shadow-warm-sm transform transition-transform duration-fast m-0.5 ${
+                        <div className={`w-5 h-5 bg-bg-surface rounded-full shadow-warm-sm transform transition-transform duration-fast m-0.5 ${
                           darkMode ? 'translate-x-5' : 'translate-x-0'
                         }`} />
                       </div>
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-bark-200 group-hover:text-sunset-500 transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-text-tertiary group-hover:text-accent-gold transition-colors" />
                     )}
                   </button>
                 ))}
@@ -197,7 +197,7 @@ export default function SettingsPage() {
           </button>
 
           {/* App Version */}
-          <div className="text-center text-body-sm text-bark-200 py-4">
+          <div className="text-center text-body-sm text-text-tertiary py-4">
             Daybreak v1.0.0 🌅
           </div>
         </div>

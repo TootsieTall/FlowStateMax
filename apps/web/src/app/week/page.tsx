@@ -56,7 +56,7 @@ export default function WeekViewPage() {
   const nextWeek = () => setCurrentWeek(addDays(currentWeek, 7))
 
   return (
-    <div className="min-h-screen layer-base">
+    <div className="min-h-screen bg-bg-primary">
       {/* Navigation - Floating layer */}
       <nav className="layer-floating sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,19 +65,19 @@ export default function WeekViewPage() {
               <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
             </div>
             <div className="flex items-center space-x-6 md:space-x-8">
-              <a href="/week" className="text-sunset-500 font-semibold">
+              <a href="/week" className="text-accent-gold font-semibold">
                 Week
               </a>
-              <a href="/today" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
+              <a href="/today" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
                 Today
               </a>
-              <a href="/capture" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
+              <a href="/capture" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
                 Capture
               </a>
-              <a href="/explore" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
+              <a href="/explore" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
                 Explore
               </a>
-              <a href="/settings" className="text-bark-200 hover:text-sunset-500 transition-all duration-fast hover:-translate-y-0.5">
+              <a href="/settings" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
                 Settings
               </a>
               <StartFlowButton variant="icon" />
@@ -92,16 +92,16 @@ export default function WeekViewPage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={previousWeek}
-            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-bark-400 hover:text-sunset-500 hover-lift"
+            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-text-secondary hover:text-accent-gold hover-lift"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <h2 className="text-h2 text-bark-500">
+          <h2 className="text-h2 text-text-primary">
             {format(weekStart, 'MMMM d')} - {format(addDays(weekStart, 6), 'MMMM d, yyyy')}
           </h2>
           <button
             onClick={nextWeek}
-            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-bark-400 hover:text-sunset-500 hover-lift"
+            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-text-secondary hover:text-accent-gold hover-lift"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -110,8 +110,8 @@ export default function WeekViewPage() {
         {/* Calendar Grid */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-body text-bark-300">Loading your week...</p>
+            <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-body text-text-tertiary">Loading your week...</p>
           </div>
         ) : (
           <div className="grid grid-cols-7 gap-4">
@@ -123,14 +123,14 @@ export default function WeekViewPage() {
                 <div
                   key={day.toISOString()}
                   className={`card p-4 min-h-[400px] transition-all duration-normal hover:-translate-y-1 hover:shadow-warm-md ${
-                    isToday ? 'border-2 border-sunset-400 shadow-glow-amber' : ''
+                    isToday ? 'border-2 border-accent-gold shadow-glow-amber' : ''
                   }`}
                 >
                   <div className="mb-4">
-                    <div className="text-overline text-bark-200">{format(day, 'EEE')}</div>
+                    <div className="text-overline text-text-tertiary">{format(day, 'EEE')}</div>
                     <div
                       className={`text-h1 ${
-                        isToday ? 'text-gradient-sunset' : 'text-bark-500'
+                        isToday ? 'text-gradient-sunset' : 'text-text-primary'
                       }`}
                     >
                       {format(day, 'd')}
@@ -151,7 +151,7 @@ export default function WeekViewPage() {
                   </div>
 
                   <button
-                    className="w-full mt-4 p-2 border-2 border-dashed border-border-DEFAULT rounded-warm-lg hover:border-sunset-400 hover:bg-sunset-50 transition-all duration-fast flex items-center justify-center text-bark-200 hover:text-sunset-500 group"
+                    className="w-full mt-4 p-2 border-2 border-dashed border-border-default rounded-warm-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all duration-fast flex items-center justify-center text-text-tertiary hover:text-accent-gold group"
                     onClick={() => {
                       // Handle adding new block
                     }}
@@ -168,7 +168,7 @@ export default function WeekViewPage() {
 
       {/* Quick Capture Button */}
       <button
-        className="fixed bottom-8 right-8 bg-gradient-to-br from-sunset-400 to-gold-400 hover:from-sunset-500 hover:to-gold-500 text-white rounded-full p-4 shadow-warm-2xl hover:shadow-glow-sunset transition-all duration-fast hover:scale-110 animate-pulse-glow"
+        className="fixed bottom-8 right-8 bg-gradient-to-br from-sunset-400 to-gold-400 hover:from-accent-gold hover:to-accent-orange text-white rounded-full p-4 shadow-warm-2xl hover:shadow-glow-sunset transition-all duration-fast hover:scale-110 animate-pulse-glow"
         onClick={() => (window.location.href = '/capture')}
       >
         <Plus className="w-6 h-6" />

@@ -39,7 +39,7 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-border-light safe-area-inset-bottom z-40 shadow-warm-lg">
+    <nav className="fixed bottom-0 left-0 right-0 bg-bg-surface border-t border-border-light safe-area-inset-bottom z-40 shadow-warm-lg">
       <div className="max-w-lg mx-auto px-2">
         <div className="flex items-center justify-around h-16">
           {BOTTOM_NAV_CONFIG.map((item) => {

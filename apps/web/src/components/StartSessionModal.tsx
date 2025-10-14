@@ -102,12 +102,12 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6">
+      <div className="bg-bg-surface rounded-xl shadow-2xl max-w-lg w-full p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Start Deep Work Session</h2>
+          <h2 className="text-2xl font-bold text-text-primary">Start Deep Work Session</h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-2 text-gray-400 hover:text-text-secondary transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,7 +125,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
 
         {/* Location Selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-text-secondary mb-3">
             <MapPin className="w-4 h-4 inline mr-1" />
             Where are you working?
           </label>
@@ -161,7 +161,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
                     {location.name}
                   </span>
                   {location.latitude && location.longitude && (
-                    <p className="text-xs text-gray-500 mt-0.5">GPS tracked location</p>
+                    <p className="text-xs text-text-tertiary mt-0.5">GPS tracked location</p>
                   )}
                 </div>
                 {currentLocationMatch === location.name && (
@@ -176,10 +176,10 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
               className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
                 selectedLocation === 'custom'
                   ? 'border-primary-600 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-border-default hover:border-border-default'
               }`}
             >
-              <span className={`font-medium ${selectedLocation === 'custom' ? 'text-primary-700' : 'text-gray-700'}`}>
+              <span className={`font-medium ${selectedLocation === 'custom' ? 'text-primary-700' : 'text-text-secondary'}`}>
                 ✏️ Other location
               </span>
             </button>
@@ -190,7 +190,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
                 value={customLocation}
                 onChange={(e) => setCustomLocation(e.target.value)}
                 placeholder="Enter location name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900 ml-2"
+                className="w-full px-4 py-2 border border-border-default rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-text-primary ml-2"
               />
             )}
           </div>
@@ -198,7 +198,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
 
         {/* Duration */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             <Clock className="w-4 h-4 inline mr-1" />
             Duration: {duration} minutes
           </label>
@@ -211,7 +211,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
             onChange={(e) => setDuration(parseInt(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-700"
           />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <div className="flex justify-between text-xs text-text-tertiary mt-1">
             <span>15 min</span>
             <span>4 hours</span>
           </div>
@@ -219,7 +219,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
 
         {/* Session Goal (Optional) */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             <Target className="w-4 h-4 inline mr-1" />
             What will you work on? (optional)
           </label>
@@ -228,7 +228,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
             placeholder="e.g., Finish report, Code feature, Study chapter 3"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-gray-900"
+            className="w-full px-4 py-2 border border-border-default rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none text-text-primary"
           />
         </div>
 
@@ -236,7 +236,7 @@ export default function StartSessionModal({ isOpen, onClose, onStartSession }: S
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+            className="flex-1 px-6 py-3 border border-border-default text-text-secondary rounded-lg font-semibold hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>

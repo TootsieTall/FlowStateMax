@@ -110,18 +110,26 @@ export async function middleware(request: NextRequest) {
   if (isAuthenticated && !isOnboardingRoute) {
     const onboardingComplete = token?.onboardingComplete === true;
     
-    console.log(`[Middleware] Checking onboarding for ${pathname}:`, {
+    console.log(`[Middleware] 🔍 Checking onboarding status for ${pathname}:`, {
       onboardingComplete,
       isGuest,
-      userId: token?.sub
+      userId: token?.sub,
+      tokenKeys: Object.keys(token || {})
     });
     
-    // If onboarding is not complete and user is trying to access protected routes
+    // If onboarding is not complete and user is NOT a guest
+    // (guests get special handling below)
     if (!onboardingComplete && !isGuest) {
       const url = request.nextUrl.clone();
       url.pathname = '/onboarding';
-      console.log('🚧 Redirecting to onboarding - not complete');
+      console.log('🚧 [Middleware] Redirecting to onboarding - not complete (regular user)');
       return NextResponse.redirect(url);
+    }
+    
+    // If onboarding IS complete, allow access
+    if (onboardingComplete) {
+      console.log(`✅ [Middleware] Onboarding complete, allowing access to ${pathname}`);
+      // Don't return yet - let guest checks run if needed
     }
   }
 
@@ -129,9 +137,15 @@ export async function middleware(request: NextRequest) {
   if (isGuest && !isOnboardingRoute) {
     const onboardingComplete = token?.onboardingComplete === true;
     
+    console.log('[Middleware] 👤 Guest user accessing main app:', {
+      pathname,
+      onboardingComplete,
+      oauthEnabled: isOAuthEnabled()
+    });
+    
     // If guest completed onboarding, allow them to use the app
     if (onboardingComplete) {
-      console.log('✅ Guest user with completed onboarding, allowing access');
+      console.log('✅ [Middleware] Guest user with completed onboarding, allowing access');
       return NextResponse.next();
     }
     
@@ -140,14 +154,16 @@ export async function middleware(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = '/onboarding/complete';
       url.searchParams.set('connectAccount', 'true');
-      console.log('🔗 Guest needs to connect account');
+      console.log('🔗 [Middleware] Guest needs to connect account');
       return NextResponse.redirect(url);
     }
     
     // If OAuth is disabled, allow them to use the app as guest
+    console.log('✅ [Middleware] OAuth disabled, allowing guest access');
     return NextResponse.next();
   }
 
+  console.log(`✅ [Middleware] Allowing access to ${pathname}`);
   return NextResponse.next();
 }
 

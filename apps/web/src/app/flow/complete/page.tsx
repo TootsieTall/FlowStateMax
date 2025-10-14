@@ -53,7 +53,7 @@ export default function FlowCompletePage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+          <div className="bg-bg-surface dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
             <Clock className="w-6 h-6 text-indigo-600 mx-auto mb-2" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {Math.floor(parseInt(duration) / 60)}
@@ -61,13 +61,13 @@ export default function FlowCompletePage() {
             <div className="text-sm text-gray-600 dark:text-gray-400">Minutes</div>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+          <div className="bg-bg-surface dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
             <Target className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">100%</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Focus</div>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+          <div className="bg-bg-surface dark:bg-gray-800 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
             <TrendingUp className="w-6 h-6 text-purple-600 mx-auto mb-2" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">+1</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Session</div>
@@ -76,7 +76,7 @@ export default function FlowCompletePage() {
 
         {/* Feedback */}
         {!feedback ? (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+          <div className="bg-bg-surface dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 text-center">
               How did it go?
             </h2>
@@ -101,7 +101,7 @@ export default function FlowCompletePage() {
                 onClick={() => handleFeedback('on_time')}
                 className="w-full px-6 py-4 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 border-2 border-blue-300 dark:border-blue-700 rounded-xl transition-all text-left"
               >
-                <div className="font-semibold text-blue-900 dark:text-blue-100">
+                <div className="font-semibold text-text-primary dark:text-blue-100">
                   🎯 Just Right
                 </div>
                 <div className="text-sm text-blue-700 dark:text-blue-300">
@@ -123,7 +123,7 @@ export default function FlowCompletePage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 text-center">
+          <div className="bg-bg-surface dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 text-center">
             <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Thanks for your feedback!
@@ -139,7 +139,7 @@ export default function FlowCompletePage() {
           <div className="text-center mt-6">
             <button
               onClick={() => router.push(ROUTES.TODAY)}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-text-tertiary text-sm"
             >
               Skip feedback →
             </button>

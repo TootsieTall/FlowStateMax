@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, X, Sparkles } from 'lucide-react'
 
@@ -115,24 +116,24 @@ export default function RecoveryPage() {
   const selectedCount = activities.filter(a => a.selected).length
 
   return (
-    <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-      <div className="card-elevated animate-slide-in-right max-w-3xl w-full p-8">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+      <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-slide-in-right max-w-3xl w-full p-8">
         <div className="mb-8">
-          <div className="text-overline text-sunset-600 mb-2">STEP 8 OF 8</div>
-          <h1 className="text-display-md text-bark-500 mb-2">
+          <div className="text-overline text-accent-orange mb-2">STEP 8 OF 8</div>
+          <h1 className="text-display-md text-text-primary mb-2">
             Plan Your Active Recovery
           </h1>
-          <p className="text-body text-bark-300">
+          <p className="text-body text-text-tertiary">
             What activities help you recharge between deep work sessions?
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="mb-8 p-4 bg-gradient-to-r from-gold-100 to-sunset-100 border border-gold-300 rounded-lg">
-          <h3 className="text-sm font-semibold text-blue-900 mb-1">
+        <div className="mb-8 p-4 bg-gradient-to-r from-accent-gold/10 to-accent-orange/10 border border-accent-gold/30 rounded-lg">
+          <h3 className="text-sm font-semibold text-text-primary mb-1">
             🏃 Why Recovery Matters
           </h3>
-          <p className="text-sm text-bark-400">
+          <p className="text-sm text-text-secondary">
             Deep work is mentally demanding. Strategic recovery through physical activity and leisure 
             helps restore your cognitive resources and prevents burnout. Cal Newport emphasizes the 
             importance of having a life outside of work.
@@ -141,7 +142,7 @@ export default function RecoveryPage() {
 
         {/* Activities Selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-bark-500 mb-3">
+          <label className="block text-sm font-medium text-text-primary mb-3">
             Select your recovery activities
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -151,21 +152,21 @@ export default function RecoveryPage() {
                 onClick={() => toggleActivity(activity.id)}
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   activity.selected
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                    ? 'border-accent-gold bg-accent-gold/10'
+                    : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-1">
-                    <h3 className={`font-semibold ${activity.selected ? 'text-green-700' : 'text-gray-900'}`}>
+                    <h3 className={`font-semibold ${activity.selected ? 'text-text-primary' : 'text-text-primary'}`}>
                       {activity.title}
                     </h3>
-                    <p className={`text-sm ${activity.selected ? 'text-green-600' : 'text-bark-300'}`}>
+                    <p className={`text-sm ${activity.selected ? 'text-accent-gold' : 'text-text-tertiary'}`}>
                       {activity.description}
                     </p>
                   </div>
                   {activity.selected && (
-                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-accent-gold flex-shrink-0" />
                   )}
                 </div>
               </button>
@@ -175,7 +176,7 @@ export default function RecoveryPage() {
 
         {/* Add Custom Activity */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-bark-500 mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             Add another activity
           </label>
           <div className="flex gap-2">
@@ -198,7 +199,7 @@ export default function RecoveryPage() {
 
         {/* Tracking Preference */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-bark-500 mb-3">
+          <label className="block text-sm font-medium text-text-primary mb-3">
             Do you want to track these activities?
           </label>
           <div className="space-y-3">
@@ -206,21 +207,21 @@ export default function RecoveryPage() {
               onClick={() => setTrackRecovery(true)}
               className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                 trackRecovery === true
-                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
-                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                  ? 'border-accent-gold bg-gradient-to-br from-accent-gold/10 to-accent-orange/10 shadow-glow-medium'
+                  : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className={`font-semibold ${trackRecovery === true ? 'text-sunset-600' : 'text-gray-900'}`}>
+                  <h3 className={`font-semibold ${trackRecovery === true ? 'text-accent-orange' : 'text-text-primary'}`}>
                     ✅ Yes, help me track
                   </h3>
-                  <p className={`text-sm ${trackRecovery === true ? 'text-gold-500' : 'text-bark-300'}`}>
+                  <p className={`text-sm ${trackRecovery === true ? 'text-accent-gold' : 'text-text-tertiary'}`}>
                     Log activities and see patterns in your energy levels
                   </p>
                 </div>
                 {trackRecovery === true && (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 )}
               </div>
             </button>
@@ -229,21 +230,21 @@ export default function RecoveryPage() {
               onClick={() => setTrackRecovery(false)}
               className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                 trackRecovery === false
-                  ? 'border-sunset-400 bg-gradient-to-br from-sunset-50 to-gold-50 shadow-warm-md'
-                  : 'border-border-DEFAULT hover:border-sunset-300 bg-white'
+                  ? 'border-accent-gold bg-gradient-to-br from-accent-gold/10 to-accent-orange/10 shadow-glow-medium'
+                  : 'border-border-default hover:border-accent-gold/30 bg-bg-surface'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className={`font-semibold ${trackRecovery === false ? 'text-sunset-600' : 'text-gray-900'}`}>
+                  <h3 className={`font-semibold ${trackRecovery === false ? 'text-accent-orange' : 'text-text-primary'}`}>
                     🎯 No, keep it simple
                   </h3>
-                  <p className={`text-sm ${trackRecovery === false ? 'text-gold-500' : 'text-bark-300'}`}>
+                  <p className={`text-sm ${trackRecovery === false ? 'text-accent-gold' : 'text-text-tertiary'}`}>
                     Just use this list as a reminder of healthy activities
                   </p>
                 </div>
                 {trackRecovery === false && (
-                  <CheckCircle className="w-5 h-5 text-gold-500" />
+                  <CheckCircle className="w-5 h-5 text-accent-gold" />
                 )}
               </div>
             </button>
@@ -254,11 +255,11 @@ export default function RecoveryPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-purple-600" />
-            <label className="block text-sm font-medium text-bark-500">
+            <label className="block text-sm font-medium text-text-primary">
               Hobbies you've wanted to try
             </label>
           </div>
-          <p className="text-sm text-bark-300 mb-3">
+          <p className="text-sm text-text-tertiary mb-3">
             We'll periodically remind you to explore these new interests during your recovery time
           </p>
           
@@ -269,11 +270,11 @@ export default function RecoveryPage() {
               onChange={(e) => setNewHobby(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addHobbyToTry()}
               placeholder="e.g., Learn guitar, Rock climbing, Photography"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none text-gray-900"
+              className="flex-1 px-4 py-2 border border-border-default rounded-lg focus:ring-2 focus:ring-accent-orange focus:border-transparent outline-none text-text-primary"
             />
             <button
               onClick={addHobbyToTry}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              className="px-4 py-2 bg-gradient-to-r from-accent-gold to-accent-orange text-white rounded-lg hover:opacity-90 transition-colors"
             >
               Add
             </button>
@@ -320,7 +321,7 @@ export default function RecoveryPage() {
           </button>
           <div className="flex items-center gap-4">
             {selectedCount > 0 && (
-              <span className="text-sm text-body text-bark-300">
+              <span className="text-sm text-body text-text-tertiary">
                 {selectedCount} activit{selectedCount !== 1 ? 'ies' : 'y'} selected
               </span>
             )}

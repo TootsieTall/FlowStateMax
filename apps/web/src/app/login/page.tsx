@@ -46,37 +46,37 @@ export default function LoginPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-dawn-100">
+      <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-bark-300">Loading...</p>
+          <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-body text-text-tertiary">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dawn-100 to-dawn-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-warm-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-bg-surface rounded-2xl shadow-warm-lg mb-4">
             <Brain className="w-10 h-10 text-gradient-sunset" />
           </div>
           <h1 className="text-display-lg text-gradient-sunset mb-2">
             Daybreak
           </h1>
-          <p className="text-body-lg text-bark-300">
+          <p className="text-body-lg text-text-tertiary">
             Flow State Productivity
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="card-elevated p-8">
-          <h2 className="text-h2 text-bark-500 mb-2 text-center">
+        <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong p-8">
+          <h2 className="text-h2 text-text-primary mb-2 text-center">
             Welcome Back
           </h2>
-          <p className="text-body text-bark-300 mb-8 text-center">
+          <p className="text-body text-text-tertiary mb-8 text-center">
             Sign in to continue your deep work practice
           </p>
 
@@ -94,10 +94,10 @@ export default function LoginPage() {
               {showGuest && (
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border-DEFAULT"></div>
+                    <div className="w-full border-t border-border-default"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-bark-200">Or</span>
+                    <span className="px-2 bg-bg-surface text-text-tertiary">Or</span>
                   </div>
                 </div>
               )}
@@ -108,7 +108,7 @@ export default function LoginPage() {
           {showGuest && (
             <form onSubmit={handleGuestSignIn} className="space-y-4">
               <div>
-                <label htmlFor="guestName" className="text-label text-bark-400 mb-2">
+                <label htmlFor="guestName" className="text-label text-text-secondary mb-2">
                   Continue as Guest
                 </label>
                 <input
@@ -134,14 +134,14 @@ export default function LoginPage() {
           )}
 
           {/* Mode indicator */}
-          <p className="mt-4 text-caption text-center text-bark-200">
+          <p className="mt-4 text-caption text-center text-text-tertiary">
             {getAuthModeMessage()}
           </p>
 
           <div className="mt-6 text-center">
-            <p className="text-body-sm text-bark-300">
+            <p className="text-body-sm text-text-tertiary">
               Don't have an account?{' '}
-              <a href={ROUTES.SIGNUP} className="text-sunset-700 hover:text-sunset-600 font-medium">
+              <a href={ROUTES.SIGNUP} className="text-accent-orange hover:text-accent-orange font-medium">
                 Sign up
               </a>
             </p>
@@ -150,10 +150,10 @@ export default function LoginPage() {
 
         {/* Features */}
         <div className="mt-8 text-center">
-          <p className="text-bark-400 text-body-sm mb-4">
+          <p className="text-text-secondary text-body-sm mb-4">
             Trusted by deep workers worldwide
           </p>
-          <div className="flex items-center justify-center gap-6 text-bark-300 text-caption">
+          <div className="flex items-center justify-center gap-6 text-text-tertiary text-caption">
             <span>🔒 Secure</span>
             <span>⚡ Fast</span>
             <span>🎯 Focused</span>

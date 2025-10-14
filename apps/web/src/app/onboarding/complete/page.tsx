@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { CheckCircle, Calendar, Target, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
 import ConnectAccountPrompt from '@/components/ConnectAccountPrompt'
 import { shouldPromptOAuthConnection } from '@/lib/guest-auth'
 
@@ -70,24 +71,25 @@ export default function OnboardingComplete() {
       const data = await response.json()
       console.log('✅ Onboarding marked as complete:', data)
       
-      // Try to update the session, but don't let it block the redirect
+      // CRITICAL: Update the session to refresh the JWT token
+      // This ensures middleware sees the updated onboardingComplete status
+      console.log('🔄 Updating session...')
       try {
-        console.log('🔄 Updating session...')
-        await Promise.race([
-          updateSession(),
-          new Promise((resolve) => setTimeout(resolve, 2000)) // 2 second timeout
-        ])
-        console.log('✅ Session updated (or timed out)')
+        const sessionUpdateResult = await updateSession()
+        console.log('✅ Session updated:', sessionUpdateResult)
+        
+        // Wait a moment for the session to fully propagate
+        await new Promise(resolve => setTimeout(resolve, 500))
+        
+        // Now redirect - the middleware should have the updated token
+        console.log('🎯 Redirecting to /today...')
+        router.push('/today')
       } catch (sessionError) {
-        console.warn('⚠️ Session update failed, but continuing anyway:', sessionError)
-      }
-      
-      // Always redirect, even if session update fails
-      // The middleware will fetch fresh data on page load
-      console.log('🎯 Redirecting to /today...')
-      setTimeout(() => {
+        console.error('⚠️ Session update failed:', sessionError)
+        // Force a full page reload to ensure the JWT is refreshed
+        console.log('🔄 Forcing full page reload to refresh session...')
         window.location.href = '/today'
-      }, 500)
+      }
       
     } catch (error) {
       console.error('❌ Error marking onboarding complete:', error)
@@ -106,115 +108,143 @@ export default function OnboardingComplete() {
         />
       )}
 
-      <div className="min-h-screen bg-dawn-100 flex items-center justify-center p-4">
-        <div className="card-elevated max-w-3xl w-full p-12 shadow-warm-2xl animate-bounce-in">
-        {/* Success Icon */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-gradient-to-br from-gold-300 to-sunset-300 rounded-full p-4 shadow-glow-gold">
-            <CheckCircle className="w-16 h-16 text-white animate-pulse" />
-          </div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary flex items-center justify-center p-4">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="max-w-3xl w-full"
+        >
+          <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 p-12 shadow-glow-strong">
+            {/* Success Icon with pulse animation */}
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ duration: 0.6 }}
+              className="flex justify-center mb-8"
+            >
+              <div className="bg-gradient-to-br from-accent-gold to-accent-orange rounded-full p-6 shadow-glow-strong">
+                <Sparkles className="w-16 h-16 text-bg-primary" />
+              </div>
+            </motion.div>
 
-        {/* Heading */}
-        <div className="text-center mb-8">
-          <h1 className="text-display-lg text-gradient-sunset mb-3">
-            You're All Set{userName ? `, ${userName}` : ''}! 🎉
-          </h1>
-          <p className="text-h4 text-bark-400">
-            Your deep work journey begins now
-          </p>
-        </div>
+            {/* Heading */}
+            <h1 className="text-4xl font-bold text-center mb-4">
+              <span className="bg-gradient-to-r from-accent-gold to-accent-orange bg-clip-text text-transparent">
+                You're All Set{userName ? `, ${userName}` : ''}!
+              </span>
+            </h1>
+            <p className="text-xl text-text-secondary text-center mb-8">
+              Your deep work journey begins now
+            </p>
 
-        {/* Summary Cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-sunset-200 shadow-warm-sm">
-            <Target className="w-8 h-8 text-sunset-500 mx-auto mb-2" />
-            <h3 className="font-semibold text-bark-500 mb-1">Focus Areas Set</h3>
-            <p className="text-sm text-bark-400">Your goals are defined</p>
-          </div>
-          
-          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-sunset-200 shadow-warm-sm">
-            <Calendar className="w-8 h-8 text-sunset-500 mx-auto mb-2" />
-            <h3 className="font-semibold text-bark-500 mb-1">Rituals Ready</h3>
-            <p className="text-sm text-bark-400">Your routines are configured</p>
-          </div>
-          
-          <div className="bg-white rounded-warm-lg p-4 text-center border-2 border-gold-200 shadow-warm-sm">
-            <Sparkles className="w-8 h-8 text-gold-500 mx-auto mb-2" />
-            <h3 className="font-semibold text-bark-500 mb-1">Recovery Planned</h3>
-            <p className="text-sm text-bark-400">Balance is key to success</p>
-          </div>
-        </div>
+            {/* Summary cards with stagger animation */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.1 }
+                }
+              }}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-3 gap-4 mb-8"
+            >
+              {[
+                { icon: Target, label: 'Goals Set', value: '3' },
+                { icon: Calendar, label: 'Rituals Ready', value: '6' },
+                { icon: Sparkles, label: 'Apps Blocked', value: '5' }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0 }
+                  }}
+                  className="bg-bg-surface rounded-lg p-4 text-center border border-accent-gold/20"
+                >
+                  <item.icon className="w-8 h-8 text-accent-gold mx-auto mb-2" />
+                  <div className="text-2xl font-bold text-text-primary">{item.value}</div>
+                  <div className="text-sm text-text-secondary">{item.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
 
-        {/* What's Next Section */}
-        <div className="bg-white border-2 border-sunset-200 rounded-warm-lg p-6 mb-8 shadow-warm-sm">
-          <h2 className="text-h3 text-bark-500 mb-3">What happens next?</h2>
-          <ul className="space-y-3 text-body text-bark-400">
-            <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>Schedule your first deep work blocks in your calendar</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>Install the browser extension to block distracting sites</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>Complete your pre-work ritual before starting flow sessions</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-gold-500" />
-              <span>Track your progress and celebrate your deep work wins</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Cal Newport Quote */}
-        <blockquote className="mb-8 border-l-4 border-gold-400 pl-6 bg-white p-4 rounded-r-warm-lg shadow-warm-sm">
-          <p className="text-body italic text-bark-500">
-            "Clarity about what matters provides clarity about what does not."
-          </p>
-          <footer className="text-body-sm mt-2 text-bark-400">— Cal Newport, Deep Work</footer>
-        </blockquote>
-
-        {/* CTA Button */}
-        <div className="flex flex-col items-center gap-3">
-          <button
-            onClick={handleGetStarted}
-            disabled={isRedirecting}
-            className="btn-primary w-full text-lg py-4 shadow-warm-2xl hover:shadow-glow-sunset"
-          >
-            {isRedirecting ? 'Launching Dashboard... ✨' : 'Start Your First Flow Session →'}
-          </button>
-          
-          <p className="text-body-sm text-bark-300">
-            You can always adjust these settings later in your profile
-          </p>
-        </div>
-
-        {/* Extension Reminder */}
-        <div className="mt-8 pt-6 border-t border-sunset-200">
-          <div className="flex items-start gap-3 bg-white p-4 rounded-warm-lg border border-sunset-200 shadow-warm-sm">
-            <div className="bg-gold-100 rounded-lg p-3 border border-gold-300">
-              <span className="text-2xl">🔌</span>
+            {/* What's Next Section */}
+            <div className="bg-bg-surface border border-accent-gold/20 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold text-text-primary mb-3">What happens next?</h2>
+              <ul className="space-y-3 text-text-secondary">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent-gold" />
+                  <span>Schedule your first deep work blocks in your calendar</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent-gold" />
+                  <span>Install the browser extension to block distracting sites</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent-gold" />
+                  <span>Complete your pre-work ritual before starting flow sessions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-accent-gold" />
+                  <span>Track your progress and celebrate your deep work wins</span>
+                </li>
+              </ul>
             </div>
-            <div>
-              <h3 className="font-semibold text-bark-500 mb-1">
-                Don't forget the browser extension!
-              </h3>
-              <p className="text-body text-bark-400 mb-2">
-                Install the Daybreak extension to automatically block distracting websites during your flow sessions.
+
+            {/* Cal Newport Quote */}
+            <blockquote className="mb-8 border-l-4 border-accent-gold pl-6 bg-bg-surface p-4 rounded-r-lg">
+              <p className="text-text-secondary italic">
+                "Clarity about what matters provides clarity about what does not."
               </p>
-              <button
-                onClick={() => window.open('/extension-install', '_blank')}
-                className="text-sunset-600 hover:text-sunset-700 font-medium underline"
+              <footer className="text-sm mt-2 text-text-tertiary">— Cal Newport, Deep Work</footer>
+            </blockquote>
+
+            {/* CTA Button */}
+            <div className="flex flex-col items-center gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleGetStarted}
+                disabled={isRedirecting}
+                className="w-full bg-gradient-to-r from-accent-gold to-accent-orange text-bg-primary font-bold text-lg py-4 rounded-lg shadow-glow-strong hover:shadow-glow-interactive transition-all"
               >
-                Install Extension →
-              </button>
+                {isRedirecting ? 'Launching Dashboard... ✨' : 'Start Your First Flow Session →'}
+              </motion.button>
+
+              <p className="text-sm text-text-tertiary">
+                You can always adjust these settings later in your profile
+              </p>
+            </div>
+
+            {/* Extension Reminder */}
+            <div className="mt-8 pt-6 border-t border-border-default">
+              <div className="flex items-start gap-3 bg-bg-surface p-4 rounded-lg border border-accent-gold/20">
+                <div className="bg-accent-gold/10 rounded-lg p-3 border border-accent-gold/30">
+                  <span className="text-2xl">🔌</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-text-primary mb-1">
+                    Don't forget the browser extension!
+                  </h3>
+                  <p className="text-text-secondary mb-2">
+                    Install the Daybreak extension to automatically block distracting websites during your flow sessions.
+                  </p>
+                  <button
+                    onClick={() => window.open('/extension-install', '_blank')}
+                    className="text-accent-orange hover:text-accent-warm font-medium underline"
+                  >
+                    Install Extension →
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        </div>
+        </motion.div>
       </div>
     </>
   )
