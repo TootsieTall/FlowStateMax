@@ -55,8 +55,6 @@ export default function AppsPage() {
           blockedApps: selectedApps.map(app => ({
             name: app.name,
             identifier: app.identifier,
-            domain: app.domain,
-            category: app.category,
           })),
         }),
       })
