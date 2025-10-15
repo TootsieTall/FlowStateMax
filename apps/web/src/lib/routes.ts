@@ -25,6 +25,17 @@ export const ROUTES = {
   EXPLORE: '/explore',
   SETTINGS: '/settings',
 
+  // Settings Hash Routes (for deep linking to sections)
+  SETTINGS_SECTIONS: {
+    PROFILE: '/settings#profile',
+    LOCATIONS: '/settings#locations',
+    BLOCKED_APPS: '/settings#blocked-apps',
+    RITUAL: '/settings#ritual',
+    NOTIFICATIONS: '/settings#notifications',
+    INTEGRATIONS: '/settings#integrations',
+    ACCOUNT: '/settings#account',
+  },
+
   // Additional Features
   CAPTURE: '/capture',
 

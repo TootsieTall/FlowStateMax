@@ -1,254 +1,184 @@
 /**
- * Integration Utilities
- * Helper functions for DND and Music service integrations
+ * Integration Helper Library
+ * OAuth and API integration functions for external services
  */
+
+import { prisma } from '@/lib/prisma'
+
+export type IntegrationProvider =
+  | 'google_calendar'
+  | 'gmail'
+  | 'canvas'
+  | 'spotify'
+  | 'apple_music'
 
 /**
- * DND (Do Not Disturb) Integration
- * Currently browser-level, future: OS-level via native app
+ * OAuth URLs for different providers
  */
-export class DNDService {
-  private static instance: DNDService
-  private dndEnabled: boolean = false
+export const OAUTH_URLS = {
+  google_calendar: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_URL || '',
+  spotify: process.env.NEXT_PUBLIC_SPOTIFY_OAUTH_URL || '',
+  apple_music: process.env.NEXT_PUBLIC_APPLE_MUSIC_URL || ''
+} as const
 
-  private constructor() {}
-
-  static getInstance(): DNDService {
-    if (!DNDService.instance) {
-      DNDService.instance = new DNDService()
-    }
-    return DNDService.instance
-  }
-
-  /**
-   * Enable Do Not Disturb mode
-   * Current: Request browser notification permission
-   * Future: Native app integration for system-level DND
-   */
-  async enable(): Promise<{ success: boolean; error?: string }> {
-    try {
-      if (typeof window === 'undefined') {
-        return { success: false, error: 'Not in browser environment' }
-      }
-
-      // Browser-level DND (notification permission)
-      if ('Notification' in window) {
-        const permission = await Notification.requestPermission()
-
-        if (permission === 'granted') {
-          this.dndEnabled = true
-
-          // Future: Send message to native app
-          // if (window.nativeApp) {
-          //   await window.nativeApp.enableDND()
-          // }
-
-          return { success: true }
-        }
-
-        return { success: false, error: 'Notification permission denied' }
-      }
-
-      return { success: false, error: 'Notifications not supported' }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+/**
+ * Check if user has an active integration
+ */
+export async function hasIntegration(
+  userId: string,
+  provider: IntegrationProvider
+): Promise<boolean> {
+  const integration = await prisma.integration.findUnique({
+    where: {
+      userId_provider: {
+        userId,
+        provider
       }
     }
-  }
+  })
 
-  /**
-   * Disable Do Not Disturb mode
-   */
-  async disable(): Promise<{ success: boolean; error?: string }> {
-    try {
-      this.dndEnabled = false
-
-      // Future: Send message to native app
-      // if (window.nativeApp) {
-      //   await window.nativeApp.disableDND()
-      // }
-
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
-    }
-  }
-
-  /**
-   * Get current DND status
-   */
-  isEnabled(): boolean {
-    return this.dndEnabled
-  }
+  return integration?.isActive ?? false
 }
 
 /**
- * Music Service Integration
- * Future: Spotify, Apple Music, YouTube Music
+ * Get user integration
  */
-export class MusicService {
-  private static instance: MusicService
-  private isPlaying: boolean = false
-  private currentProvider: 'spotify' | 'apple' | 'youtube' | null = null
-
-  private constructor() {}
-
-  static getInstance(): MusicService {
-    if (!MusicService.instance) {
-      MusicService.instance = new MusicService()
-    }
-    return MusicService.instance
-  }
-
-  /**
-   * Start focus music playlist
-   * Future: Integrate with music service APIs
-   */
-  async start(provider: 'spotify' | 'apple' | 'youtube' = 'spotify'): Promise<{
-    success: boolean
-    error?: string
-  }> {
-    try {
-      // Placeholder implementation
-      console.log(`[Music] Starting focus playlist on ${provider}`)
-
-      // Future: Spotify SDK
-      // if (provider === 'spotify' && window.Spotify) {
-      //   const player = new window.Spotify.Player({
-      //     name: 'FlowState Focus',
-      //     getOAuthToken: cb => cb(token),
-      //   })
-      //   await player.connect()
-      //   await player.play('spotify:playlist:37i9dQZF1DWZeKCadgRdKQ') // Deep Focus
-      // }
-
-      // Future: Apple Music
-      // if (provider === 'apple' && window.MusicKit) {
-      //   const music = window.MusicKit.getInstance()
-      //   await music.setQueue({ playlist: 'focus-playlist-id' })
-      //   await music.play()
-      // }
-
-      this.isPlaying = true
-      this.currentProvider = provider
-
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+export async function getIntegration(
+  userId: string,
+  provider: IntegrationProvider
+) {
+  return await prisma.integration.findUnique({
+    where: {
+      userId_provider: {
+        userId,
+        provider
       }
     }
-  }
-
-  /**
-   * Stop focus music
-   */
-  async stop(): Promise<{ success: boolean; error?: string }> {
-    try {
-      console.log('[Music] Stopping focus playlist')
-
-      // Future: Stop playback via SDK
-      // if (window.Spotify?.player) {
-      //   await window.Spotify.player.pause()
-      // }
-
-      this.isPlaying = false
-      this.currentProvider = null
-
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      }
-    }
-  }
-
-  /**
-   * Get current playback status
-   */
-  getStatus(): { isPlaying: boolean; provider: string | null } {
-    return {
-      isPlaying: this.isPlaying,
-      provider: this.currentProvider,
-    }
-  }
+  })
 }
 
 /**
- * Integration Manager
- * Coordinates all integration services
+ * Save integration tokens
  */
-export class IntegrationManager {
-  private static instance: IntegrationManager
-  private dnd: DNDService
-  private music: MusicService
-
-  private constructor() {
-    this.dnd = DNDService.getInstance()
-    this.music = MusicService.getInstance()
+export async function saveIntegration(
+  userId: string,
+  provider: IntegrationProvider,
+  data: {
+    providerAccountId?: string
+    accessToken?: string
+    refreshToken?: string
+    expiresAt?: number
+    scope?: string
+    metadata?: any
   }
-
-  static getInstance(): IntegrationManager {
-    if (!IntegrationManager.instance) {
-      IntegrationManager.instance = new IntegrationManager()
+) {
+  return await prisma.integration.upsert({
+    where: {
+      userId_provider: {
+        userId,
+        provider
+      }
+    },
+    update: {
+      ...data,
+      isActive: true,
+      updatedAt: new Date()
+    },
+    create: {
+      userId,
+      provider,
+      ...data,
+      isActive: true
     }
-    return IntegrationManager.instance
-  }
-
-  /**
-   * Enable all integrations for Flow session
-   */
-  async enableAll(): Promise<{
-    dnd: { success: boolean; error?: string }
-    music: { success: boolean; error?: string }
-  }> {
-    const dndResult = await this.dnd.enable()
-    const musicResult = await this.music.start()
-
-    return {
-      dnd: dndResult,
-      music: musicResult,
-    }
-  }
-
-  /**
-   * Disable all integrations
-   */
-  async disableAll(): Promise<{
-    dnd: { success: boolean; error?: string }
-    music: { success: boolean; error?: string }
-  }> {
-    const dndResult = await this.dnd.disable()
-    const musicResult = await this.music.stop()
-
-    return {
-      dnd: dndResult,
-      music: musicResult,
-    }
-  }
-
-  /**
-   * Get integration status
-   */
-  getStatus(): {
-    dnd: boolean
-    music: { isPlaying: boolean; provider: string | null }
-  } {
-    return {
-      dnd: this.dnd.isEnabled(),
-      music: this.music.getStatus(),
-    }
-  }
+  })
 }
 
-// Export singleton instances
-export const dndService = DNDService.getInstance()
-export const musicService = MusicService.getInstance()
-export const integrationManager = IntegrationManager.getInstance()
+/**
+ * Disconnect integration
+ */
+export async function disconnectIntegration(
+  userId: string,
+  provider: IntegrationProvider
+) {
+  return await prisma.integration.update({
+    where: {
+      userId_provider: {
+        userId,
+        provider
+      }
+    },
+    data: {
+      isActive: false,
+      accessToken: null,
+      refreshToken: null
+    }
+  })
+}
+
+/**
+ * Delete integration completely
+ */
+export async function deleteIntegration(
+  userId: string,
+  provider: IntegrationProvider
+) {
+  return await prisma.integration.delete({
+    where: {
+      userId_provider: {
+        userId,
+        provider
+      }
+    }
+  })
+}
+
+/**
+ * Get all user integrations
+ */
+export async function getUserIntegrations(userId: string) {
+  return await prisma.integration.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'asc' }
+  })
+}
+
+/**
+ * Canvas LMS specific functions
+ */
+export async function saveCanvasIntegration(
+  userId: string,
+  apiKey: string,
+  institutionUrl: string
+) {
+  return await saveIntegration(userId, 'canvas', {
+    accessToken: apiKey,
+    metadata: { institutionUrl }
+  })
+}
+
+/**
+ * Check if access token is expired
+ */
+export function isTokenExpired(expiresAt?: number | null): boolean {
+  if (!expiresAt) return false
+  return Date.now() >= expiresAt * 1000
+}
+
+/**
+ * Refresh OAuth token (placeholder - implement per provider)
+ */
+export async function refreshOAuthToken(
+  userId: string,
+  provider: IntegrationProvider
+): Promise<boolean> {
+  const integration = await getIntegration(userId, provider)
+
+  if (!integration || !integration.refreshToken) {
+    return false
+  }
+
+  // TODO: Implement provider-specific token refresh
+  // For now, just return false
+  console.warn(\`Token refresh not implemented for \${provider}\`)
+  return false
+}
