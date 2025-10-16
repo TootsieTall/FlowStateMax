@@ -11,3 +11,6 @@ export const prisma =
   })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+// Note: Supabase provides built-in connection pooling via pgBouncer
+// No need for Prisma Accelerate when using Supabase's pooled connection
