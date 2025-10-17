@@ -179,6 +179,6 @@ export async function refreshOAuthToken(
 
   // TODO: Implement provider-specific token refresh
   // For now, just return false
-  console.warn(\`Token refresh not implemented for \${provider}\`)
+  console.warn(`Token refresh not implemented for ${provider}`)
   return false
 }
