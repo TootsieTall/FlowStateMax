@@ -156,7 +156,7 @@ export const authOptions: NextAuthOptions = {
     // Shorter session for guest users
     maxAge: isGuestOnboardingAllowed() ? 24 * 60 * 60 : 30 * 24 * 60 * 60, // 1 day vs 30 days
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development',
   debug: isDevMode(), // Enable debug mode in development
 }
 
