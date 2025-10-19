@@ -12,15 +12,19 @@ datasource db {
 
 model User {
   id                String             @id @default(cuid())
-  email             String             @unique
+  email             String?            @unique
+  emailVerified     DateTime?
+  hashedPassword    String?
   name              String?
   image             String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  
+
   // Onboarding
   onboardingComplete Boolean           @default(false)
   goals             String[]          // Array of focus areas
+
+  @@index([email])
   
   // Flow Session Tracking (28-day ritual/location habit building)
   ritualCompletionCount Int            @default(0)  // Count of completed rituals (max 28)
