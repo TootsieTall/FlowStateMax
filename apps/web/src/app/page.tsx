@@ -1,29 +1,32 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [hasRedirected, setHasRedirected] = useState(false)
 
   useEffect(() => {
-    if (status === 'loading') {
-      // Still checking authentication
+    // Only redirect once authentication status is determined
+    if (status === 'loading' || hasRedirected) {
       return
     }
 
-    if (!session) {
-      // No session, redirect to onboarding
+    // Redirect based on authentication status
+    if (status === 'authenticated' && session) {
+      const onboardingComplete = (session.user as any)?.onboardingComplete
+      router.replace(onboardingComplete ? '/today' : '/onboarding')
+      setHasRedirected(true)
+    } else if (status === 'unauthenticated') {
       router.replace('/onboarding')
-    } else {
-      // Has session, redirect to today view
-      router.replace('/today')
+      setHasRedirected(true)
     }
-  }, [session, status, router])
+  }, [session, status, router, hasRedirected])
 
-  // Show loading state
+  // Show loading state while determining auth status and redirecting
   return (
     <div className="min-h-screen bg-bg-primary flex items-center justify-center">
       <div className="text-center">

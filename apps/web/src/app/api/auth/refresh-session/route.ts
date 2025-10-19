@@ -2,9 +2,12 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/auth/refresh-session
- * 
+ *
  * Forces a session refresh by fetching the latest user data
  * This is useful after completing onboarding to ensure the JWT token
  * has the updated onboardingComplete status
