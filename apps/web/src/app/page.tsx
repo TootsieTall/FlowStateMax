@@ -1,38 +1,21 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
-import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+export default async function Home() {
+  // Get session on the server
+  const session = await getServerSession(authOptions)
 
-export default function Home() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [hasRedirected, setHasRedirected] = useState(false)
+  // Server-side redirect based on authentication status
+  if (session) {
+    // User is authenticated - check onboarding status
+    const onboardingComplete = (session.user as any)?.onboardingComplete === true
+    redirect(onboardingComplete ? '/today' : '/onboarding')
+  } else {
+    // User is not authenticated - send to onboarding
+    redirect('/onboarding')
+  }
 
-  useEffect(() => {
-    // Only redirect once authentication status is determined
-    if (status === 'loading' || hasRedirected) {
-      return
-    }
-
-    // Redirect based on authentication status
-    if (status === 'authenticated' && session) {
-      const onboardingComplete = (session.user as any)?.onboardingComplete
-      router.replace(onboardingComplete ? '/today' : '/onboarding')
-      setHasRedirected(true)
-    } else if (status === 'unauthenticated') {
-      router.replace('/onboarding')
-      setHasRedirected(true)
-    }
-  }, [session, status, router, hasRedirected])
-
-  // Show loading state while determining auth status and redirecting
-  return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-text-secondary">Loading...</p>
-      </div>
-    </div>
-  )
+  // This will never be reached due to redirects above
+  return null
 }

@@ -78,16 +78,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from landing page (check onboarding status)
-  if (isAuthenticated && pathname === '/') {
-    const url = request.nextUrl.clone();
-    // Check if user completed onboarding (stored in token if available)
-    const onboardingComplete = token?.onboardingComplete === true;
-    url.pathname = onboardingComplete ? '/today' : '/onboarding';
-    return NextResponse.redirect(url);
-  }
-
-  // Allow access to public routes
+  // Allow access to public routes (root page handles its own redirect logic)
   if (isPublicRoute) {
     return NextResponse.next();
   }
