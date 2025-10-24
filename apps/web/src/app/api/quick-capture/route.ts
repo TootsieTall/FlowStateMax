@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { quickCaptureSchema } from '@flowstate/core';
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/quick-capture
  * Create a task, note, or scheduled item from quick capture input

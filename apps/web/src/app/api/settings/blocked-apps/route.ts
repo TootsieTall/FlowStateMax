@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { blockedAppSchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/settings/blocked-apps
  * List all blocked apps

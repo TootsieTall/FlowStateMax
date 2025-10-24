@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateAIResponse } from '@/lib/ai';
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/ai/parse-intent
  * Parse natural language input into structured task data

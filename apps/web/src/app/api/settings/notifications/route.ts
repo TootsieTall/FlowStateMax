@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { notificationPreferencesSchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/settings/notifications
  * Get notification preferences

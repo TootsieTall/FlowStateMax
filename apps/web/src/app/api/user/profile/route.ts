@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { profileUpdateSchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/user/profile
  * Get user profile data including ritual and location counts

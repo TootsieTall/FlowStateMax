@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ritualItemSchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * PATCH /api/settings/ritual/[id]
  * Update ritual item

@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { locationSchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * PATCH /api/settings/locations/[id]
  * Update location

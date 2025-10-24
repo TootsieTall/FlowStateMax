@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { FlowSessionOrchestrator } from '@flowstate/core'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/sessions/flow/resume
  * Resume a paused flow session

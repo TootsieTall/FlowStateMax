@@ -3,6 +3,8 @@ import { authOptions } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { getUserIntegrations } from '@/lib/integrations'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/settings/integrations
  * List all user integrations

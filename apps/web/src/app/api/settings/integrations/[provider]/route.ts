@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { disconnectIntegration, deleteIntegration, saveCanvasIntegration } from '@/lib/integrations'
 import { integrationProviderSchema, canvasApiKeySchema } from '@/lib/validators/settings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/settings/integrations/[provider]
  * Connect integration (Canvas API key for now)

@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { generateAIResponse } from '@/lib/ai';
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/ai/brainstorm
  * AI thinking partner for brainstorming and problem-solving

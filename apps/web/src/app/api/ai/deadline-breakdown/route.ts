@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { generateAIResponse } from '@/lib/ai';
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/ai/deadline-breakdown
  * Break down a task with a deadline into smaller time blocks

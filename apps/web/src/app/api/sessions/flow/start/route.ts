@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { FlowSessionOrchestrator, OrchestratorConfig } from '@flowstate/core'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/sessions/flow/start
  * Start a new flow session with full adapter orchestration
