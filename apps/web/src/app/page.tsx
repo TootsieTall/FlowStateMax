@@ -2,17 +2,27 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+/**
+ * Root Page - Smart redirect based on authentication state
+ *
+ * Redirect Logic:
+ * - Authenticated + onboarding complete → /today (main app)
+ * - Authenticated + onboarding incomplete → /onboarding/goals
+ * - Unauthenticated → /onboarding (shows auth form)
+ *
+ * Note: /onboarding serves dual purpose:
+ * - Shows login/signup form for unauthenticated users
+ * - Shows onboarding flow for authenticated users
+ */
 export default async function Home() {
-  // Get session on the server
   const session = await getServerSession(authOptions)
 
-  // Server-side redirect based on authentication status
   if (session) {
-    // User is authenticated - check onboarding status
+    // Authenticated user - check if they've completed onboarding
     const onboardingComplete = (session.user as any)?.onboardingComplete === true
-    redirect(onboardingComplete ? '/today' : '/onboarding')
+    redirect(onboardingComplete ? '/today' : '/onboarding/goals')
   } else {
-    // User is not authenticated - send to onboarding
+    // Unauthenticated user - send to onboarding (which shows auth form)
     redirect('/onboarding')
   }
 

@@ -6,9 +6,9 @@ import { prisma } from '@/lib/prisma'
 
 export default async function TodayPage() {
   const session = await getServerSession(authOptions)
-  
+
   if (!session?.user) {
-    redirect('/login')
+    redirect('/onboarding')
   }
 
   // Fetch or create user data
