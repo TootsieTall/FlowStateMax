@@ -63,9 +63,16 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
   const isOnboardingRoute = pathname.startsWith(ONBOARDING_ROUTES);
 
-  // GUEST MODE: Allow unauthenticated access to onboarding
+  // Allow unauthenticated access to /onboarding (where auth form is located)
+  // This prevents redirect loops when guest mode is disabled
+  if (pathname === '/onboarding' && !isAuthenticated) {
+    console.log('🔓 Allowing unauthenticated access to onboarding page (auth form)');
+    return NextResponse.next();
+  }
+
+  // GUEST MODE: Allow unauthenticated access to other onboarding routes
   if (isOnboardingRoute && isGuestOnboardingAllowed() && !isAuthenticated) {
-    // Allow guest users to access onboarding without authentication
+    // Allow guest users to access onboarding flow without authentication
     console.log('🎫 Guest onboarding access granted for:', pathname);
     return NextResponse.next();
   }
@@ -92,16 +99,11 @@ export async function middleware(request: NextRequest) {
   // Require authentication for protected routes (non-onboarding)
   if (!isAuthenticated) {
     const url = request.nextUrl.clone();
-    
-    // If guest mode is enabled, send to onboarding; otherwise to login
-    if (isGuestOnboardingAllowed()) {
-      url.pathname = '/onboarding';
-    } else {
-      url.pathname = '/login';
-      // Store the intended destination
-      url.searchParams.set('callbackUrl', pathname);
-    }
-    
+
+    // Always redirect to /onboarding where the auth form is located
+    // This works whether guest mode is enabled or not
+    url.pathname = '/onboarding';
+
     return NextResponse.redirect(url);
   }
 
