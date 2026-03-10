@@ -1,19 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { 
-  Sparkles, 
-  Calendar, 
-  Trash2, 
-  CheckCircle2, 
-  Circle,
-  Filter,
+import {
+  Sparkles,
+  Calendar,
+  Trash2,
+  Flag,
+  GripVertical,
+  Plus,
   Search,
-  ArrowUpDown,
-  Clock,
-  Flag
 } from 'lucide-react';
 import { useAppStore } from '@/store';
 import QuickCapture from '@/components/QuickCapture';
@@ -31,6 +28,194 @@ interface CapturedItem {
   updatedAt: string;
 }
 
+type Column = 'inbox' | 'doing' | 'done';
+
+function columnLabel(col: Column) {
+  if (col === 'inbox') return '📥 Inbox';
+  if (col === 'doing') return '⚡ Doing';
+  return '✅ Done';
+}
+
+function itemToColumn(item: CapturedItem): Column {
+  if (item.completed) return 'done';
+  if (item.impact === 'HIGH') return 'doing';
+  return 'inbox';
+}
+
+/** Move an item to a column by mutating its fields locally + calling the API */
+async function moveItem(
+  itemId: string,
+  col: Column
+): Promise<{ completed: boolean; impact: 'HIGH' | 'LOW' }> {
+  const patch =
+    col === 'done'
+      ? { completed: true }
+      : col === 'doing'
+      ? { completed: false, impact: 'HIGH' }
+      : { completed: false, impact: 'LOW' };
+
+  await fetch(`/api/tasks/${itemId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+
+  return patch as { completed: boolean; impact: 'HIGH' | 'LOW' };
+}
+
+// ─── Kanban column component ────────────────────────────────────────────────
+
+interface KanbanColumnProps {
+  col: Column;
+  items: CapturedItem[];
+  onDrop: (itemId: string, col: Column) => void;
+  onDelete: (itemId: string) => void;
+  onMoveCard: (itemId: string, col: Column) => void;
+}
+
+function KanbanColumn({ col, items, onDrop, onDelete, onMoveCard }: KanbanColumnProps) {
+  const [isDragOver, setIsDragOver] = useState(false);
+  const dragItem = useRef<string | null>(null);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const colBg: Record<Column, string> = {
+    inbox: 'bg-bg-elevated border-border-default',
+    doing: 'bg-bg-elevated border-accent-orange/40',
+    done: 'bg-bg-elevated border-accent-gold/30',
+  };
+
+  const colHeader: Record<Column, string> = {
+    inbox: 'text-text-secondary',
+    doing: 'text-accent-orange',
+    done: 'text-accent-gold',
+  };
+
+  return (
+    <div
+      className={`flex flex-col rounded-2xl border-2 min-h-[400px] transition-all ${colBg[col]} ${
+        isDragOver ? 'ring-2 ring-accent-gold/60 scale-[1.01]' : ''
+      }`}
+      onDragOver={handleDragOver}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setIsDragOver(false);
+        const id = e.dataTransfer.getData('text/plain');
+        if (id) onDrop(id, col);
+      }}
+    >
+      {/* Column header */}
+      <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span className={`font-semibold text-sm uppercase tracking-wide ${colHeader[col]}`}>
+          {columnLabel(col)}
+        </span>
+        <span className="text-xs text-text-tertiary bg-bg-surface px-2 py-0.5 rounded-full">
+          {items.length}
+        </span>
+      </div>
+
+      {/* Cards */}
+      <div className="flex-1 px-3 pb-3 space-y-2 overflow-y-auto">
+        {items.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-24 text-text-tertiary text-sm opacity-50 select-none">
+            <span>Drop cards here</span>
+          </div>
+        )}
+
+        {items.map((item) => (
+          <div
+            key={item.id}
+            draggable
+            onDragStart={(e) => {
+              dragItem.current = item.id;
+              e.dataTransfer.setData('text/plain', item.id);
+              e.dataTransfer.effectAllowed = 'move';
+            }}
+            className="group bg-bg-primary border border-border-default rounded-xl p-3 cursor-grab active:cursor-grabbing hover:border-accent-gold/40 hover:shadow-md transition-all"
+          >
+            <div className="flex items-start gap-2">
+              <GripVertical className="w-4 h-4 text-text-tertiary mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="flex-1 min-w-0">
+                <p
+                  className={`text-sm font-medium leading-snug ${
+                    item.completed ? 'line-through text-text-tertiary' : 'text-text-primary'
+                  }`}
+                >
+                  {item.title}
+                </p>
+
+                {item.description && (
+                  <p className="text-xs text-text-tertiary mt-1 line-clamp-2">
+                    {item.description}
+                  </p>
+                )}
+
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                  {item.impact === 'HIGH' && col !== 'done' && (
+                    <span className="flex items-center gap-0.5 text-xs text-accent-orange bg-accent-orange/10 px-1.5 py-0.5 rounded-md">
+                      <Flag className="w-2.5 h-2.5" /> High
+                    </span>
+                  )}
+                  {item.deadline && (
+                    <span className="flex items-center gap-0.5 text-xs text-text-tertiary">
+                      <Calendar className="w-2.5 h-2.5" />
+                      {new Date(item.deadline).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  )}
+                </div>
+
+                {/* Quick move buttons */}
+                <div className="flex gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {col !== 'inbox' && (
+                    <button
+                      onClick={() => onMoveCard(item.id, 'inbox')}
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-bg-surface text-text-tertiary hover:text-text-primary hover:bg-bg-secondary transition-colors"
+                    >
+                      → Inbox
+                    </button>
+                  )}
+                  {col !== 'doing' && (
+                    <button
+                      onClick={() => onMoveCard(item.id, 'doing')}
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-bg-surface text-text-tertiary hover:text-accent-orange hover:bg-accent-orange/10 transition-colors"
+                    >
+                      → Doing
+                    </button>
+                  )}
+                  {col !== 'done' && (
+                    <button
+                      onClick={() => onMoveCard(item.id, 'done')}
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-bg-surface text-text-tertiary hover:text-accent-gold hover:bg-accent-gold/10 transition-colors"
+                    >
+                      → Done
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={() => onDelete(item.id)}
+                className="flex-shrink-0 p-1 rounded text-text-tertiary hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main page ───────────────────────────────────────────────────────────────
+
 export default function CapturePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -38,135 +223,83 @@ export default function CapturePage() {
 
   const [items, setItems] = useState<CapturedItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'recent' | 'deadline' | 'impact'>('recent');
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push(ROUTES.HOME);
-    }
-  }, [status, router]);
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
 
-  // Fetch captured items
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetchItems();
-    }
-  }, [status]);
+    if (!isDevBypass && status === 'unauthenticated') router.push(ROUTES.HOME);
+  }, [status, router, isDevBypass]);
+
+  useEffect(() => {
+    if (status === 'authenticated' || isDevBypass) fetchItems();
+  }, [status, isDevBypass]);
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('/api/quick-capture');
-      if (response.ok) {
-        const data = await response.json();
+      const res = await fetch('/api/quick-capture');
+      if (res.ok) {
+        const data = await res.json();
         setItems(data.items || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch items:', error);
+    } catch (err) {
+      console.error('Failed to fetch items:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleToggleComplete = async (itemId: string, currentStatus: boolean) => {
+  const handleDrop = async (itemId: string, col: Column) => {
+    const item = items.find((i) => i.id === itemId);
+    if (!item) return;
+    if (itemToColumn(item) === col) return; // no-op
+
+    // Optimistic update
+    setItems((prev) =>
+      prev.map((i) =>
+        i.id === itemId
+          ? {
+              ...i,
+              completed: col === 'done',
+              impact: col === 'doing' ? 'HIGH' : col === 'inbox' ? 'LOW' : i.impact,
+            }
+          : i
+      )
+    );
+
     try {
-      // Optimistic update
-      setItems(items.map(item => 
-        item.id === itemId ? { ...item, completed: !currentStatus } : item
-      ));
-
-      // TODO: Create API endpoint to update task completion
-      const response = await fetch(`/api/tasks/${itemId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed: !currentStatus }),
-      });
-
-      if (!response.ok) {
-        // Revert on error
-        setItems(items.map(item => 
-          item.id === itemId ? { ...item, completed: currentStatus } : item
-        ));
-      }
-    } catch (error) {
-      console.error('Failed to toggle completion:', error);
-      // Revert on error
-      setItems(items.map(item => 
-        item.id === itemId ? { ...item, completed: currentStatus } : item
-      ));
+      await moveItem(itemId, col);
+    } catch {
+      fetchItems(); // revert on error
     }
   };
 
   const handleDelete = async (itemId: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return;
-
+    setItems((prev) => prev.filter((i) => i.id !== itemId));
     try {
-      // Optimistic update
-      setItems(items.filter(item => item.id !== itemId));
-
-      // TODO: Create API endpoint to delete task
-      const response = await fetch(`/api/tasks/${itemId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        // Refresh on error
-        fetchItems();
-      }
-    } catch (error) {
-      console.error('Failed to delete item:', error);
+      await fetch(`/api/tasks/${itemId}`, { method: 'DELETE' });
+    } catch {
       fetchItems();
     }
   };
 
-  // Filter and sort items
-  const filteredItems = items
-    .filter(item => {
-      // Filter by status
-      if (filter === 'active' && item.completed) return false;
-      if (filter === 'completed' && !item.completed) return false;
+  const filtered = items.filter((item) => {
+    if (!searchTerm) return true;
+    const s = searchTerm.toLowerCase();
+    return (
+      item.title.toLowerCase().includes(s) ||
+      item.description?.toLowerCase().includes(s)
+    );
+  });
 
-      // Filter by search
-      if (searchTerm) {
-        const search = searchTerm.toLowerCase();
-        return (
-          item.title.toLowerCase().includes(search) ||
-          item.description?.toLowerCase().includes(search)
-        );
-      }
-
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'recent') {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      } else if (sortBy === 'deadline') {
-        if (!a.deadline) return 1;
-        if (!b.deadline) return -1;
-        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-      } else if (sortBy === 'impact') {
-        if (a.impact === 'HIGH' && b.impact === 'LOW') return -1;
-        if (a.impact === 'LOW' && b.impact === 'HIGH') return 1;
-        return 0;
-      }
-      return 0;
-    });
-
-  const stats = {
-    total: items.length,
-    active: items.filter(item => !item.completed).length,
-    completed: items.filter(item => item.completed).length,
-    highImpact: items.filter(item => item.impact === 'HIGH' && !item.completed).length,
-  };
+  const byColumn = (col: Column) => filtered.filter((i) => itemToColumn(i) === col);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-text-tertiary">Loading your captures...</p>
+          <div className="w-12 h-12 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-sm text-text-tertiary">Loading your board...</p>
         </div>
       </div>
     );
@@ -175,211 +308,95 @@ export default function CapturePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
       <QuickCapture />
-      
-      <div className="max-w-6xl mx-auto px-4 py-8">
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h1 className="text-display-md text-text-primary mb-2">
-                Quick Capture
-              </h1>
-              <p className="text-body text-text-tertiary">
-                Capture thoughts, tasks, and ideas instantly ✨
-              </p>
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-text-primary">Task Board</h1>
+            <p className="text-sm text-text-tertiary mt-0.5">
+              Drag cards between columns or use the quick-move buttons
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+                className="pl-9 pr-4 py-2 text-sm bg-bg-elevated border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent-gold/60"
+              />
             </div>
+
             <button
               onClick={toggleQuickCapture}
-              className="btn-primary group"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent-gold to-accent-orange text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity shadow-md"
             >
-              <Sparkles className="w-5 h-5 group-hover:animate-icon-bounce" />
+              <Plus className="w-4 h-4" />
               New Capture
             </button>
           </div>
+        </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-4 gap-4 mt-6">
-            <div className="card p-4 hover-lift">
-              <div className="text-h2 text-text-primary">{stats.total}</div>
-              <div className="text-caption text-text-tertiary">Total Items</div>
-            </div>
-            <div className="card p-4 hover-lift">
-              <div className="text-h2 text-gradient-sunset">{stats.active}</div>
-              <div className="text-caption text-text-tertiary">Active</div>
-            </div>
-            <div className="card p-4 hover-lift">
-              <div className="text-h2 text-gradient-gold">{stats.completed}</div>
-              <div className="text-caption text-text-tertiary">Completed</div>
-            </div>
-            <div className="card p-4 hover-lift">
-              <div className="text-h2 text-accent-orange">{stats.highImpact}</div>
-              <div className="text-caption text-text-tertiary">High Impact</div>
-            </div>
+        {/* Summary chips */}
+        <div className="flex gap-3 mb-6 text-xs flex-wrap">
+          <span className="px-3 py-1 bg-bg-elevated rounded-full border border-border-default text-text-secondary">
+            {byColumn('inbox').length} in inbox
+          </span>
+          <span className="px-3 py-1 bg-accent-orange/10 rounded-full border border-accent-orange/30 text-accent-orange">
+            {byColumn('doing').length} doing
+          </span>
+          <span className="px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/30 text-accent-gold">
+            {byColumn('done').length} done
+          </span>
+        </div>
+
+        {/* Empty state */}
+        {items.length === 0 ? (
+          <div className="text-center py-20">
+            <Sparkles className="w-12 h-12 text-accent-gold mx-auto mb-4 opacity-60" />
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
+              Board is empty
+            </h3>
+            <p className="text-sm text-text-tertiary mb-6">
+              Capture your first task to get started
+            </p>
+            <button
+              onClick={toggleQuickCapture}
+              className="px-6 py-2.5 bg-gradient-to-r from-accent-gold to-accent-orange text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+            >
+              <Sparkles className="w-4 h-4 inline-block mr-2" />
+              Capture Something
+            </button>
           </div>
-        </div>
-
-        {/* Filters and Search */}
-        <div className="bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong p-4 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Search */}
-            <div className="flex-1 min-w-[200px]">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search captures..."
-                  className="input pl-10"
-                />
-              </div>
-            </div>
-
-            {/* Filter */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-text-tertiary" />
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value as any)}
-                className="select"
-              >
-                <option value="all">All Items</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-
-            {/* Sort */}
-            <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-5 h-5 text-text-tertiary" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="select"
-              >
-                <option value="recent">Recent First</option>
-                <option value="deadline">By Deadline</option>
-                <option value="impact">By Impact</option>
-              </select>
-            </div>
+        ) : (
+          /* Kanban grid */
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {(['inbox', 'doing', 'done'] as Column[]).map((col) => (
+              <KanbanColumn
+                key={col}
+                col={col}
+                items={byColumn(col)}
+                onDrop={handleDrop}
+                onDelete={handleDelete}
+                onMoveCard={handleDrop}
+              />
+            ))}
           </div>
-        </div>
+        )}
 
-        {/* Items List */}
-        <div className="space-y-3">
-          {filteredItems.length === 0 ? (
-            <div className="text-center py-16 bg-bg-elevated rounded-2xl border border-accent-gold/30 shadow-glow-strong animate-bounce-in">
-              <div className="relative inline-block mb-4">
-                <div className="absolute inset-0 bg-accent-gold/20 rounded-full blur-xl opacity-50 animate-pulse"></div>
-                <Sparkles className="w-16 h-16 text-accent-gold relative animate-pulse" />
-              </div>
-              <h3 className="text-h2 text-transparent bg-clip-text bg-gradient-to-r from-accent-gold to-accent-orange mb-2">
-                Your canvas awaits
-              </h3>
-              <p className="text-body text-text-tertiary mb-6">
-                Start capturing your brilliant thoughts and tasks ✨
-              </p>
-              <button
-                onClick={toggleQuickCapture}
-                className="btn-primary animate-pulse-glow"
-              >
-                <Sparkles className="w-4 h-4 inline-block mr-2" />
-                Create Your First Capture
-              </button>
-            </div>
-          ) : (
-            filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className={`card-interactive ${
-                  item.completed
-                    ? 'opacity-60'
-                    : ''
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  {/* Checkbox */}
-                  <button
-                    onClick={() => handleToggleComplete(item.id, item.completed)}
-                    className="mt-1 flex-shrink-0 group"
-                  >
-                    {item.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-accent-gold completion-shine" />
-                    ) : (
-                      <Circle className="w-6 h-6 text-text-tertiary hover:text-accent-gold transition-colors group-hover:animate-icon-bounce" />
-                    )}
-                  </button>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className={`text-h4 ${
-                        item.completed
-                          ? 'text-text-tertiary line-through'
-                          : 'text-text-primary'
-                      }`}>
-                        {item.title}
-                      </h3>
-
-                      {/* Impact Badge */}
-                      {item.impact === 'HIGH' && !item.completed && (
-                        <span className="flex items-center gap-1 px-2 py-1 bg-accent-orange/10 text-accent-orange text-xs font-medium rounded-lg flex-shrink-0">
-                          <Flag className="w-3 h-3" />
-                          High Impact
-                        </span>
-                      )}
-                    </div>
-
-                    {item.description && (
-                      <p className="text-body-sm text-text-tertiary mb-3 line-clamp-2">
-                        {item.description}
-                      </p>
-                    )}
-
-                    {/* Meta Info */}
-                    <div className="flex items-center gap-4 text-caption text-text-tertiary">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        <span>{new Date(item.createdAt).toLocaleDateString()}</span>
-                      </div>
-
-                      {item.deadline && (
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>Due: {new Date(item.deadline).toLocaleDateString()}</span>
-                        </div>
-                      )}
-
-                      {item.scheduledAt && (
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>Scheduled: {new Date(item.scheduledAt).toLocaleString()}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Delete Button */}
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="p-2 text-text-tertiary hover:text-error-strong hover:bg-error-light rounded-lg transition-all duration-fast flex-shrink-0 group"
-                  >
-                    <Trash2 className="w-5 h-5 group-hover:animate-icon-bounce" />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Keyboard Hint */}
-        <div className="mt-8 mb-32 text-center">
-          <p className="text-body-sm text-text-tertiary">
-            💡 Tip: Press <kbd className="px-2 py-1 bg-bg-secondary border border-border-default rounded text-xs text-text-secondary">⌘K</kbd> anywhere to quick capture
-          </p>
-        </div>
+        <p className="text-center text-xs text-text-tertiary mt-8 mb-24">
+          💡 Press{' '}
+          <kbd className="px-1.5 py-0.5 bg-bg-secondary border border-border-default rounded text-xs">
+            ⌘K
+          </kbd>{' '}
+          anywhere to quick capture
+        </p>
       </div>
     </div>
   );
 }
-

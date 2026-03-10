@@ -72,12 +72,14 @@ export default function SettingsPage() {
   const [integrations, setIntegrations] = useState<Integration[]>([])
   const [loading, setLoading] = useState(true)
 
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
+
   // Fetch all settings data
   useEffect(() => {
-    if (status === 'authenticated') {
+    if (status === 'authenticated' || isDevBypass) {
       fetchAllSettings()
     }
-  }, [status])
+  }, [status, isDevBypass])
 
   const fetchAllSettings = async () => {
     try {
@@ -150,7 +152,7 @@ export default function SettingsPage() {
     }
   }
 
-  if (status === 'loading' || loading) {
+  if ((!isDevBypass && status === 'loading') || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">

@@ -20,14 +20,16 @@ export default function ExplorePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Redirect if not authenticated
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
+
+  // Redirect if not authenticated (skipped in dev bypass mode)
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (!isDevBypass && status === 'unauthenticated') {
       router.push(ROUTES.HOME);
     }
-  }, [status, router]);
+  }, [status, router, isDevBypass]);
 
-  if (status === 'loading') {
+  if (!isDevBypass && status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">

@@ -29,12 +29,25 @@ function isOAuthEnabled(): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // DEV BYPASS: Allow access to all routes in dev mode with query param
-  // This is useful for testing and can be removed in production
-  if (process.env.NEXT_PUBLIC_DEV_MODE === 'true' && 
-      request.nextUrl.searchParams.get('devBypass') === 'true') {
-    console.log('🚧 DEV BYPASS: Allowing access to', pathname);
-    return NextResponse.next();
+  // DEV BYPASS: Allow access to all routes in dev mode with query param OR cookie
+  // - Visiting /?devBypass=true sets a session cookie so all subsequent requests also bypass
+  // - This is useful for local testing and is only active when NEXT_PUBLIC_DEV_MODE=true
+  if (process.env.NEXT_PUBLIC_DEV_MODE === 'true') {
+    const hasBypassParam = request.nextUrl.searchParams.get('devBypass') === 'true';
+    const hasBypassCookie = request.cookies.get('dev_bypass')?.value === 'true';
+
+    if (hasBypassParam) {
+      // Set cookie and allow through — the cookie persists for the rest of the session
+      console.log('🚧 DEV BYPASS (param): Setting bypass cookie and allowing access to', pathname);
+      const response = NextResponse.next();
+      response.cookies.set('dev_bypass', 'true', { path: '/', sameSite: 'lax' });
+      return response;
+    }
+
+    if (hasBypassCookie) {
+      console.log('🚧 DEV BYPASS (cookie): Allowing access to', pathname);
+      return NextResponse.next();
+    }
   }
 
   // Allow API routes to pass through

@@ -1,10 +1,38 @@
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { TodayView } from '@/components/TodayView'
 import { prisma } from '@/lib/prisma'
 
+// Dev mock user — used only when devBypass cookie is set and DEV_MODE is true
+const DEV_MOCK_USER = {
+  id: 'dev-bypass-user',
+  name: 'Dev User',
+  email: 'dev@daybreak.local',
+  onboardingComplete: true,
+  goals: ['Ship features', 'Stay focused'],
+  podcastGenres: [],
+  dailyGoals: [],
+  ritualCompletionCount: 0,
+  locationConfirmationCount: 0,
+}
+
 export default async function TodayPage() {
+  // DEV BYPASS: skip auth when dev_bypass cookie is set
+  if (process.env.NEXT_PUBLIC_DEV_MODE === 'true') {
+    const cookieStore = cookies()
+    if (cookieStore.get('dev_bypass')?.value === 'true') {
+      return (
+        <TodayView
+          user={DEV_MOCK_USER}
+          blocks={[]}
+          dailyGoals={DEV_MOCK_USER.goals}
+        />
+      )
+    }
+  }
+
   const session = await getServerSession(authOptions)
 
   if (!session?.user) {

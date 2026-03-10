@@ -36,17 +36,46 @@ interface UserStats {
   totalMinutes: number
 }
 
+const DEV_MOCK_SESSION_DATA: SessionData = {
+  id: 'dev-session-1',
+  startTime: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
+  endTime: new Date().toISOString(),
+  duration: 90,
+  originalDuration: 90,
+  extendedDuration: 0,
+  feedback: 'on_time',
+  ritualCompleted: true,
+  locationConfirmed: true,
+}
+
+const DEV_MOCK_USER_STATS: UserStats = {
+  ritualCompletionCount: 7,
+  locationConfirmationCount: 5,
+  totalSessions: 12,
+  totalMinutes: 720,
+}
+
 export default function FlowCompletePage() {
   const router = useRouter()
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
   const [userStats, setUserStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
+
   useEffect(() => {
+    // Dev bypass: show mock data
+    if (isDevBypass) {
+      setSessionData(DEV_MOCK_SESSION_DATA)
+      setUserStats(DEV_MOCK_USER_STATS)
+      setLoading(false)
+      return
+    }
+
     // Get session data from URL params or localStorage
     const urlParams = new URLSearchParams(window.location.search)
     const sessionId = urlParams.get('sessionId')
-    
+
     if (sessionId) {
       fetchSessionData(sessionId)
     } else {
@@ -59,7 +88,7 @@ export default function FlowCompletePage() {
         router.push('/today')
       }
     }
-  }, [router])
+  }, [router, isDevBypass])
 
   const fetchSessionData = async (sessionId: string) => {
     try {

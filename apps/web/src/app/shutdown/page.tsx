@@ -15,11 +15,13 @@ export default function ShutdownPage() {
   const [alarmsSet, setAlarmsSet] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
+  const isDevBypass = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
+
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (!isDevBypass && status === 'unauthenticated') {
       router.push(ROUTES.HOME);
     }
-  }, [status, router]);
+  }, [status, router, isDevBypass]);
 
   const handleTaskChange = (index: number, value: string) => {
     const newTasks = [...tomorrowTasks];
@@ -51,7 +53,7 @@ export default function ShutdownPage() {
     }
   };
 
-  if (status === 'loading') {
+  if (!isDevBypass && status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
