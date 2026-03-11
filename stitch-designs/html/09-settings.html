@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffc757",
+                        "accent-orange": "#FF8C42",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0B0B0B",
+                        "card-dark": "#1E1E1E",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .gold-glow {
+            box-shadow: 0 0 15px -5px rgba(255, 199, 87, 0.3);
+            border: 1px solid rgba(255, 199, 87, 0.2);
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-white/10 px-6 py-4 lg:px-20 bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">wb_sunny</span>
+</div>
+<h2 class="text-xl font-black tracking-tight uppercase italic text-primary">Daybreak</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-400 hover:text-primary text-sm font-semibold transition-colors" href="#">Today</a>
+<a class="text-slate-400 hover:text-primary text-sm font-semibold transition-colors" href="#">Week</a>
+<a class="text-slate-400 hover:text-primary text-sm font-semibold transition-colors" href="#">Explore</a>
+<a class="text-slate-400 hover:text-primary text-sm font-semibold transition-colors" href="#">Capture</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary pb-1" href="#">Profile</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile professional portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUwx58ABbxQg3vAFzuj1Z7cZOsoBvlqQnzQcqI3D-0XgvHeas8SiIi7X1_7csd9xqfLl0qev1S1OMSZjEwaPJ3QC5-u7fmgjS0k92FZyt6ty_20h0yX9aNUdgK2cjxs5uGfsZ0hexijsVwhp3m_4u6HACRBQswTYoPKA41q4ufFTJzdopdcXXmsGi6NCv2aed9O64yma_dB8x1CWmOVgFlnMncejaI2jKt8SDFH1p5_iUIy5Ljb6Maq2bhkkm2a-ZL9CEAahyNcd8"/>
+</div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-10 px-4">
+<div class="layout-content-container flex flex-col max-w-[800px] flex-1 gap-8">
+<!-- Header -->
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl font-black tracking-tight text-slate-100">Settings</h1>
+<p class="text-slate-400">Configure your high-performance environment</p>
+</div>
+<!-- Profile Section (Special Card) -->
+<div class="bg-card-dark rounded-xl gold-glow p-6 flex flex-wrap justify-between items-center gap-4">
+<div class="flex items-center gap-6">
+<div class="relative">
+<div class="size-24 rounded-full overflow-hidden border-2 border-primary/30">
+<img class="w-full h-full object-cover" data-alt="Detailed user avatar photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3GNNMUokZWn41E0xkkbq043r5cVXqPqQVKcWaGCMF36aCBNAryqK0tP4MSq4VymVgKekiRMDE_NJsSuMqkyVBnmQkRiyLWs_rLZGTGvnG_8p5TOgagN9pehndLZTLloNGSpoKcZnbuv_nJMawr57aj0-PL9x2V4IjAvmFSRIy-Y1OJkvqOD-gcN_PBSCl2HuZzYoYbNS64Lm-GFAEi1chTvyb5rozE0hI8f_aMAaQVYnIENP-PQLlm6D614-yVEE0MG6KbPw8Bg8"/>
+</div>
+<button class="absolute -bottom-1 -right-1 bg-primary text-background-dark p-1.5 rounded-full shadow-lg border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm block">edit</span>
+</button>
+</div>
+<div class="flex flex-col">
+<h3 class="text-2xl font-bold text-white leading-tight">Alex Rivers</h3>
+<p class="text-slate-400 font-medium text-sm">alex.rivers@daybreak.app</p>
+<span class="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary px-2 py-0.5 rounded bg-primary/10 w-fit">Premium Member</span>
+</div>
+</div>
+<button class="px-6 py-2.5 bg-primary text-background-dark font-bold rounded-lg hover:bg-primary/90 transition-all text-sm">
+                            Update Profile
+                        </button>
+</div>
+<!-- Accordion Sections -->
+<div class="flex flex-col gap-4">
+<!-- Work Locations -->
+<details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Flow Locations</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-5 pb-6 flex flex-col gap-4 border-t border-white/5 pt-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-slate-500">Home Office</label>
+<div class="flex items-center gap-2 bg-background-dark border border-white/10 rounded-lg p-3">
+<span class="material-symbols-outlined text-slate-500 text-sm">home</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-300" type="text" value="Oak Street, San Francisco"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-slate-500">Primary Hub</label>
+<div class="flex items-center gap-2 bg-background-dark border border-white/10 rounded-lg p-3">
+<span class="material-symbols-outlined text-slate-500 text-sm">business</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-300" placeholder="Add office address" type="text"/>
+</div>
+</div>
+</div>
+<div class="h-32 w-full rounded-lg bg-slate-800 relative overflow-hidden mt-2">
+<img class="w-full h-full object-cover opacity-50 grayscale contrast-125" data-alt="Map view showing office location" data-location="San Francisco" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3P5MUSfLUa-0GaIVox0xU-9B8JDAC1ckpFlzTUQdI_Gz9_1BdxYbKX1SbVWzTy8KdwRHzJnSj7-0LD9FnRA_M_DEwEnJCs25v7kjS2-7ISaOqYvcOAwO5_dwP8WnjUZq7L2nXtVS3WyLHRLg_2_xi7R2ScyuJAvEUxJWVw4JL9o4T_QQFygtM-BuB8lxdKpCcCKChzoTmNhPtDKrMtcuEI6EC1ZgiUEVN_1k0S2hQprSErY_OK8TrzOFhLEamM7g7bipAxKhVo6Y"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-primary/20 p-2 rounded-full animate-pulse">
+<div class="bg-primary size-3 rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="self-end px-4 py-2 bg-primary/10 text-primary border border-primary/30 font-bold rounded-lg text-sm">Save Locations</button>
+</div>
+</details>
+<!-- App Blocking -->
+<details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-accent-orange/10 p-2 rounded-lg text-accent-orange">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Blocked Apps</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-5 pb-6 border-t border-white/5 pt-4 space-y-4">
+<p class="text-sm text-slate-400">These apps will be completely disabled during focus sessions.</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 bg-background-dark rounded-lg border border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-slate-700 rounded-lg flex items-center justify-center font-bold text-xs">X</div>
+<span class="text-sm font-semibold">X (Twitter)</span>
+</div>
+<button class="text-slate-500 hover:text-red-400"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="flex items-center justify-between p-3 bg-background-dark rounded-lg border border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-slate-700 rounded-lg flex items-center justify-center font-bold text-xs">IN</div>
+<span class="text-sm font-semibold">Instagram</span>
+</div>
+<button class="text-slate-500 hover:text-red-400"><span class="material-symbols-outlined">close</span></button>
+</div>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-white/10 rounded-xl text-slate-500 font-bold text-sm hover:border-primary/50 hover:text-primary transition-all">
+                                    + Add App to Blocklist
+                                </button>
+</div>
+</details><details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Pre-Work Ritual</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">notifications</span>
+</summary>
+<div class="px-5 pb-6 border-t border-white/5 pt-4">
+<p class="text-sm text-slate-400">Set up your daily routine to enter deep focus.</p>
+</div>
+</details>
+<!-- Notifications -->
+<details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">link</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Notifications</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">link</span>
+</summary>
+<div class="px-5 pb-6 border-t border-white/5 pt-4 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-slate-100">Quiet Hours</p>
+<p class="text-xs text-slate-400">Mute everything between 10 PM and 7 AM</p>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-slate-100">Desktop Banners</p>
+<p class="text-xs text-slate-400">Show floating alerts for urgent tasks</p>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+</div>
+</details>
+<!-- Integrations -->
+<details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">extension</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Integrations</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-5 pb-6 border-t border-white/5 pt-4 grid grid-cols-1 gap-3">
+<div class="flex items-center justify-between p-4 bg-background-dark rounded-lg border border-white/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-400">calendar_month</span>
+<span class="text-sm font-semibold">Google Calendar</span>
+</div>
+<span class="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded uppercase">Connected</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-background-dark rounded-lg border border-white/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-blue-600">mail</span>
+<span class="text-sm font-semibold">Outlook</span>
+</div>
+<button class="text-[10px] font-bold text-slate-400 hover:text-white transition-colors uppercase">Connect</button>
+</div>
+</div>
+</details>
+<!-- Danger Zone -->
+<details class="group bg-card-dark rounded-xl gold-glow overflow-hidden">
+<summary class="flex cursor-pointer items-center justify-between p-5 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="bg-red-500/10 p-2 rounded-lg text-red-500">
+<span class="material-symbols-outlined">delete_forever</span>
+</div>
+<span class="text-lg font-bold text-slate-100">Danger Zone</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-5 pb-6 border-t border-red-500/20 pt-4 space-y-4">
+<p class="text-sm text-slate-400">Permanently delete your account and all associated focus data. This action cannot be undone.</p>
+<button class="w-full py-3 bg-red-500/10 text-red-500 border border-red-500/30 rounded-lg font-bold text-sm hover:bg-red-500 hover:text-white transition-all">
+                                    Delete My Account
+                                </button>
+</div>
+</details>
+</div>
+<!-- Footer Quote -->
+<div class="mt-12 p-8 border-l-4 border-primary bg-primary/5 rounded-r-xl italic">
+<p class="text-xl text-slate-300 font-medium leading-relaxed">
+                            "Deep work is the ability to focus without distraction on a cognitively demanding task. It’s a skill that allows you to quickly master complicated information and produce better results in less time."
+                        </p>
+<p class="mt-4 text-primary font-black uppercase tracking-[0.2em] text-sm">— Cal Newport</p>
+</div>
+</div>
+</main>
+<footer class="p-10 text-center text-slate-600 text-xs font-semibold tracking-widest uppercase">
+                © 2024 Daybreak Productivity Systems. Designed for Deep Work.
+            </footer>
+</div>
+</div>
+</body></html>

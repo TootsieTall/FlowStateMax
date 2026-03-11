@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffc757",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0B0B0B",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0B0B0B;
+            background-image: radial-gradient(circle at bottom center, rgba(255, 199, 87, 0.08) 0%, transparent 70%);
+            min-height: 100vh;
+        }
+        .golden-glow {
+            border: 1px solid rgba(255, 199, 87, 0.15);
+            box-shadow: 0 0 20px rgba(255, 199, 87, 0.05);
+        }
+    </style>
+</head>
+<body class="font-display text-slate-100 selection:bg-primary/30">
+<div class="relative flex flex-col min-h-screen w-full overflow-x-hidden">
+<!-- Header / Navigation -->
+<header class="flex items-center justify-between px-6 lg:px-20 py-4 border-b border-white/5 bg-background-dark/50 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">wb_twilight</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Daybreak</h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="relative py-2 text-sm font-semibold text-primary" href="#">
+                    Today
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary rounded-full"></span>
+</a>
+<a class="text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors" href="#">Journal</a>
+<a class="text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors" href="#">Deep Work</a>
+<a class="text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark font-bold border-2 border-primary/20" data-alt="User profile orange circle avatar">
+                    JD
+                </div>
+</div>
+</header>
+<main class="flex-1 max-w-[1400px] mx-auto w-full p-6 lg:p-10 space-y-10">
+<!-- Welcome Header -->
+<div class="space-y-2">
+<p class="text-primary font-medium tracking-wide uppercase text-xs">Tuesday, October 24</p>
+<h1 class="text-4xl lg:text-5xl font-black tracking-tight text-slate-100">Good morning, Julian.</h1>
+<p class="text-slate-400 text-lg">Your focus blocks are ready. Let's make today count.</p>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Section: Today's Goals -->
+<section class="lg:col-span-3 flex flex-col gap-6">
+<div class="golden-glow bg-white/5 rounded-xl p-6 h-full">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-lg text-slate-100">Today's Goals</h3>
+<span class="text-xs font-bold text-primary px-2 py-1 bg-primary/10 rounded-full">3/5</span>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border border-primary bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-background-dark font-bold">check</span>
+</div>
+<span class="text-sm text-slate-400 line-through">Complete Architecture Review</span>
+</li>
+<li class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border border-primary bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-background-dark font-bold">check</span>
+</div>
+<span class="text-sm text-slate-400 line-through">Morning meditation (15m)</span>
+</li>
+<li class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border border-primary bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[16px] text-background-dark font-bold">check</span>
+</div>
+<span class="text-sm text-slate-400 line-through">Client presentation deck</span>
+</li>
+<li class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border border-primary/40 hover:border-primary transition-colors shrink-0"></div>
+<span class="text-sm text-slate-100">Email inbox zero protocol</span>
+</li>
+<li class="flex items-start gap-3 group">
+<div class="mt-1 size-5 rounded border border-primary/40 hover:border-primary transition-colors shrink-0"></div>
+<span class="text-sm text-slate-100">Reading: Deep Work Ch. 3</span>
+</li>
+</ul>
+<button class="mt-8 w-full py-2.5 rounded-lg border border-white/10 text-xs font-bold text-slate-300 hover:bg-white/5 transition-all">
+                            + ADD GOAL
+                        </button>
+</div>
+</section>
+<!-- Center Section: Between Blocks -->
+<section class="lg:col-span-5 flex flex-col gap-6">
+<div class="golden-glow bg-white/5 rounded-xl p-8 flex flex-col items-center text-center justify-center min-h-[400px] relative overflow-hidden">
+<!-- Abstract glow background -->
+<div class="absolute inset-0 bg-primary/5 blur-[100px] -z-10"></div>
+<div class="size-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 text-primary">
+<span class="material-symbols-outlined text-4xl">coffee</span>
+</div>
+<h3 class="text-2xl font-extrabold mb-2">Between Blocks</h3>
+<p class="text-slate-400 mb-8 max-w-xs text-sm">You've finished your first focus session. Take a 15-minute conscious break before the next one.</p>
+<div class="grid grid-cols-2 gap-4 w-full">
+<div class="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-primary mb-2">self_improvement</span>
+<p class="text-sm font-bold block">Box Breathing</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">4 Minutes</p>
+</div>
+<div class="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-primary mb-2">directions_walk</span>
+<p class="text-sm font-bold block">Digital Walk</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">10 Minutes</p>
+</div>
+</div>
+<button class="mt-8 bg-primary text-background-dark px-8 py-3 rounded-xl font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all">
+                            RESUME DEEP WORK
+                        </button>
+</div>
+</section>
+<!-- Right Section: Coming Up -->
+<section class="lg:col-span-4 flex flex-col gap-6">
+<div class="golden-glow bg-white/5 rounded-xl p-6">
+<h3 class="font-bold text-lg text-slate-100 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                            Coming Up
+                        </h3>
+<div class="space-y-6 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-white/10">
+<!-- Event 1 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1.5 size-[23px] rounded-full bg-background-dark border-2 border-primary z-10"></div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Ongoing</span>
+<span class="text-sm font-bold text-slate-100">Morning Break</span>
+<span class="text-xs text-slate-500">11:00 AM - 11:15 AM</span>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1.5 size-[23px] rounded-full bg-background-dark border-2 border-slate-700 z-10"></div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Next Up</span>
+<span class="text-sm font-bold text-slate-100">Deep Work Block 2</span>
+<span class="text-xs text-slate-500">11:15 AM - 1:00 PM</span>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1.5 size-[23px] rounded-full bg-background-dark border-2 border-slate-700 z-10"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-100">Team Sync</span>
+<span class="text-xs text-slate-500">1:00 PM - 1:30 PM</span>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1.5 size-[23px] rounded-full bg-background-dark border-2 border-slate-700 z-10"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-100">Creative Review</span>
+<span class="text-xs text-slate-500">3:00 PM - 4:30 PM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Small Stat card -->
+<div class="golden-glow bg-white/5 rounded-xl p-6 flex items-center justify-between">
+<div>
+<p class="text-xs text-slate-500 font-bold uppercase tracking-widest">Deep Work Today</p>
+<p class="text-2xl font-black text-slate-100">2h 15m</p>
+</div>
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer / Quote -->
+<footer class="pt-20 pb-10 flex flex-col items-center text-center">
+<div class="max-w-2xl px-6">
+<span class="material-symbols-outlined text-primary/30 text-5xl mb-4 italic">format_quote</span>
+<p class="text-xl lg:text-2xl font-medium text-slate-300 italic leading-relaxed">
+                        "If you don't produce, you won't thrive — no matter how skilled or talented you are."
+                    </p>
+<div class="mt-4 flex items-center justify-center gap-3">
+<div class="h-px w-8 bg-primary/30"></div>
+<span class="text-sm font-bold text-primary tracking-widest uppercase">Cal Newport</span>
+<div class="h-px w-8 bg-primary/30"></div>
+</div>
+</div>
+<div class="mt-20 opacity-20 text-[10px] tracking-[0.4em] font-bold uppercase text-slate-400">
+                    Daybreak © 2024 • Focus on what matters
+                </div>
+</footer>
+</main>
+</div>
+</body></html>

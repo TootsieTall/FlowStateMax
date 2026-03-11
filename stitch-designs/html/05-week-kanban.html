@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffc757",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#231c0f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .kanban-column { min-width: 280px; }
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b3d20; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<!-- Top Navigation -->
+<header class="border-b border-primary/20 bg-background-dark/50 backdrop-blur-md sticky top-0 z-50 px-6 py-3">
+<div class="max-w-[1600px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-primary text-2xl">🌅</span>
+<h1 class="text-xl font-bold tracking-tight text-slate-100">Daybreak</h1>
+</div>
+<nav class="flex items-center gap-1">
+<a class="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-primary transition-colors" href="#">Today</a>
+<a class="px-4 py-2 rounded-lg text-sm font-bold bg-primary/10 text-primary border border-primary/20" href="#">Week</a>
+<a class="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-primary transition-colors" href="#">Capture</a>
+<a class="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-primary transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-xl bg-primary/5 border border-primary/10 text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Kanban Board -->
+<main class="flex-1 overflow-x-auto custom-scrollbar p-6">
+<div class="flex gap-4 min-w-max pb-4 h-full">
+<!-- Monday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Monday 11</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30">
+<!-- Task Card -->
+<div class="bg-[#1E1E1E] border border-slate-800 p-4 rounded-xl shadow-lg group">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-red-500/10 text-red-400 text-[10px] font-bold uppercase">High</span>
+<span class="material-symbols-outlined text-slate-600 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<p class="text-sm font-semibold text-slate-100 mb-3">Q3 Strategy Review</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] px-2 py-1 rounded-full bg-slate-800 text-slate-400">Deep Work</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tuesday (Highlighted - Today) -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-primary uppercase tracking-widest text-xs">Tuesday 12 (Today)</h3>
+<span class="material-symbols-outlined text-primary text-sm">notifications_active</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-primary/5 rounded-xl p-2 border-2 border-primary/30 shadow-[0_0_15px_rgba(255,199,87,0.1)]">
+<div class="bg-[#1E1E1E] border border-primary/20 p-4 rounded-xl shadow-lg group relative">
+<div class="absolute -left-1 top-4 h-8 w-1 bg-primary rounded-full"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase">Med</span>
+<span class="material-symbols-outlined text-slate-600 cursor-grab">drag_indicator</span>
+</div>
+<p class="text-sm font-semibold text-slate-100 mb-1">Product UI Overhaul</p>
+<p class="text-[11px] text-slate-400 mb-3">Focus on Kanban views</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] px-2 py-1 rounded-full bg-slate-800 text-slate-400">Design</span>
+</div>
+</div>
+<!-- Ghost Card (Drag Simulation) -->
+<div class="border-2 border-dashed border-primary/30 bg-primary/5 h-24 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/40">add</span>
+</div>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Wednesday 13</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30">
+<!-- Multi-day Task Start -->
+<div class="bg-[#1E1E1E] border border-slate-800 p-4 rounded-xl shadow-lg relative z-10">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase">Low</span>
+</div>
+<p class="text-sm font-semibold text-slate-100 mb-1">Architecture Audit</p>
+<div class="absolute right-[-16px] top-1/2 -translate-y-1/2 w-4 h-1 bg-primary/40 z-0"></div>
+</div>
+</div>
+</div>
+<!-- Thursday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Thursday 14</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30">
+<!-- Multi-day Task End -->
+<div class="bg-[#1E1E1E]/50 border border-slate-800 p-4 rounded-xl shadow-lg relative opacity-80">
+<div class="absolute left-[-16px] top-1/2 -translate-y-1/2 w-4 h-1 bg-primary/40 z-0"></div>
+<p class="text-sm font-semibold text-slate-300 italic">Audit continued...</p>
+</div>
+</div>
+</div>
+<!-- Friday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Friday 15</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30">
+<div class="bg-[#1E1E1E] border border-slate-800 p-4 rounded-xl shadow-lg">
+<p class="text-sm font-semibold text-slate-100 mb-3">Weekly Retro</p>
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border border-background-dark bg-primary/30 flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="h-6 w-6 rounded-full border border-background-dark bg-slate-600 flex items-center justify-center text-[10px] font-bold">AK</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Saturday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Saturday 16</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30"></div>
+</div>
+<!-- Sunday -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-bold text-slate-400 uppercase tracking-widest text-xs">Sunday 17</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3 flex-1 bg-slate-800/20 rounded-xl p-2 border border-slate-800/30"></div>
+</div>
+</div>
+</main>
+<!-- Task Pool / Inbox -->
+<section class="bg-[#1A150B] border-t border-primary/10 p-6">
+<div class="max-w-[1600px] mx-auto">
+<div class="flex items-center gap-4 mb-4">
+<h2 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">inventory_2</span>
+                    Inbox &amp; Backlog
+                </h2>
+<div class="h-px flex-1 bg-primary/10"></div>
+<button class="text-xs text-primary font-bold hover:underline">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+<!-- Backlog Cards -->
+<div class="min-w-[240px] bg-[#1E1E1E] border border-slate-800 p-3 rounded-lg flex items-center gap-3 cursor-grab hover:border-primary/40 transition-all active:scale-95">
+<span class="material-symbols-outlined text-slate-600 text-sm">drag_indicator</span>
+<div>
+<p class="text-xs font-medium text-slate-200">Refactor Auth Service</p>
+<span class="text-[9px] text-slate-500">Backlog</span>
+</div>
+</div>
+<div class="min-w-[240px] bg-[#1E1E1E] border border-slate-800 p-3 rounded-lg flex items-center gap-3 cursor-grab hover:border-primary/40 transition-all active:scale-95">
+<span class="material-symbols-outlined text-slate-600 text-sm">drag_indicator</span>
+<div>
+<p class="text-xs font-medium text-slate-200">Update Documentation</p>
+<span class="text-[9px] text-slate-500">Inbox</span>
+</div>
+</div>
+<div class="min-w-[240px] bg-[#1E1E1E] border border-slate-800 p-3 rounded-lg flex items-center gap-3 cursor-grab hover:border-primary/40 transition-all active:scale-95 shadow-[0_4px_12px_rgba(255,199,87,0.05)] border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">drag_indicator</span>
+<div>
+<p class="text-xs font-medium text-slate-200">Client Presentation Prep</p>
+<span class="text-[9px] text-primary/60 font-bold uppercase">High Priority</span>
+</div>
+</div>
+<div class="min-w-[240px] bg-[#1E1E1E] border border-slate-800 p-3 rounded-lg flex items-center gap-3 cursor-grab hover:border-primary/40 transition-all active:scale-95">
+<span class="material-symbols-outlined text-slate-600 text-sm">drag_indicator</span>
+<div>
+<p class="text-xs font-medium text-slate-200">Onboarding Flow UX</p>
+<span class="text-[9px] text-slate-500">Backlog</span>
+</div>
+</div>
+<div class="min-w-[240px] border-2 border-dashed border-slate-800 rounded-lg flex items-center justify-center text-slate-600 hover:border-primary/20 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">add_circle</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Quote -->
+<footer class="py-10 px-6 border-t border-primary/5">
+<div class="max-w-3xl mx-auto text-center">
+<blockquote class="relative">
+<span class="material-symbols-outlined text-primary/20 text-5xl absolute -top-6 -left-8 pointer-events-none">format_quote</span>
+<p class="text-lg md:text-xl font-medium text-slate-400 italic leading-relaxed">
+                    "A 40-hour time-blocked work week, I estimate, produces the same amount of output as a 60-plus hour work week pursued without structure."
+                </p>
+<footer class="mt-4 text-primary font-bold tracking-widest uppercase text-xs">— Cal Newport, Deep Work</footer>
+</blockquote>
+</div>
+</footer>
+</body></html>

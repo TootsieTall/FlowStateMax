@@ -167,10 +167,19 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Daybreak Animation Background */}
-      <DaybreakAnimation 
-        startTime={startTime} 
+      <DaybreakAnimation
+        startTime={startTime}
         endTime={endTime}
         isPaused={false}
+      />
+
+      {/* Bottom sunrise glow — Stitch screen 01 signature element */}
+      <div
+        className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-64 z-0"
+        style={{
+          background: 'radial-gradient(ellipse at bottom center, rgba(255,140,66,0.25) 0%, rgba(255,200,87,0.10) 40%, transparent 70%)',
+          filter: 'blur(40px)',
+        }}
       />
 
       {/* Immersive Mode Toggle */}
@@ -186,51 +195,74 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
         <AnimatePresence mode="wait">
           {isImmersiveMode ? (
-            /* Immersive Mode - Timer Only */
+            /* Immersive Mode — Stitch screen 01: massive timer + floating control panel */
             <motion.div
               key="immersive"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="text-center"
+              className="text-center w-full max-w-2xl"
             >
-              {/* Large Timer */}
+              {/* Session label */}
+              <p className="text-white/50 text-sm font-semibold uppercase tracking-widest mb-4">
+                {timeBlock?.title || 'Deep Work Session'}
+              </p>
+
+              {/* Large Timer — Stitch design uses ~120-160px */}
               <motion.div
-                className="mb-8"
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                className="mb-10"
+                animate={{ scale: [1, 1.015, 1] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <div className="text-white text-9xl font-bold font-mono mb-4 drop-shadow-2xl">
+                <div
+                  className="text-white font-black font-mono drop-shadow-2xl leading-none"
+                  style={{ fontSize: 'clamp(80px, 18vw, 160px)' }}
+                >
                   {formatTime(timeLeft)}
                 </div>
-                <p className="text-white/70 text-xl">
-                  {timeBlock?.title || 'Deep Work Session'}
-                </p>
               </motion.div>
 
-              {/* Minimal Controls */}
-              <div className="flex items-center justify-center gap-4">
+              {/* Floating control panel — Stitch screen 01 glass card */}
+              <div
+                className="inline-flex items-center gap-4 px-6 py-4 rounded-2xl"
+                style={{
+                  background: 'rgba(0,0,0,0.45)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                }}
+              >
                 {timeLeft < 300 && (
                   <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
                     onClick={() => setShowExtendDialog(true)}
-                    className="px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-lg transition-all flex items-center gap-2"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl transition-all"
                   >
                     <Plus className="w-4 h-4" />
                     Extend
                   </motion.button>
                 )}
                 <button
-                  onClick={handleComplete}
-                  className="px-8 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white rounded-lg transition-all"
+                  onClick={handleTakeBreak}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold rounded-xl transition-all border border-white/10"
                 >
-                  Complete
+                  <Coffee className="w-4 h-4" />
+                  Take Break
+                </button>
+                <button
+                  onClick={handleComplete}
+                  className="flex items-center gap-2 px-5 py-2.5 text-bg-primary text-sm font-black rounded-xl transition-all hover:scale-105"
+                  style={{ background: 'linear-gradient(135deg, #ffc757 0%, #fb923c 100%)' }}
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Complete Session
                 </button>
               </div>
             </motion.div>
           ) : (
-            /* Normal Mode - Full Details */
+            /* Normal Mode — Full Details panel */
             <motion.div
               key="normal"
               initial={{ opacity: 0, y: 20 }}
@@ -246,14 +278,14 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                     <div className="w-2 h-2 bg-accent-gold rounded-full animate-pulse" />
                     Flow Session Active
                   </div>
-                  <h1 className="text-display-md text-white mb-2">
+                  <h1 className="text-3xl font-black text-white mb-2 tracking-tight">
                     {timeBlock?.title || 'Deep Work Session'}
                   </h1>
                   {timeBlock?.description && (
-                    <p className="text-body text-white/70">{timeBlock.description}</p>
+                    <p className="text-sm text-white/70">{timeBlock.description}</p>
                   )}
                   {timeBlock?.task && (
-                    <p className="text-body-sm text-white/60 mt-2">
+                    <p className="text-xs text-white/60 mt-2">
                       Task: {timeBlock.task.title}
                     </p>
                   )}
@@ -279,7 +311,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                     <div className="text-2xl mb-1">
                       {session.monochromeOn ? '🎨' : '🌈'}
                     </div>
-                    <div className="text-caption text-white/70">
+                    <div className="text-xs text-white/70">
                       {session.monochromeOn ? 'Monochrome' : 'Color'}
                     </div>
                   </div>
@@ -287,7 +319,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                     <div className="text-2xl mb-1">
                       {session.appsBlocked ? '🔒' : '🔓'}
                     </div>
-                    <div className="text-caption text-white/70">
+                    <div className="text-xs text-white/70">
                       {session.appsBlocked ? 'Apps Blocked' : 'Apps Open'}
                     </div>
                   </div>
@@ -295,7 +327,7 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                     <div className="text-2xl mb-1">
                       {session.musicPlayed ? '🎵' : '🔇'}
                     </div>
-                    <div className="text-caption text-white/70">
+                    <div className="text-xs text-white/70">
                       {session.musicPlayed ? 'Music On' : 'Silent'}
                     </div>
                   </div>
@@ -321,7 +353,8 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                   </button>
                   <button
                     onClick={handleComplete}
-                    className="flex-1 px-4 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 text-bg-primary font-black rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg, #ffc757 0%, #fb923c 100%)' }}
                   >
                     <CheckCircle className="w-4 h-4" />
                     Complete
@@ -337,10 +370,10 @@ export function FlowSessionView({ session, timeBlock, user }: FlowSessionViewPro
                 className="mt-6 text-center"
               >
                 <blockquote className="border-l-4 border-white/30 bg-black/20 backdrop-blur-md px-6 py-4 rounded-r-lg">
-                  <p className="text-body text-white/80 italic mb-2">
-                    "The ability to concentrate intensely is a skill that must be trained."
+                  <p className="text-sm text-white/80 italic mb-2">
+                    &ldquo;The ability to concentrate intensely is a skill that must be trained.&rdquo;
                   </p>
-                  <footer className="text-body-sm text-white/60">— Cal Newport</footer>
+                  <footer className="text-xs text-white/60">— Cal Newport</footer>
                 </blockquote>
               </motion.div>
             </motion.div>

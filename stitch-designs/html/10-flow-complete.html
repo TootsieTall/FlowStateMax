@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffc757",
+                        "primary-dark": "#d9a320",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#080808",
+                    },
+                    fontFamily: {
+                        "display": ["'Inter'", "sans-serif"]
+                    },
+                    letterSpacing: {
+                        "tighter": "-0.03em",
+                        "tightest": "-0.05em"
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #ffc757 0%, #fde68a 50%, #ffc757 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .premium-gold-gradient {
+            background: linear-gradient(135deg, #ffc757 0%, #fb923c 100%);
+        }
+        .glass-card {
+            background: rgba(255, 199, 87, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 199, 87, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .gold-glow-border {
+            border: 1px solid rgba(255, 199, 87, 0.3);
+            box-shadow: 0 0 20px rgba(255, 199, 87, 0.05);
+        }
+        .btn-hover-effect:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        .progress-bg {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-primary/20 px-6 py-4 md:px-20 lg:px-40">
+<div class="flex items-center gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">flare</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] dark:text-slate-100">Daybreak</h2>
+</div>
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-primary/10 hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-primary">close</span>
+</button>
+</header>
+<main class="flex flex-1 justify-center py-10 px-6">
+<div class="flex flex-col max-w-[800px] flex-1">
+<!-- Hero Section -->
+<div class="flex flex-col items-center mb-16 text-center">
+<div class="w-20 h-20 rounded-full bg-primary flex items-center justify-center mb-8 shadow-2xl shadow-primary/20">
+<span class="material-symbols-outlined text-4xl text-background-dark">check</span>
+</div>
+<h1 class="text-5xl md:text-6xl font-black gold-gradient-text mb-4 tracking-tightest">Flow Session Complete!</h1>
+<p class="text-slate-400 text-lg font-medium tracking-tight opacity-80">Deep work achieved. Your focus is your superpower.</p>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+<!-- Duration Card -->
+<div class="glass-card gold-glow-border flex flex-col gap-6 rounded-2xl p-8 transition-all hover:bg-primary/5">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">timer</span>
+</div>
+<div class="flex flex-col">
+<p class="text-primary/50 text-xs font-bold uppercase tracking-[0.2em] mb-1">Session Duration</p>
+<h2 class="text-3xl font-bold text-white tracking-tighter">90 mins</h2>
+</div>
+</div>
+<!-- Feedback Card -->
+<div class="glass-card gold-glow-border flex flex-col gap-6 rounded-2xl p-8 transition-all hover:bg-primary/5">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">sentiment_very_satisfied</span>
+</div>
+<div class="flex flex-col">
+<p class="text-primary/50 text-xs font-bold uppercase tracking-[0.2em] mb-1">Flow Feedback</p>
+<h2 class="text-3xl font-bold text-white tracking-tighter">Perfect timing!</h2>
+</div>
+</div>
+</div>
+<!-- Status Badges -->
+<div class="flex flex-wrap justify-center gap-4 mb-12">
+<div class="flex items-center gap-2 rounded-full bg-emerald-500/5 px-5 py-2 border border-emerald-500/20">
+<span class="material-symbols-outlined text-emerald-400 text-sm">task_alt</span>
+<span class="text-emerald-400/80 text-xs font-bold uppercase tracking-widest">Pre-Flow Ritual: Completed</span>
+</div>
+<div class="flex items-center gap-2 rounded-full bg-blue-500/5 px-5 py-2 border border-blue-500/20">
+<span class="material-symbols-outlined text-blue-400 text-sm">location_on</span>
+<span class="text-blue-400/80 text-xs font-bold uppercase tracking-widest">Location Check: Confirmed</span>
+</div>
+</div>
+<!-- Progress Section -->
+<div class="glass-card gold-glow-border rounded-2xl p-10 mb-12 relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="text-primary/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">Ritual Streak</p>
+<h3 class="text-4xl font-black text-white tracking-tighter">7 of 28 Days</h3>
+</div>
+<div class="text-right">
+<span class="text-5xl font-black text-primary/20 tracking-tighter">25%</span>
+</div>
+</div>
+<div class="w-full progress-bg rounded-full h-2 overflow-hidden">
+<div class="premium-gold-gradient h-full w-1/4 rounded-full shadow-[0_0_15px_rgba(255,199,87,0.5)]"></div>
+</div>
+<p class="mt-6 text-sm text-slate-400 font-medium italic opacity-70 tracking-tight">"The consistency of your ritual determines the depth of your focus."</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-6 mb-16">
+<button class="flex-1 premium-gold-gradient text-background-dark font-black py-5 rounded-2xl shadow-xl shadow-primary/10 btn-hover-effect transition-all flex items-center justify-center gap-3 text-lg tracking-tight">
+<span class="material-symbols-outlined">home</span>
+                        Back to Today
+                    </button>
+<button class="flex-1 border border-primary/20 text-primary font-bold py-5 rounded-2xl hover:bg-primary/5 btn-hover-effect transition-all flex items-center justify-center gap-3 text-lg tracking-tight">
+<span class="material-symbols-outlined">edit_note</span>
+                        Quick Capture
+                    </button>
+</div>
+<!-- Footer Quote -->
+<div class="border-t border-primary/10 pt-12 pb-16">
+<blockquote class="relative p-8 border-l border-primary/30">
+<span class="material-symbols-outlined text-primary/10 absolute -top-2 -left-4 text-6xl">format_quote</span>
+<p class="text-slate-400 italic text-xl leading-relaxed tracking-tight">
+                            "Who you are, what you think, feel, and do, what you love—is the sum of what you focus on."
+                        </p>
+<cite class="block mt-6 text-primary/60 font-bold not-italic text-sm uppercase tracking-[0.2em]">— Cal Newport, Deep Work</cite>
+</blockquote>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

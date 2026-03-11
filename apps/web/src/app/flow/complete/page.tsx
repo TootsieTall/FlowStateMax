@@ -3,19 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { 
-  CheckCircle, 
-  Clock, 
-  TrendingUp, 
-  Target, 
-  Sparkles,
-  ArrowRight,
-  Home
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+// Material Symbols used inline to match Stitch design exactly
 
 interface SessionData {
   id: string
@@ -97,7 +85,7 @@ export default function FlowCompletePage() {
         const data = await response.json()
         setSessionData(data.session)
         setUserStats(data.userStats)
-        
+
         // Store in localStorage for future reference
         localStorage.setItem('lastCompletedSession', JSON.stringify(data.session))
       }
@@ -111,20 +99,18 @@ export default function FlowCompletePage() {
   const getFeedbackMessage = (feedback: string) => {
     switch (feedback) {
       case 'on_time':
-        return { message: 'Perfect timing!', emoji: '🎯', color: 'text-green-500' }
+        return 'Perfect timing!'
       case 'needed_more':
-        return { message: 'Could use more time', emoji: '⏰', color: 'text-orange-500' }
+        return 'Could use more time'
       case 'finished_early':
-        return { message: 'Finished ahead of schedule!', emoji: '🚀', color: 'text-blue-500' }
+        return 'Finished ahead of schedule!'
       default:
-        return { message: 'Session completed', emoji: '✅', color: 'text-gray-500' }
+        return 'Session completed'
     }
   }
 
   const formatDuration = (minutes: number) => {
-    if (minutes < 60) {
-      return `${minutes}m`
-    }
+    if (minutes < 60) return `${minutes} mins`
     const hours = Math.floor(minutes / 60)
     const mins = minutes % 60
     return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`
@@ -135,7 +121,7 @@ export default function FlowCompletePage() {
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-text-tertiary">Loading session summary...</p>
+          <p className="text-sm text-text-tertiary">Loading session summary...</p>
         </div>
       </div>
     )
@@ -145,229 +131,219 @@ export default function FlowCompletePage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
-          <h1 className="text-h2 text-text-primary mb-4">Session not found</h1>
-          <Button onClick={() => router.push('/today')}>
-            <Home className="w-4 h-4 mr-2" />
+          <h1 className="text-2xl font-bold text-text-primary mb-4">Session not found</h1>
+          <button
+            onClick={() => router.push('/today')}
+            className="btn-primary flex items-center gap-2 mx-auto"
+          >
+            <span className="material-symbols-outlined text-lg">home</span>
             Go Home
-          </Button>
+          </button>
         </div>
       </div>
     )
   }
 
-  const feedback = getFeedbackMessage(sessionData.feedback)
+  const feedbackMsg = getFeedbackMessage(sessionData.feedback)
   const totalDuration = (sessionData.originalDuration || sessionData.duration) + (sessionData.extendedDuration || 0)
+  const streakDays = userStats?.ritualCompletionCount ?? 0
+  const streakTarget = 28
+  const streakPct = Math.round((streakDays / streakTarget) * 100)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
+    <div className="min-h-screen bg-bg-primary relative overflow-x-hidden">
+      {/* Subtle background glow */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 70% 40% at 50% -5%, rgba(255,200,87,0.08) 0%, transparent 70%)',
+        }}
+      />
+
+      <div className="relative z-10 max-w-[800px] mx-auto px-6 py-10 pb-24">
+        {/* Hero Section — Stitch screen 10 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center mb-16 text-center"
         >
+          {/* Gold check circle — Stitch 10 */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-accent-gold to-accent-orange rounded-full mb-6"
+            transition={{ delay: 0.15, type: 'spring', stiffness: 200, damping: 15 }}
+            className="w-20 h-20 rounded-full flex items-center justify-center mb-8 shadow-2xl"
+            style={{
+              background: '#ffc757',
+              boxShadow: '0 25px 50px -12px rgba(255,199,87,0.2)',
+            }}
           >
-            <CheckCircle className="w-10 h-10 text-white" />
+            <span className="material-symbols-outlined text-4xl" style={{ color: '#080808' }}>check</span>
           </motion.div>
-          
-          <h1 className="text-display-md text-text-primary mb-2">
+
+          {/* Gold gradient headline */}
+          <h1
+            className="text-5xl md:text-6xl font-black mb-4 tracking-tight"
+            style={{
+              background: 'linear-gradient(135deg, #ffc757 0%, #fde68a 50%, #ffc757 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
             Flow Session Complete!
           </h1>
-          <p className="text-body text-text-secondary">
-            Great work on your deep focus session
+          <p className="text-text-secondary text-lg font-medium opacity-80">
+            Deep work achieved. Your focus is your superpower.
           </p>
         </motion.div>
 
-        {/* Session Summary */}
+        {/* Metrics Grid — Stitch screen 10 glass cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+          transition={{ delay: 0.25 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
         >
           {/* Duration Card */}
-          <Card className="bg-gradient-to-br from-accent-gold/10 to-accent-orange/10 border-accent-gold/20">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-text-primary">
-                <Clock className="w-5 h-5 text-accent-gold" />
+          <div className="glass-card gold-glow-border flex flex-col gap-6 rounded-2xl p-8 hover:bg-accent-gold/5 transition-all">
+            <div className="w-10 h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center">
+              <span className="material-symbols-outlined text-xl text-accent-gold">timer</span>
+            </div>
+            <div className="flex flex-col">
+              <p className="text-accent-gold/50 text-xs font-bold uppercase tracking-[0.2em] mb-1">
                 Session Duration
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-text-primary mb-2">
+              </p>
+              <h2 className="text-3xl font-bold text-text-primary tracking-tight">
                 {formatDuration(sessionData.duration)}
-              </div>
-              {sessionData.extendedDuration && sessionData.extendedDuration > 0 && (
-                <div className="text-sm text-text-secondary">
-                  <span className="font-medium">{formatDuration(sessionData.originalDuration || sessionData.duration)}</span>
-                  {' + '}
-                  <span className="text-accent-orange font-medium">{formatDuration(sessionData.extendedDuration)} extended</span>
-                  {' = '}
-                  <span className="font-bold">{formatDuration(totalDuration)} total</span>
-                </div>
+              </h2>
+              {(sessionData.extendedDuration ?? 0) > 0 && (
+                <p className="text-xs text-text-tertiary mt-1">
+                  {formatDuration(sessionData.originalDuration ?? sessionData.duration)} + {formatDuration(sessionData.extendedDuration!)} extended
+                </p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Feedback Card */}
-          <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-text-primary">
-                <Target className="w-5 h-5 text-blue-500" />
-                How did it go?
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold mb-2 ${feedback.color}`}>
-                {feedback.emoji} {feedback.message}
-              </div>
-              <p className="text-sm text-text-secondary">
-                Your feedback helps us schedule better sessions
+          <div className="glass-card gold-glow-border flex flex-col gap-6 rounded-2xl p-8 hover:bg-accent-gold/5 transition-all">
+            <div className="w-10 h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center">
+              <span className="material-symbols-outlined text-xl text-accent-gold">sentiment_very_satisfied</span>
+            </div>
+            <div className="flex flex-col">
+              <p className="text-accent-gold/50 text-xs font-bold uppercase tracking-[0.2em] mb-1">
+                Flow Feedback
               </p>
-            </CardContent>
-          </Card>
+              <h2 className="text-3xl font-bold text-text-primary tracking-tight">
+                {feedbackMsg}
+              </h2>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Ritual & Location Status */}
+        {/* Status Badges — Stitch screen 10 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+          transition={{ delay: 0.35 }}
+          className="flex flex-wrap justify-center gap-4 mb-12"
         >
-          <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                </div>
-                <div>
-                  <div className="font-semibold text-text-primary">Pre-Flow Ritual</div>
-                  <div className="text-sm text-text-secondary">
-                    {sessionData.ritualCompleted ? 'Completed' : 'Skipped'}
-                  </div>
-                </div>
-                {sessionData.ritualCompleted && (
-                  <Badge variant="secondary" className="bg-green-500/20 text-green-700">
-                    ✓
-                  </Badge>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-500/20 rounded-lg">
-                  <CheckCircle className="w-5 h-5 text-blue-500" />
-                </div>
-                <div>
-                  <div className="font-semibold text-text-primary">Location Check</div>
-                  <div className="text-sm text-text-secondary">
-                    {sessionData.locationConfirmed ? 'Confirmed' : 'Skipped'}
-                  </div>
-                </div>
-                {sessionData.locationConfirmed && (
-                  <Badge variant="secondary" className="bg-blue-500/20 text-blue-700">
-                    ✓
-                  </Badge>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex items-center gap-2 rounded-full bg-emerald-500/5 px-5 py-2 border border-emerald-500/20">
+            <span className="material-symbols-outlined text-emerald-400 text-sm">task_alt</span>
+            <span className="text-emerald-400/80 text-xs font-bold uppercase tracking-widest">
+              Pre-Flow Ritual: {sessionData.ritualCompleted ? 'Completed' : 'Skipped'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 rounded-full bg-blue-500/5 px-5 py-2 border border-blue-500/20">
+            <span className="material-symbols-outlined text-blue-400 text-sm">location_on</span>
+            <span className="text-blue-400/80 text-xs font-bold uppercase tracking-widest">
+              Location Check: {sessionData.locationConfirmed ? 'Confirmed' : 'Skipped'}
+            </span>
+          </div>
         </motion.div>
 
-        {/* User Progress */}
+        {/* Streak Progress — Stitch screen 10 */}
         {userStats && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mb-8"
+            transition={{ delay: 0.45 }}
+            className="glass-card gold-glow-border rounded-2xl p-10 mb-12 relative overflow-hidden"
           >
-            <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-text-primary">
-                  <TrendingUp className="w-5 h-5 text-purple-500" />
-                  Your Progress
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-text-primary">
-                      {userStats.ritualCompletionCount}/28
-                    </div>
-                    <div className="text-sm text-text-secondary">Ritual Completions</div>
-                    <Progress 
-                      value={(userStats.ritualCompletionCount / 28) * 100} 
-                      className="mt-2"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-text-primary">
-                      {userStats.totalSessions}
-                    </div>
-                    <div className="text-sm text-text-secondary">Total Sessions</div>
-                  </div>
-                </div>
-                
-                {userStats.ritualCompletionCount < 28 && (
-                  <div className="text-center p-3 bg-accent-gold/10 rounded-lg border border-accent-gold/20">
-                    <p className="text-sm text-text-primary">
-                      <span className="font-semibold">{28 - userStats.ritualCompletionCount} more</span> ritual completions to master the habit
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="flex justify-between items-end mb-6">
+              <div>
+                <p className="text-accent-gold/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">
+                  Ritual Streak
+                </p>
+                <h3 className="text-4xl font-black text-text-primary tracking-tight">
+                  {streakDays} of {streakTarget} Days
+                </h3>
+              </div>
+              <div className="text-right">
+                <span className="text-5xl font-black text-accent-gold/20 tracking-tight">
+                  {streakPct}%
+                </span>
+              </div>
+            </div>
+
+            {/* Gold gradient progress bar */}
+            <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{
+                  width: `${streakPct}%`,
+                  background: 'linear-gradient(135deg, #ffc757 0%, #fb923c 100%)',
+                  boxShadow: '0 0 15px rgba(255,199,87,0.5)',
+                }}
+              />
+            </div>
+
+            <p className="mt-6 text-sm text-text-tertiary font-medium italic opacity-70 tracking-tight">
+              &ldquo;The consistency of your ritual determines the depth of your focus.&rdquo;
+            </p>
           </motion.div>
         )}
 
-        {/* Action Buttons */}
+        {/* Action Buttons — Stitch screen 10 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          transition={{ delay: 0.55 }}
+          className="flex flex-col sm:flex-row gap-6 mb-16"
         >
-          <Button
+          <button
             onClick={() => router.push('/today')}
-            className="btn-primary flex items-center gap-2"
+            className="flex-1 premium-gold-gradient text-bg-primary font-black py-5 rounded-2xl shadow-xl shadow-accent-gold/10 transition-all flex items-center justify-center gap-3 text-lg tracking-tight hover:scale-[1.02] hover:brightness-110"
           >
-            <Home className="w-4 h-4" />
+            <span className="material-symbols-outlined">home</span>
             Back to Today
-          </Button>
-          
-          <Button
+          </button>
+          <button
             onClick={() => router.push('/capture')}
-            variant="outline"
-            className="flex items-center gap-2"
+            className="flex-1 border border-accent-gold/20 text-accent-gold font-bold py-5 rounded-2xl hover:bg-accent-gold/5 transition-all flex items-center justify-center gap-3 text-lg tracking-tight hover:scale-[1.02]"
           >
-            <Sparkles className="w-4 h-4" />
+            <span className="material-symbols-outlined">edit_note</span>
             Quick Capture
-          </Button>
+          </button>
         </motion.div>
 
-        {/* Motivational Quote */}
+        {/* Footer Quote — Stitch screen 10 */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 text-center"
+          transition={{ delay: 0.7 }}
+          className="border-t border-accent-gold/10 pt-12 pb-16"
         >
-          <blockquote className="border-l-4 border-accent-gold bg-bg-elevated px-6 py-4 rounded-r-lg">
-            <p className="text-body text-text-primary italic mb-2">
-              "The ability to concentrate intensely is a skill that must be trained."
+          <blockquote className="relative p-8 border-l border-accent-gold/30">
+            <span className="material-symbols-outlined absolute -top-2 -left-4 text-6xl" style={{ color: 'rgba(255,199,87,0.1)' }}>format_quote</span>
+            <p className="text-text-secondary italic text-xl leading-relaxed tracking-tight">
+              &ldquo;Who you are, what you think, feel, and do, what you love — is the sum of what you focus on.&rdquo;
             </p>
-            <footer className="text-body-sm text-text-tertiary">— Cal Newport</footer>
+            <cite className="block mt-6 text-accent-gold/60 font-bold not-italic text-sm uppercase tracking-[0.2em]">
+              — Cal Newport, Deep Work
+            </cite>
           </blockquote>
         </motion.div>
       </div>

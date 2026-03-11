@@ -3,7 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { User, MapPin, Shield, Bell, Link as LinkIcon, Trash2 } from 'lucide-react'
+// Material Symbols used inline to match Stitch 09 design exactly
 import ROUTES from '@/lib/routes'
 import { ExpandableSection } from '@/components/settings/ExpandableSection'
 
@@ -157,32 +157,91 @@ export default function SettingsPage() {
       <div className="min-h-screen flex items-center justify-center bg-bg-primary">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-body text-text-tertiary">Loading settings...</p>
+          <p className="text-sm text-text-tertiary">Loading settings...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary pb-20">
-      {/* Header */}
-      <div className="bg-bg-surface border-b border-border-default">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
-          <h1 className="text-display-md text-text-primary font-bold">Settings</h1>
-          <p className="text-body text-text-secondary mt-1">
-            Manage your account and preferences
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-bg-primary relative overflow-x-hidden pb-20">
+      {/* Subtle golden top glow */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-48 z-0"
+        style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,200,87,0.07) 0%, transparent 70%)',
+        }}
+      />
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-4">
+      <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-10 space-y-6">
+        {/* Page header */}
+        <div className="mb-2">
+          <h1 className="text-4xl font-black text-text-primary tracking-tight">Settings</h1>
+          <p className="text-text-tertiary mt-1 text-sm">Configure your high-performance environment</p>
+        </div>
+
+        {/* Profile card — Stitch 09 gold glow card */}
+        <div
+          className="rounded-xl p-6 flex flex-wrap justify-between items-center gap-4"
+          style={{
+            background: '#1E1E1E',
+            boxShadow: '0 0 15px -5px rgba(255,199,87,0.3)',
+            border: '1px solid rgba(255,199,87,0.2)',
+          }}
+        >
+          <div className="flex items-center gap-6">
+            <div className="relative flex-shrink-0">
+              <div
+                className="w-24 h-24 rounded-full overflow-hidden"
+                style={{ border: '2px solid rgba(255,199,87,0.3)' }}
+              >
+                {profile.image ? (
+                  <img src={profile.image} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center text-3xl font-black"
+                    style={{ background: 'linear-gradient(135deg, rgba(255,199,87,0.3) 0%, rgba(255,140,66,0.2) 100%)' }}
+                  >
+                    <span className="text-accent-gold">
+                      {profile.name?.charAt(0)?.toUpperCase() || session?.user?.name?.charAt(0)?.toUpperCase() || '?'}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <button
+                className="absolute -bottom-1 -right-1 p-1.5 rounded-full shadow-lg"
+                style={{ background: '#ffc757', color: '#0B0B0B', border: '2px solid #0B0B0B' }}
+              >
+                <span className="material-symbols-outlined text-sm block">edit</span>
+              </button>
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-2xl font-bold text-white leading-tight">
+                {profile.name || session?.user?.name || 'User'}
+              </h3>
+              <p className="text-text-tertiary font-medium text-sm">{profile.email || session?.user?.email}</p>
+              <span
+                className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded w-fit"
+                style={{ background: 'rgba(255,199,87,0.1)', color: '#ffc757' }}
+              >
+                Premium Member
+              </span>
+            </div>
+          </div>
+          <button
+            className="px-6 py-2.5 font-bold rounded-lg hover:opacity-90 transition-all text-sm"
+            style={{ background: '#ffc757', color: '#0B0B0B' }}
+          >
+            Update Profile
+          </button>
+        </div>
         
         {/* Profile Section */}
         <ExpandableSection
           id="profile"
           title="Profile"
-          icon={<User size={20} />}
+          icon={<span className="material-symbols-outlined">person</span>}
         >
           <div className="space-y-4">
             <div>
@@ -219,7 +278,7 @@ export default function SettingsPage() {
         <ExpandableSection
           id="locations"
           title="Flow Locations"
-          icon={<MapPin size={20} />}
+          icon={<span className="material-symbols-outlined">location_on</span>}
         >
           <div className="space-y-4">
             {locations.length === 0 ? (
@@ -233,7 +292,7 @@ export default function SettingsPage() {
                       <p className="text-sm text-text-tertiary">Radius: {loc.radius}m</p>
                     </div>
                     <button className="text-error-strong hover:text-error-dark">
-                      <Trash2 size={18} />
+                      <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                   </div>
                 ))}
@@ -252,7 +311,7 @@ export default function SettingsPage() {
         <ExpandableSection
           id="blocked-apps"
           title="Blocked Apps"
-          icon={<Shield size={20} />}
+          icon={<span className="material-symbols-outlined">shield</span>}
         >
           <div className="space-y-4">
             {blockedApps.length === 0 ? (
@@ -268,7 +327,7 @@ export default function SettingsPage() {
                       )}
                     </div>
                     <button className="text-error-strong hover:text-error-dark">
-                      <Trash2 size={18} />
+                      <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                   </div>
                 ))}
@@ -287,7 +346,7 @@ export default function SettingsPage() {
         <ExpandableSection
           id="ritual"
           title="Pre-Work Ritual"
-          icon={<User size={20} />}
+          icon={<span className="material-symbols-outlined">notifications</span>}
         >
           <div className="space-y-4">
             {ritualItems.length === 0 ? (
@@ -298,7 +357,7 @@ export default function SettingsPage() {
                   <div key={item.id} className="flex items-center justify-between p-3 bg-bg-secondary rounded-lg">
                     <p className="text-text-primary">{item.text}</p>
                     <button className="text-error-strong hover:text-error-dark">
-                      <Trash2 size={18} />
+                      <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                   </div>
                 ))}
@@ -317,7 +376,7 @@ export default function SettingsPage() {
         <ExpandableSection
           id="notifications"
           title="Notifications"
-          icon={<Bell size={20} />}
+          icon={<span className="material-symbols-outlined">link</span>}
         >
           <div className="space-y-4">
             {Object.entries(notifications).map(([key, value]) => (
@@ -343,7 +402,7 @@ export default function SettingsPage() {
         <ExpandableSection
           id="integrations"
           title="Integrations"
-          icon={<LinkIcon size={20} />}
+          icon={<span className="material-symbols-outlined">extension</span>}
         >
           <div className="space-y-4">
             {integrations.length === 0 ? (
@@ -376,34 +435,55 @@ export default function SettingsPage() {
           </div>
         </ExpandableSection>
 
-        {/* Account Actions */}
+        {/* Danger Zone — Stitch 09 */}
         <ExpandableSection
-          id="account"
-          title="Account"
-          icon={<User size={20} />}
+          id="danger"
+          title="Danger Zone"
+          icon={<span className="material-symbols-outlined text-red-500">delete_forever</span>}
         >
-          <div className="space-y-4">
+          <div className="space-y-4" style={{ borderTop: '1px solid rgba(239,68,68,0.2)', paddingTop: '1rem' }}>
+            <p className="text-sm text-text-tertiary">
+              Permanently delete your account and all associated focus data. This action cannot be undone.
+            </p>
+            <button
+              onClick={handleDeleteAccount}
+              className="w-full py-3 font-bold text-sm rounded-lg transition-all hover:bg-red-500 hover:text-white"
+              style={{
+                background: 'rgba(239,68,68,0.1)',
+                color: '#ef4444',
+                border: '1px solid rgba(239,68,68,0.3)',
+              }}
+            >
+              Delete My Account
+            </button>
             <button
               onClick={handleSignOut}
               className="btn-secondary w-full"
             >
               Sign Out
             </button>
-            <button
-              onClick={handleDeleteAccount}
-              className="w-full px-4 py-3 bg-error-light text-error-strong font-medium rounded-lg hover:bg-error-DEFAULT transition-colors"
-            >
-              Delete Account
-            </button>
-            <p className="text-xs text-text-tertiary text-center">
-              Deleting your account is permanent and cannot be undone.
-            </p>
           </div>
         </ExpandableSection>
 
-        {/* App Version */}
-        <div className="text-center text-sm text-text-tertiary py-4">
-          Daybreak v1.0.0
+        {/* Footer Quote — Stitch 09 */}
+        <div
+          className="mt-12 p-8 rounded-r-xl italic"
+          style={{
+            borderLeft: '4px solid #ffc757',
+            background: 'rgba(255,199,87,0.05)',
+          }}
+        >
+          <p className="text-xl font-medium leading-relaxed" style={{ color: '#cbd5e1' }}>
+            &ldquo;Deep work is the ability to focus without distraction on a cognitively demanding task. It&rsquo;s a skill that allows you to quickly master complicated information and produce better results in less time.&rdquo;
+          </p>
+          <p className="mt-4 font-black uppercase text-sm" style={{ color: '#ffc757', letterSpacing: '0.2em' }}>
+            — Cal Newport
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-xs font-semibold tracking-widest uppercase py-10" style={{ color: '#4b5563' }}>
+          &copy; 2024 Daybreak Productivity Systems. Designed for Deep Work.
         </div>
       </div>
     </div>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffc757",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#000000",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .golden-glow {
+            box-shadow: 0 0 20px rgba(255, 199, 87, 0.15);
+            border: 1px solid rgba(255, 199, 87, 0.3);
+        }
+        .bg-gradient-gold {
+            background: linear-gradient(135deg, #ffc757 0%, #e0a526 100%);
+        }
+        .card-selected {
+            border: 2px solid #ffc757;
+            background-color: rgba(255, 199, 87, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+<div class="w-full max-w-2xl bg-slate-900/50 rounded-xl golden-glow overflow-hidden relative">
+<div class="px-8 pt-8 pb-4 text-center">
+<span class="text-primary text-xs font-bold tracking-widest uppercase">Step 2 of 8</span>
+<h1 class="text-3xl font-bold mt-4 mb-2 text-white">What brings you here?</h1>
+<p class="text-slate-400 text-sm">Select your primary focus for using Daybreak.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-8">
+<button class="group relative flex flex-col items-center justify-end aspect-square rounded-lg bg-slate-800 border border-slate-700 p-4 transition-all hover:border-primary/50 overflow-hidden">
+<div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity bg-cover bg-center" data-alt="A clean desk with a laptop and coffee representing focused deep work" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBetGuappuUkFd-tuV3MtJyNs5hGEk6W9u4kem4oPjMczWGYiTngqsUghAPYmF9cK4FTis7gj3bGtQsUfdWWAzLayWExLGy3jA28D0q14VEmye7tk3VqXujQaoGu49ahkvg6k-UlGZAK_fE5ulpi_jBlSgZ1uvsZE_ddy275KopY29lLcjgkr7VEw9FjF5Ur2CKVz-PxuCQW0JeB_qK8AFziYuKMW8h4rwF5sdUYFjjH7Cb6Q2XEFl7vUb8XmHb9GSzLh3Wyc_-8g8')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+<span class="relative z-10 text-white font-semibold">Deep Work</span>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center justify-end aspect-square rounded-lg card-selected p-4 transition-all overflow-hidden">
+<div class="absolute inset-0 opacity-40 transition-opacity bg-cover bg-center" data-alt="Stones balanced on each other at a beach representing life balance" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZqSOA1BGcmmUCFhuA_vhkRuvy6Td2QKENwb8idVJRm_COs-fYaZHzvvBdbR5CKDryM_rHZTJTNLCcxNjt2B3WmmmlkHl9PFiyyda_8-_uaYKJsjvh522t1VgBl5Hfs9qM2Hpge5pV38XYb5m8yE0MOW-7v4w3Qu5y0dE0lfcHKMHlMpSp4VN8jL9W79I4E8FqsL6FON_1rHPErPKzBk4ScAzwXYzHClMRcgdp86sTQJXsLddeT_FK1Kw2N-pL777cP68GLk3lCW0')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+<span class="relative z-10 text-white font-semibold">Life Balance</span>
+<div class="absolute top-2 right-2 opacity-100">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+</button>
+<button class="group relative flex flex-col items-center justify-end aspect-square rounded-lg bg-slate-800 border border-slate-700 p-4 transition-all hover:border-primary/50 overflow-hidden">
+<div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity bg-cover bg-center" data-alt="A person reading a book and taking notes representing skill building" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDv5J6i-k-fh22eK47IH_2EQVTcAiFv65RSP315eQRthVBhpfwyQF4pLR7TN-aB1SwfNqfv-HLM_MMKruEQBDcfECaTtkOqzeMJ8mDPUatoWQPyKPL5LG7r-BH-TGPSfj-OsHxg8gb2HmB3ZZ9gr28-DK_O1m-gcQtbpb6iL8W5a2Tx3FVoP2G9Dwy6yxf3UsEaeS7uR0AGAGqkTmcUvYN7eA7pdMebfW_2RpfOnJrbr4avu4oGRKwX04qFHpMTCPavEOgCRxhzesw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+<span class="relative z-10 text-white font-semibold">Skill Building</span>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+</button>
+</div>
+<div class="flex items-center justify-between p-8 border-t border-slate-800">
+<button class="px-6 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-semibold hover:bg-slate-800 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                Back
+            </button>
+<button class="px-8 py-2.5 rounded-lg bg-gradient-gold text-background-dark font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+                Continue
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="mt-12 max-w-lg text-center px-4">
+<p class="text-slate-500 italic text-lg leading-relaxed font-light">
+            "The ability to perform deep work is becoming increasingly rare at exactly the same time it is becoming increasingly valuable in our economy."
+        </p>
+<p class="mt-4 text-primary/80 font-medium tracking-wide uppercase text-xs">— Cal Newport</p>
+</div>
+</body></html>

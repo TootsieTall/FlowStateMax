@@ -91,4 +91,37 @@
   .input:focus {
     box-shadow: 0 0 0 4px var(--focus-ring);
   }
+
+  /* ── Stitch Glass Card ──
+     Frosted glass panel matching Stitch screen designs */
+  .glass-card {
+    background: rgba(255, 199, 87, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 199, 87, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    @apply rounded-2xl;
+  }
+
+  /* ── Stitch Golden Glow Border ──
+     Subtle gold border + ambient glow used across screens */
+  .gold-glow-border {
+    border: 1px solid rgba(255, 199, 87, 0.3);
+    box-shadow: 0 0 20px rgba(255, 199, 87, 0.06);
+  }
+
+  /* ── Stitch Gold Gradient Text ──
+     Used on Flow Complete headline */
+  .gold-gradient-text {
+    background: linear-gradient(135deg, #ffc757 0%, #fde68a 50%, #ffc757 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Stitch Gold Gradient Button ──
+     Used for primary CTAs across Stitch screens */
+  .premium-gold-gradient {
+    background: linear-gradient(135deg, #ffc757 0%, #fb923c 100%);
+  }
 }

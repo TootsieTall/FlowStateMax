@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { format, startOfWeek, addDays, isSameDay, set } from 'date-fns'
-import { BlockCard, Button } from '@flowstate/ui'
-import { Plus, ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { BlockCard } from '@flowstate/ui'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { StartFlowButton } from '@/components/StartFlowButton'
 
 interface TimeBlock {
@@ -99,13 +99,23 @@ function AddBlockModal({ day, onClose, onSave }: AddBlockModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#1a1410] border border-amber-900/30 rounded-xl p-6 w-full max-w-sm shadow-2xl">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-amber-100">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div
+        className="w-full max-w-sm rounded-2xl p-6 shadow-2xl"
+        style={{
+          background: '#1a1410',
+          border: '1px solid rgba(255,199,87,0.2)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,199,87,0.06)',
+        }}
+      >
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-base font-bold text-text-primary">
             Add Block — {format(day, 'EEE, MMM d')}
           </h3>
-          <button onClick={onClose} className="text-amber-400/60 hover:text-amber-300 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-text-tertiary hover:text-accent-gold transition-colors"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -113,7 +123,9 @@ function AddBlockModal({ day, onClose, onSave }: AddBlockModalProps) {
         <div className="space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-sm text-amber-300/70 mb-1">Title</label>
+            <label className="block text-xs font-bold text-accent-gold/60 uppercase tracking-widest mb-1.5">
+              Title
+            </label>
             <input
               autoFocus
               type="text"
@@ -121,23 +133,38 @@ function AddBlockModal({ day, onClose, onSave }: AddBlockModalProps) {
               onChange={(e) => setTitle(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSave()}
               placeholder="e.g. Deep work session"
-              className="w-full bg-amber-950/30 border border-amber-900/40 rounded-lg px-3 py-2 text-amber-100 placeholder-amber-700/50 focus:outline-none focus:border-amber-500/60 transition-colors"
+              className="w-full rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary focus:outline-none transition-colors"
+              style={{
+                background: 'rgba(255,199,87,0.04)',
+                border: '1px solid rgba(255,199,87,0.15)',
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,199,87,0.4)'
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,199,87,0.15)'
+              }}
             />
           </div>
 
           {/* Type */}
           <div>
-            <label className="block text-sm text-amber-300/70 mb-1">Type</label>
+            <label className="block text-xs font-bold text-accent-gold/60 uppercase tracking-widest mb-1.5">
+              Type
+            </label>
             <div className="grid grid-cols-2 gap-2">
               {BLOCK_TYPES.map((t) => (
                 <button
                   key={t.value}
                   onClick={() => setType(t.value)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                    type === t.value
-                      ? 'border-amber-500 bg-amber-500/20 text-amber-200'
-                      : 'border-amber-900/30 text-amber-400/60 hover:border-amber-700/50 hover:text-amber-300'
-                  }`}
+                  className="px-3 py-2 rounded-xl text-xs font-semibold transition-all"
+                  style={{
+                    background: type === t.value ? 'rgba(255,199,87,0.15)' : 'rgba(255,199,87,0.03)',
+                    border: type === t.value
+                      ? '1px solid rgba(255,199,87,0.5)'
+                      : '1px solid rgba(255,199,87,0.1)',
+                    color: type === t.value ? '#ffc757' : '#6B6560',
+                  }}
                 >
                   {t.label}
                 </button>
@@ -148,38 +175,46 @@ function AddBlockModal({ day, onClose, onSave }: AddBlockModalProps) {
           {/* Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm text-amber-300/70 mb-1">Start</label>
+              <label className="block text-xs font-bold text-accent-gold/60 uppercase tracking-widest mb-1.5">
+                Start
+              </label>
               <div className="flex gap-1">
                 <select
                   value={startHour}
                   onChange={(e) => setStartHour(e.target.value)}
-                  className="flex-1 bg-amber-950/30 border border-amber-900/40 rounded-lg px-2 py-2 text-amber-100 focus:outline-none focus:border-amber-500/60 text-sm"
+                  className="flex-1 rounded-xl px-2 py-2 text-sm text-text-primary focus:outline-none"
+                  style={{ background: 'rgba(255,199,87,0.04)', border: '1px solid rgba(255,199,87,0.15)' }}
                 >
                   {hours.map((h) => <option key={h} value={h}>{h}</option>)}
                 </select>
                 <select
                   value={startMin}
                   onChange={(e) => setStartMin(e.target.value)}
-                  className="flex-1 bg-amber-950/30 border border-amber-900/40 rounded-lg px-2 py-2 text-amber-100 focus:outline-none focus:border-amber-500/60 text-sm"
+                  className="flex-1 rounded-xl px-2 py-2 text-sm text-text-primary focus:outline-none"
+                  style={{ background: 'rgba(255,199,87,0.04)', border: '1px solid rgba(255,199,87,0.15)' }}
                 >
                   {mins.map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label className="block text-sm text-amber-300/70 mb-1">End</label>
+              <label className="block text-xs font-bold text-accent-gold/60 uppercase tracking-widest mb-1.5">
+                End
+              </label>
               <div className="flex gap-1">
                 <select
                   value={endHour}
                   onChange={(e) => setEndHour(e.target.value)}
-                  className="flex-1 bg-amber-950/30 border border-amber-900/40 rounded-lg px-2 py-2 text-amber-100 focus:outline-none focus:border-amber-500/60 text-sm"
+                  className="flex-1 rounded-xl px-2 py-2 text-sm text-text-primary focus:outline-none"
+                  style={{ background: 'rgba(255,199,87,0.04)', border: '1px solid rgba(255,199,87,0.15)' }}
                 >
                   {hours.map((h) => <option key={h} value={h}>{h}</option>)}
                 </select>
                 <select
                   value={endMin}
                   onChange={(e) => setEndMin(e.target.value)}
-                  className="flex-1 bg-amber-950/30 border border-amber-900/40 rounded-lg px-2 py-2 text-amber-100 focus:outline-none focus:border-amber-500/60 text-sm"
+                  className="flex-1 rounded-xl px-2 py-2 text-sm text-text-primary focus:outline-none"
+                  style={{ background: 'rgba(255,199,87,0.04)', border: '1px solid rgba(255,199,87,0.15)' }}
                 >
                   {mins.map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
@@ -188,20 +223,22 @@ function AddBlockModal({ day, onClose, onSave }: AddBlockModalProps) {
           </div>
 
           {error && (
-            <p className="text-red-400 text-sm">{error}</p>
+            <p className="text-red-400 text-xs">{error}</p>
           )}
 
           <div className="flex gap-3 pt-1">
             <button
               onClick={onClose}
-              className="flex-1 py-2 rounded-lg border border-amber-900/40 text-amber-400/70 hover:text-amber-300 hover:border-amber-700/50 transition-colors text-sm"
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium text-text-tertiary hover:text-text-secondary transition-colors"
+              style={{ border: '1px solid rgba(255,199,87,0.15)' }}
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 py-2 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 text-white font-medium hover:from-amber-500 hover:to-orange-500 transition-all text-sm disabled:opacity-50"
+              className="flex-1 py-2.5 rounded-xl text-sm font-bold text-bg-primary transition-all disabled:opacity-50 hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #ffc757 0%, #fb923c 100%)' }}
             >
               {saving ? 'Saving...' : 'Add Block'}
             </button>
@@ -259,65 +296,63 @@ export default function WeekViewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary">
-      {/* Navigation - Floating layer */}
-      <nav className="layer-floating sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gradient-sunset">Daybreak</h1>
-            </div>
-            <div className="flex items-center space-x-6 md:space-x-8">
-              <a href="/week" className="text-accent-gold font-semibold">
-                Week
-              </a>
-              <a href="/today" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
-                Today
-              </a>
-              <a href="/capture" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
-                Capture
-              </a>
-              <a href="/explore" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
-                Explore
-              </a>
-              <a href="/settings" className="text-text-tertiary hover:text-accent-gold transition-all duration-fast hover:-translate-y-0.5">
-                Settings
-              </a>
-              <StartFlowButton variant="icon" />
-            </div>
+    <div className="min-h-screen bg-bg-primary flex flex-col">
+      {/* Subtle golden top glow */}
+      <div
+        className="pointer-events-none fixed inset-x-0 top-0 h-48 z-0"
+        style={{
+          background: 'radial-gradient(ellipse 60% 60% at 50% -10%, rgba(255,200,87,0.07) 0%, transparent 70%)',
+        }}
+      />
+
+      {/* Week Navigation Header */}
+      <header
+        className="sticky top-0 z-30 px-6 py-4"
+        style={{
+          background: 'rgba(11,11,11,0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(255,199,87,0.1)',
+        }}
+      >
+        <div className="max-w-[1600px] mx-auto flex items-center justify-between">
+          {/* Week navigation */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={previousWeek}
+              className="p-2 rounded-xl text-text-tertiary hover:text-accent-gold transition-colors"
+              style={{ border: '1px solid rgba(255,199,87,0.1)' }}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <h2 className="text-base font-bold text-text-primary tracking-tight">
+              {format(weekStart, 'MMMM d')} – {format(addDays(weekStart, 6), 'MMMM d, yyyy')}
+            </h2>
+            <button
+              onClick={nextWeek}
+              className="p-2 rounded-xl text-text-tertiary hover:text-accent-gold transition-colors"
+              style={{ border: '1px solid rgba(255,199,87,0.1)' }}
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
-        </div>
-      </nav>
 
-      {/* Week View - Responsive container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Week Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <button
-            onClick={previousWeek}
-            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-text-secondary hover:text-accent-gold hover-lift"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <h2 className="text-h2 text-text-primary">
-            {format(weekStart, 'MMMM d')} - {format(addDays(weekStart, 6), 'MMMM d, yyyy')}
-          </h2>
-          <button
-            onClick={nextWeek}
-            className="layer-elevated p-2 rounded-warm transition-all duration-fast text-text-secondary hover:text-accent-gold hover-lift"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {/* Start Flow */}
+          <StartFlowButton variant="icon" />
         </div>
+      </header>
 
-        {/* Calendar Grid */}
+      {/* Main Kanban Board — horizontal scroll */}
+      <main className="flex-1 overflow-x-auto px-6 pt-6 pb-4 relative z-10" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4b3d20 transparent' }}>
         {loading ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-body text-text-tertiary">Loading your week...</p>
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-accent-gold border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <p className="text-sm text-text-tertiary">Loading your week...</p>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-7 gap-4">
+          <div className="flex gap-4 min-w-max pb-4 max-w-[1600px] mx-auto">
             {days.map((day) => {
               const dayBlocks = getBlocksForDay(day)
               const isToday = isSameDay(day, new Date())
@@ -325,41 +360,97 @@ export default function WeekViewPage() {
               return (
                 <div
                   key={day.toISOString()}
-                  className={`card p-4 min-h-[400px] transition-all duration-normal hover:-translate-y-1 hover:shadow-warm-md ${
-                    isToday ? 'border-2 border-accent-gold shadow-glow-amber' : ''
-                  }`}
+                  className="flex flex-col gap-3"
+                  style={{ minWidth: '280px' }}
                 >
-                  <div className="mb-4">
-                    <div className="text-overline text-text-tertiary">{format(day, 'EEE')}</div>
-                    <div
-                      className={`text-h1 ${
-                        isToday ? 'text-gradient-sunset' : 'text-text-primary'
-                      }`}
+                  {/* Day header — Stitch 05 */}
+                  <div className="flex items-center justify-between px-2">
+                    <h3
+                      className="font-bold uppercase tracking-widest text-xs"
+                      style={{ color: isToday ? '#ffc757' : '#94a3b8' }}
                     >
-                      {format(day, 'd')}
-                    </div>
+                      {format(day, 'EEEE')} {format(day, 'd')}
+                      {isToday && ' (Today)'}
+                    </h3>
+                    {isToday ? (
+                      <span className="material-symbols-outlined text-sm" style={{ color: '#ffc757' }}>notifications_active</span>
+                    ) : (
+                      <span className="material-symbols-outlined text-sm" style={{ color: '#64748b' }}>more_horiz</span>
+                    )}
                   </div>
 
-                  <div className="space-y-2">
-                    {dayBlocks.map((block) => (
-                      <BlockCard
-                        key={block.id}
-                        title={block.title}
-                        startTime={block.startTime}
-                        endTime={block.endTime}
-                        type={block.type}
-                        color={block.color}
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    className="w-full mt-4 p-2 border-2 border-dashed border-border-default rounded-warm-lg hover:border-accent-gold hover:bg-accent-gold/5 transition-all duration-fast flex items-center justify-center text-text-tertiary hover:text-accent-gold group"
-                    onClick={() => setAddingForDay(day)}
+                  {/* Day column — Stitch 05 */}
+                  <div
+                    className="flex flex-col gap-3 flex-1 rounded-xl p-2"
+                    style={{
+                      minHeight: '420px',
+                      background: isToday
+                        ? 'rgba(255,199,87,0.05)'
+                        : 'rgba(30,41,59,0.2)',
+                      border: isToday
+                        ? '2px solid rgba(255,199,87,0.3)'
+                        : '1px solid rgba(30,41,59,0.3)',
+                      boxShadow: isToday
+                        ? '0 0 15px rgba(255,199,87,0.1)'
+                        : 'none',
+                    }}
                   >
-                    <Plus className="w-4 h-4 mr-1 group-hover:animate-icon-bounce" />
-                    <span className="text-sm">Add block</span>
-                  </button>
+                    {/* Block cards — Stitch 05 */}
+                    {dayBlocks.map((block) => (
+                      <div
+                        key={block.id}
+                        className="rounded-xl p-4 shadow-lg relative group"
+                        style={{
+                          background: '#1E1E1E',
+                          border: isToday
+                            ? '1px solid rgba(255,199,87,0.2)'
+                            : '1px solid rgba(30,41,59,1)',
+                        }}
+                      >
+                        {/* Gold left accent for today's blocks */}
+                        {isToday && (
+                          <div
+                            className="absolute -left-1 top-4 h-8 w-1 rounded-full"
+                            style={{ background: '#ffc757' }}
+                          />
+                        )}
+                        <div className="flex items-start justify-between mb-2">
+                          <BlockCard
+                            title={block.title}
+                            startTime={block.startTime}
+                            endTime={block.endTime}
+                            type={block.type}
+                            color={block.color}
+                          />
+                          <span className="material-symbols-outlined text-sm cursor-grab opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: '#4b5563' }}>drag_indicator</span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Ghost card / Add block — Stitch 05 */}
+                    <button
+                      onClick={() => setAddingForDay(day)}
+                      className="h-24 rounded-xl flex items-center justify-center transition-all"
+                      style={{
+                        border: isToday
+                          ? '2px dashed rgba(255,199,87,0.3)'
+                          : '2px dashed rgba(255,199,87,0.15)',
+                        background: isToday
+                          ? 'rgba(255,199,87,0.05)'
+                          : 'transparent',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(255,199,87,0.4)'
+                        e.currentTarget.style.background = 'rgba(255,199,87,0.05)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = isToday ? 'rgba(255,199,87,0.3)' : 'rgba(255,199,87,0.15)'
+                        e.currentTarget.style.background = isToday ? 'rgba(255,199,87,0.05)' : 'transparent'
+                      }}
+                    >
+                      <span className="material-symbols-outlined" style={{ color: 'rgba(255,199,87,0.4)' }}>add</span>
+                    </button>
+                  </div>
                 </div>
               )
             })}
@@ -367,13 +458,75 @@ export default function WeekViewPage() {
         )}
       </main>
 
-      {/* Quick Capture Button */}
-      <button
-        className="fixed bottom-8 right-8 bg-gradient-to-br from-sunset-400 to-gold-400 hover:from-accent-gold hover:to-accent-orange text-white rounded-full p-4 shadow-warm-2xl hover:shadow-glow-sunset transition-all duration-fast hover:scale-110 animate-pulse-glow"
-        onClick={() => (window.location.href = '/capture')}
+      {/* Inbox / Backlog strip — Stitch 05 */}
+      <section
+        className="relative z-10 p-6"
+        style={{
+          borderTop: '1px solid rgba(255,199,87,0.1)',
+          background: '#1A150B',
+        }}
       >
-        <Plus className="w-6 h-6" />
-      </button>
+        <div className="max-w-[1600px] mx-auto">
+          <div className="flex items-center gap-4 mb-4">
+            <h2 className="text-sm font-bold text-text-primary flex items-center gap-2">
+              <span className="material-symbols-outlined text-lg text-accent-gold">inventory_2</span>
+              Inbox &amp; Backlog
+            </h2>
+            <div className="h-px flex-1" style={{ background: 'rgba(255,199,87,0.1)' }} />
+            <button
+              onClick={() => (window.location.href = '/capture')}
+              className="text-xs text-accent-gold font-bold hover:underline"
+            >
+              View All
+            </button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4b3d20 transparent' }}>
+            {/* Placeholder backlog cards — Stitch 05 */}
+            <div
+              className="min-w-[240px] flex items-center gap-3 p-3 rounded-lg cursor-grab transition-all hover:border-accent-gold/40 active:scale-95"
+              style={{
+                background: '#1E1E1E',
+                border: '1px solid rgba(30,41,59,1)',
+              }}
+            >
+              <span className="material-symbols-outlined text-sm" style={{ color: '#4b5563' }}>drag_indicator</span>
+              <div>
+                <p className="text-xs font-medium" style={{ color: '#e2e8f0' }}>Drag from capture</p>
+                <span className="text-[9px]" style={{ color: '#64748b' }}>Backlog</span>
+              </div>
+            </div>
+            {/* Add card */}
+            <div
+              onClick={() => (window.location.href = '/capture')}
+              className="min-w-[240px] flex items-center justify-center rounded-lg cursor-pointer transition-colors hover:text-accent-gold"
+              style={{
+                border: '2px dashed rgba(30,41,59,1)',
+                color: '#4b5563',
+              }}
+            >
+              <span className="material-symbols-outlined">add_circle</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer quote */}
+      <footer className="relative z-10 py-10 px-6 border-t border-accent-gold/5">
+        <div className="max-w-3xl mx-auto text-center">
+          <blockquote className="relative">
+            <span
+              className="material-symbols-outlined text-5xl absolute -top-6 -left-8 pointer-events-none"
+              style={{ color: 'rgba(255,199,87,0.2)' }}
+            >format_quote</span>
+            <p className="text-lg md:text-xl font-medium italic leading-relaxed" style={{ color: '#94a3b8' }}>
+              &ldquo;A 40-hour time-blocked work week, I estimate, produces the same amount of output as a 60-plus hour work week pursued without structure.&rdquo;
+            </p>
+            <footer className="mt-4 font-bold tracking-widest uppercase text-xs" style={{ color: '#ffc757' }}>
+              — Cal Newport, Deep Work
+            </footer>
+          </blockquote>
+        </div>
+      </footer>
 
       {/* Add Block Modal */}
       {addingForDay && (

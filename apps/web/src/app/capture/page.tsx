@@ -84,8 +84,8 @@ function KanbanColumn({ col, items, onDrop, onDelete, onMoveCard }: KanbanColumn
 
   const colBg: Record<Column, string> = {
     inbox: 'bg-bg-elevated border-border-default',
-    doing: 'bg-bg-elevated border-accent-orange/40',
-    done: 'bg-bg-elevated border-accent-gold/30',
+    doing: 'bg-bg-elevated border-border-default',
+    done: 'bg-bg-elevated border-border-default',
   };
 
   const colHeader: Record<Column, string> = {
@@ -108,14 +108,19 @@ function KanbanColumn({ col, items, onDrop, onDelete, onMoveCard }: KanbanColumn
         if (id) onDrop(id, col);
       }}
     >
-      {/* Column header */}
+      {/* Column header — Stitch 06 */}
       <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-        <span className={`font-semibold text-sm uppercase tracking-wide ${colHeader[col]}`}>
-          {columnLabel(col)}
-        </span>
-        <span className="text-xs text-text-tertiary bg-bg-surface px-2 py-0.5 rounded-full">
-          {items.length}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-text-primary">
+            {columnLabel(col)}
+          </span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,199,87,0.1)', color: '#ffc757' }}>
+            {items.length} {items.length === 1 ? 'item' : 'items'}
+          </span>
+        </div>
+        <button className="text-text-tertiary hover:text-text-primary transition-colors">
+          <span className="material-symbols-outlined">more_horiz</span>
+        </button>
       </div>
 
       {/* Cards */}
@@ -306,16 +311,24 @@ export default function CapturePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary">
+    <div className="min-h-screen bg-bg-primary relative overflow-x-hidden">
+      {/* Subtle golden top glow */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-48 z-0"
+        style={{
+          background: 'radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,200,87,0.08) 0%, transparent 70%)',
+        }}
+      />
+
       <QuickCapture />
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+        <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-text-primary">Task Board</h1>
-            <p className="text-sm text-text-tertiary mt-0.5">
-              Drag cards between columns or use the quick-move buttons
+            <h1 className="text-3xl font-black text-text-primary tracking-tight">Capture</h1>
+            <p className="text-sm text-text-tertiary mt-1">
+              Organize your thoughts and tasks into action.
             </p>
           </div>
 
@@ -327,30 +340,37 @@ export default function CapturePage() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search..."
-                className="pl-9 pr-4 py-2 text-sm bg-bg-elevated border border-border-default rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent-gold/60"
+                placeholder="Search captures..."
+                className="pl-9 pr-4 py-2.5 text-sm rounded-xl text-text-primary placeholder-text-tertiary focus:outline-none transition-colors"
+                style={{
+                  background: '#1E1E1E',
+                  border: '1px solid rgba(255,199,87,0.12)',
+                }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(255,199,87,0.4)' }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,199,87,0.12)' }}
               />
             </div>
 
             <button
               onClick={toggleQuickCapture}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent-gold to-accent-orange text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity shadow-md"
+              className="flex items-center gap-2 px-5 py-2.5 text-bg-primary text-sm font-bold rounded-xl hover:scale-[1.02] transition-all shadow-md"
+              style={{ background: 'linear-gradient(to right, #ffc757, #e6ac30)' }}
             >
-              <Plus className="w-4 h-4" />
-              New Capture
+              <span className="material-symbols-outlined text-lg font-bold">add</span>
+              Quick Capture
             </button>
           </div>
         </div>
 
         {/* Summary chips */}
         <div className="flex gap-3 mb-6 text-xs flex-wrap">
-          <span className="px-3 py-1 bg-bg-elevated rounded-full border border-border-default text-text-secondary">
+          <span className="px-3 py-1.5 rounded-full text-text-secondary font-semibold" style={{ background: '#1E1E1E', border: '1px solid rgba(255,255,255,0.06)' }}>
             {byColumn('inbox').length} in inbox
           </span>
-          <span className="px-3 py-1 bg-accent-orange/10 rounded-full border border-accent-orange/30 text-accent-orange">
+          <span className="px-3 py-1.5 rounded-full font-bold text-accent-orange" style={{ background: 'rgba(255,140,66,0.08)', border: '1px solid rgba(255,140,66,0.25)' }}>
             {byColumn('doing').length} doing
           </span>
-          <span className="px-3 py-1 bg-accent-gold/10 rounded-full border border-accent-gold/30 text-accent-gold">
+          <span className="px-3 py-1.5 rounded-full font-bold text-accent-gold" style={{ background: 'rgba(255,199,87,0.08)', border: '1px solid rgba(255,199,87,0.25)' }}>
             {byColumn('done').length} done
           </span>
         </div>
@@ -358,24 +378,30 @@ export default function CapturePage() {
         {/* Empty state */}
         {items.length === 0 ? (
           <div className="text-center py-20">
-            <Sparkles className="w-12 h-12 text-accent-gold mx-auto mb-4 opacity-60" />
-            <h3 className="text-lg font-semibold text-text-primary mb-2">
-              Board is empty
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+              style={{ background: 'rgba(255,199,87,0.08)', border: '1px solid rgba(255,199,87,0.2)' }}
+            >
+              <Sparkles className="w-8 h-8 text-accent-gold" />
+            </div>
+            <h3 className="text-xl font-bold text-text-primary mb-2">
+              Your inbox is clear
             </h3>
-            <p className="text-sm text-text-tertiary mb-6">
-              Capture your first task to get started
+            <p className="text-sm text-text-tertiary mb-8">
+              All tasks are processed. Capture your next thought.
             </p>
             <button
               onClick={toggleQuickCapture}
-              className="px-6 py-2.5 bg-gradient-to-r from-accent-gold to-accent-orange text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 text-bg-primary text-sm font-bold rounded-xl hover:scale-[1.02] transition-all"
+              style={{ background: 'linear-gradient(to right, #ffc757, #e6ac30)' }}
             >
-              <Sparkles className="w-4 h-4 inline-block mr-2" />
+              <Sparkles className="w-4 h-4" />
               Capture Something
             </button>
           </div>
         ) : (
           /* Kanban grid */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {(['inbox', 'doing', 'done'] as Column[]).map((col) => (
               <KanbanColumn
                 key={col}
@@ -389,13 +415,23 @@ export default function CapturePage() {
           </div>
         )}
 
-        <p className="text-center text-xs text-text-tertiary mt-8 mb-24">
-          💡 Press{' '}
-          <kbd className="px-1.5 py-0.5 bg-bg-secondary border border-border-default rounded text-xs">
-            ⌘K
-          </kbd>{' '}
-          anywhere to quick capture
-        </p>
+        {/* Footer quote — Stitch 06 */}
+        <footer className="mt-auto pt-10 pb-6" style={{ borderTop: '1px solid #2D2D2D' }}>
+          <blockquote
+            className="rounded-xl p-6 text-center"
+            style={{
+              border: '2px solid rgba(255,199,87,0.3)',
+              background: 'rgba(255,199,87,0.05)',
+            }}
+          >
+            <p className="text-accent-gold italic font-medium text-lg leading-relaxed">
+              &ldquo;Who you are, what you think, feel, and do, what you love — is the sum of what you focus on.&rdquo;
+            </p>
+            <cite className="block mt-3 text-text-tertiary font-bold not-italic">
+              — Cal Newport, Deep Work
+            </cite>
+          </blockquote>
+        </footer>
       </div>
     </div>
   );

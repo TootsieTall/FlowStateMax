@@ -42,30 +42,37 @@ export function ExpandableSection({
   }, [id])
 
   return (
-    <div id={id} className="card-elevated">
+    <div
+      id={id}
+      className="rounded-xl overflow-hidden"
+      style={{
+        background: '#1E1E1E',
+        boxShadow: '0 0 15px -5px rgba(255,199,87,0.3)',
+        border: '1px solid rgba(255,199,87,0.2)',
+      }}
+    >
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-6 text-left hover-lift transition-all"
+        className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/[0.03]"
       >
-        <div className="flex items-center gap-3">
-          {icon && <div className="text-accent-gold">{icon}</div>}
-          <h2 className="text-h3 text-text-primary font-medium">{title}</h2>
+        <div className="flex items-center gap-4">
+          {icon && (
+            <div
+              className="p-2 rounded-lg text-accent-gold"
+              style={{ background: 'rgba(255,199,87,0.1)' }}
+            >
+              {icon}
+            </div>
+          )}
+          <span className="text-lg font-bold text-text-primary">{title}</span>
         </div>
-        <motion.svg
+        <motion.span
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-text-secondary"
+          className="material-symbols-outlined text-text-tertiary"
         >
-          <polyline points="6 9 12 15 18 9" />
-        </motion.svg>
+          expand_more
+        </motion.span>
       </button>
 
       <AnimatePresence>
@@ -77,7 +84,7 @@ export function ExpandableSection({
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-6 pt-0">{children}</div>
+            <div className="px-5 pb-6 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
